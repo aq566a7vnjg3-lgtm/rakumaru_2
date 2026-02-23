@@ -1,1 +1,0 @@
-# rakumaru_2
