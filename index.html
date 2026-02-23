@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>メンテナンス維持費 簡易計算シート</title>
+  <style>
+    :root{
+      --bg:#0aa64f;
+      --line:#d9d9d9;
+      --muted:#666;
+    }
+    body{font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Arial, sans-serif; margin:0; background:#fafafa;}
+    header{background:var(--bg); color:#fff; padding:14px 18px;}
+    header h1{margin:0; font-size:18px; font-weight:700;}
+    main{padding:16px 18px 28px;}
+    .controls{display:flex; flex-wrap:wrap; gap:10px 14px; align-items:end; margin-bottom:12px;}
+    label{display:flex; flex-direction:column; gap:6px; font-size:12px; color:#111;}
+    select, input[type="number"]{
+      padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#fff; font-size:14px;
+      min-width: 160px;
+    }
+    .note{font-size:12px; color:var(--muted); margin:10px 0 14px;}
+    .sheet{background:#fff; border:1px solid var(--line); border-radius:14px; overflow:auto; box-shadow:0 2px 10px rgba(0,0,0,.04);}
+    table{border-collapse:separate; border-spacing:0; width:max(980px,100%); font-size:13px;}
+    thead th{
+      position:sticky; top:0; z-index:3;
+      background:#f3f7f5; border-bottom:1px solid var(--line);
+      padding:10px 8px; text-align:center; white-space:nowrap;
+    }
+    th, td{border-bottom:1px solid var(--line); padding:8px;}
+    tbody tr:hover td{background:#fcfffd;}
+    .sticky-col{
+      position:sticky; left:0; z-index:2; background:#fff;
+      border-right:1px solid var(--line);
+      min-width: 260px;
+    }
+    thead .sticky-col{z-index:4; background:#f3f7f5;}
+    td.num{text-align:right; white-space:nowrap;}
+    td.center{text-align:center;}
+    .input-mini{width:96px; min-width:96px;}
+    .input-count{width:70px; min-width:70px;}
+    .yen{font-variant-numeric: tabular-nums;}
+    .section-row td{background:#f8faf9; font-weight:700;}
+    .total-row td{background:#f3f7f5; font-weight:800;}
+    .right{float:right;}
+    .badge{
+      display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px;
+      background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25);
+      margin-left:8px;
+    }
+    .hidden{display:none;}
+    .footer-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+    button{
+      border:1px solid var(--line); background:#fff; padding:10px 12px; border-radius:12px; cursor:pointer;
+      font-size:13px;
+    }
+    button.primary{background:var(--bg); color:#fff; border-color:transparent;}
+    button:active{transform: translateY(1px);}
+    .small{font-size:12px; color:var(--muted);}
+  </style>
+</head>
+<body>
+<header>
+  <h1>メンテナンス維持費 簡易計算シート <span class="badge">工賃込み / 税込み</span></h1>
+</header>
+
+<main>
+  <div class="controls">
+    <label>
+      車両区分（プルダウン）
+      <select id="vehicleType">
+        <option value="kei">軽自動車</option>
+        <option value="small">小型車</option>
+        <option value="normal">普通車</option>
+        <option value="ev">EV車（N-ONEe）</option>
+      </select>
+    </label>
+
+    <label id="taxClassWrap" class="hidden">
+      普通車 税区分（任意）
+      <select id="taxClass">
+        <option value="1500">自動車税 1500CC</option>
+        <option value="2000">自動車税 2000CC</option>
+      </select>
+    </label>
+
+    <div class="small">
+      ・単価/回数は編集できます（初期値＝基準値）<br/>
+      ・金額は <b>単価 × 回数</b> で自動計算します
+    </div>
+  </div>
+
+  <div class="sheet">
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th class="sticky-col">メンテナンス（固定）</th>
+          <th>単価</th>
+          <th>2年半 回数</th>
+          <th>2年半 金額</th>
+          <th>4年半 回数</th>
+          <th>4年半 金額</th>
+          <th>6年半 回数</th>
+          <th>6年半 金額</th>
+          <th>10年 回数</th>
+          <th>10年 金額</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+
+      <tbody>
+        <tr class="total-row">
+          <td class="sticky-col">合計（メンテナンス）</td>
+          <td></td>
+          <td></td><td class="num yen" id="sum_2_5">-</td>
+          <td></td><td class="num yen" id="sum_4_5">-</td>
+          <td></td><td class="num yen" id="sum_6_5">-</td>
+          <td></td><td class="num yen" id="sum_10">-</td>
+        </tr>
+      </tbody>
+
+      <tbody id="extraSection">
+        <tr class="section-row">
+          <td class="sticky-col">自動車税 / 自賠責保険（自動切替）</td>
+          <td colspan="9" class="small">※ 車両区分により表示/非表示が切り替わります</td>
+        </tr>
+      </tbody>
+
+      <tbody>
+        <tr class="total-row">
+          <td class="sticky-col">合計（メンテナンス + 表示中の税/保険）</td>
+          <td></td>
+          <td></td><td class="num yen" id="grand_2_5">-</td>
+          <td></td><td class="num yen" id="grand_4_5">-</td>
+          <td></td><td class="num yen" id="grand_6_5">-</td>
+          <td></td><td class="num yen" id="grand_10">-</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-actions">
+    <button class="primary" id="resetBtn">この車両区分の基準値に戻す</button>
+    <button id="copyJsonBtn">現在値をJSONでコピー</button>
+  </div>
+  <div class="small" id="copyStatus"></div>
+</main>
+
+<script>
+/** 期間キー */
+const PERIODS = [
+  { key: "2_5", label: "2年半" },
+  { key: "4_5", label: "4年半" },
+  { key: "6_5", label: "6年半" },
+  { key: "10",  label: "10年" },
+];
+
+const fmtJPY = new Intl.NumberFormat("ja-JP", { style:"currency", currency:"JPY", maximumFractionDigits:0 });
+
+/** 元データ（基準値） */
+const BASE = {
+  normal: {
+    label: "普通車",
+    items: [
+      { name:"安全点検", unit:10450, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"12ヶ月点検", unit:18700, counts:{ "2_5":2,"4_5":3,"6_5":4,"10":6 } },
+      { name:"車検（基本料金＋代行費用含む）", unit:53350, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"エンジンオイル交換", unit:6743, counts:{ "2_5":5,"4_5":9,"6_5":13,"10":20 } },
+      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーンフィルター交換", unit:7260, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーナーエレメント交換", unit:3080, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":5 } },
+      { name:"フロントブレーキパッド交換", unit:21120, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"リアブレーキパッド/シュー交換", unit:21230, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"トランスミッションオイル交換", unit:10340, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"エンジンプラグ交換", unit:17050, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"A/Cベルト交換", unit:13585, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ACGベルト交換", unit:13585, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"バッテリー交換", unit:32340, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":4 } },
+      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"4_5":4,"6_5":6,"10":10 } },
+      { name:"パンク修理剤交換", unit:6490, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ノーマルタイヤ4本交換", unit:99000, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":3 } },
+    ],
+    extras: {
+      tax_1500: { name:"自動車税1500CC", unit:30500, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":10 } },
+      tax_2000: { name:"自動車税2000CC", unit:34500, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":10 } },
+      jibaiseki:{ name:"自賠責保険", unit:18160, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":3 } },
+    }
+  },
+
+  small: {
+    label: "小型車",
+    items: [
+      { name:"安全点検", unit:9350, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"12ヶ月点検", unit:16500, counts:{ "2_5":2,"4_5":3,"6_5":4,"10":6 } },
+      { name:"車検（基本料金＋代行費用含む）", unit:50050, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"エンジンオイル交換", unit:6226, counts:{ "2_5":5,"4_5":9,"6_5":13,"10":20 } },
+      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーンフィルター交換", unit:5610, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーナーエレメント交換", unit:3080, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":5 } },
+      { name:"フロントブレーキパッド交換", unit:18810, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"リアブレーキパッド/シュー交換", unit:19250, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"トランスミッションオイル交換", unit:6600, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"エンジンプラグ交換", unit:16280, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"A/Cベルト交換", unit:9020, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ACGベルト交換", unit:9020, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"バッテリー交換", unit:29590, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":4 } },
+      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"4_5":4,"6_5":6,"10":10 } },
+      { name:"パンク修理剤交換", unit:5500, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ノーマルタイヤ4本交換", unit:80300, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":3 } },
+    ],
+    extras: {
+      tax_1500: { name:"自動車税1500CC", unit:30500, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":10 } },
+      jibaiseki:{ name:"自賠責保険", unit:18160, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":3 } },
+    }
+  },
+
+  kei: {
+    label: "軽自動車",
+    items: [
+      { name:"安全点検", unit:8800, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"12ヶ月点検", unit:15400, counts:{ "2_5":2,"4_5":3,"6_5":4,"10":6 } },
+      { name:"車検（基本料金＋代行費用含む）", unit:47850, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"エンジンオイル交換", unit:5379, counts:{ "2_5":5,"4_5":9,"6_5":13,"10":20 } },
+      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーンフィルター交換", unit:5610, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーナーエレメント交換", unit:1980, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":5 } },
+      { name:"フロントブレーキパッド交換", unit:16390, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"リアブレーキパッド/シュー交換", unit:17270, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"トランスミッションオイル交換", unit:6270, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"エンジンプラグ交換", unit:14630, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"A/Cベルト交換", unit:8800, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ACGベルト交換", unit:7700, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"バッテリー交換", unit:18480, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":4 } },
+      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"4_5":4,"6_5":6,"10":10 } },
+      { name:"パンク修理剤交換", unit:4730, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ノーマルタイヤ4本交換", unit:60500, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":3 } },
+    ],
+    extras: {
+      tax_660: { name:"自動車税 660CC", unit:10800, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":10 } },
+      jibaiseki:{ name:"自賠責保険", unit:18040, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":3 } },
+    }
+  },
+
+  ev: {
+    label: "EV車（N-ONEe）",
+    items: [
+      { name:"安全点検", unit:8800, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"12ヶ月点検", unit:15400, counts:{ "2_5":2,"4_5":3,"6_5":4,"10":6 } },
+      { name:"車検（基本料金＋代行費用含む）", unit:47850, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"エンジンオイル交換", unit:5379, counts:{ "2_5":0,"4_5":0,"6_5":13,"10":0 } },
+      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":0,"4_5":0,"6_5":6,"10":0 } },
+      { name:"エアクリーンフィルター交換", unit:5610, counts:{ "2_5":2,"4_5":4,"6_5":6,"10":9 } },
+      { name:"エアクリーナーエレメント交換", unit:1980, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":5 } },
+      { name:"フロントブレーキパッド交換", unit:16390, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"リアブレーキパッド/シュー交換", unit:17270, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":2 } },
+      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"4_5":1,"6_5":2,"10":4 } },
+      { name:"トランスミッションオイル交換", unit:6270, counts:{ "2_5":0,"4_5":0,"6_5":1,"10":0 } },
+      { name:"エンジンプラグ交換", unit:14630, counts:{ "2_5":0,"4_5":0,"6_5":1,"10":0 } },
+      { name:"A/Cベルト交換", unit:8800, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ACGベルト交換", unit:7700, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"バッテリー交換", unit:18480, counts:{ "2_5":1,"4_5":2,"6_5":3,"10":4 } },
+      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"4_5":4,"6_5":6,"10":10 } },
+      { name:"パンク修理剤交換", unit:4730, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":2 } },
+      { name:"ノーマルタイヤ4本交換", unit:60500, counts:{ "2_5":0,"4_5":1,"6_5":1,"10":3 } },
+    ],
+    extras: {} // 参考データ上は非表示
+  },
+};
+
+/** 現在編集値（基準値からコピーして使う） */
+let state = {
+  vehicle: "kei",
+  taxClass: "1500", // normal のみ
+  rows: [],
+  extras: []
+};
+
+function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+
+function buildStateFromBase(vehicleKey){
+  const base = BASE[vehicleKey];
+  state.vehicle = vehicleKey;
+  state.rows = deepClone(base.items);
+  state.extras = buildExtras(vehicleKey);
+}
+
+function buildExtras(vehicleKey){
+  const base = BASE[vehicleKey];
+  const e = base.extras || {};
+  // normal の税は taxClass で切替
+  if(vehicleKey === "normal"){
+    const taxKey = (document.getElementById("taxClass").value === "2000") ? "tax_2000" : "tax_1500";
+    return [ deepClone(e[taxKey]), deepClone(e.jibaiseki) ].filter(Boolean);
+  }
+  if(vehicleKey === "small"){
+    return [ deepClone(e.tax_1500), deepClone(e.jibaiseki) ].filter(Boolean);
+  }
+  if(vehicleKey === "kei"){
+    return [ deepClone(e.tax_660), deepClone(e.jibaiseki) ].filter(Boolean);
+  }
+  return []; // EVは非表示
+}
+
+function createNumInput(value, cls){
+  const inp = document.createElement("input");
+  inp.type = "number";
+  inp.value = Number(value ?? 0);
+  inp.min = "0";
+  inp.step = "1";
+  inp.className = cls;
+  return inp;
+}
+
+function yenCell(value){
+  const td = document.createElement("td");
+  td.className = "num yen";
+  td.textContent = fmtJPY.format(Math.round(value || 0));
+  return td;
+}
+
+function calcRowAmount(row, periodKey){
+  const unit = Number(row.unit || 0);
+  const cnt = Number(row.counts?.[periodKey] || 0);
+  return unit * cnt;
+}
+
+function render(){
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+
+  // 行描画
+  state.rows.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+
+    const tdName = document.createElement("td");
+    tdName.className = "sticky-col";
+    tdName.textContent = row.name;
+    tr.appendChild(tdName);
+
+    // unit
+    const tdUnit = document.createElement("td");
+    tdUnit.className = "center";
+    const inpUnit = createNumInput(row.unit, "input-mini");
+    inpUnit.addEventListener("input", () => { state.rows[idx].unit = Number(inpUnit.value || 0); recalc(); });
+    tdUnit.appendChild(inpUnit);
+    tr.appendChild(tdUnit);
+
+    PERIODS.forEach(p => {
+      // count
+      const tdC = document.createElement("td");
+      tdC.className = "center";
+      const inpC = createNumInput(row.counts[p.key] ?? 0, "input-count");
+      inpC.addEventListener("input", () => {
+        state.rows[idx].counts[p.key] = Number(inpC.value || 0);
+        recalc();
+      });
+      tdC.appendChild(inpC);
+      tr.appendChild(tdC);
+
+      // amount
+      tr.appendChild(yenCell(calcRowAmount(row, p.key)));
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  renderExtras();
+  recalc();
+}
+
+function renderExtras(){
+  const sec = document.getElementById("extraSection");
+  // 先頭のセクション行を残して削除
+  [...sec.querySelectorAll("tr")].slice(1).forEach(tr => tr.remove());
+
+  state.extras = buildExtras(state.vehicle);
+
+  // 表示・非表示制御
+  const showExtras = state.extras.length > 0;
+  sec.classList.toggle("hidden", !showExtras);
+
+  // 普通車 税区分の表示制御
+  const taxWrap = document.getElementById("taxClassWrap");
+  taxWrap.classList.toggle("hidden", state.vehicle !== "normal");
+
+  if(!showExtras) return;
+
+  state.extras.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+
+    const tdName = document.createElement("td");
+    tdName.className = "sticky-col";
+    tdName.textContent = row.name;
+    tr.appendChild(tdName);
+
+    const tdUnit = document.createElement("td");
+    tdUnit.className = "center";
+    const inpUnit = createNumInput(row.unit, "input-mini");
+    inpUnit.addEventListener("input", () => { state.extras[idx].unit = Number(inpUnit.value || 0); recalc(); });
+    tdUnit.appendChild(inpUnit);
+    tr.appendChild(tdUnit);
+
+    PERIODS.forEach(p => {
+      const tdC = document.createElement("td");
+      tdC.className = "center";
+      const inpC = createNumInput(row.counts[p.key] ?? 0, "input-count");
+      inpC.addEventListener("input", () => { state.extras[idx].counts[p.key] = Number(inpC.value || 0); recalc(); });
+      tdC.appendChild(inpC);
+      tr.appendChild(tdC);
+
+      tr.appendChild(yenCell(calcRowAmount(row, p.key)));
+    });
+
+    sec.appendChild(tr);
+  });
+}
+
+function recalc(){
+  // 金額セル再描画（tbody と extraSection の金額セルを更新）
+  // メンテナンス
+  const tbody = document.getElementById("tbody");
+  [...tbody.rows].forEach((tr, idx) => {
+    const row = state.rows[idx];
+    // 金額セルは 4列目から 2セルおき（count, amount）
+    PERIODS.forEach((p, pi) => {
+      const amount = calcRowAmount(row, p.key);
+      const amountCellIndex = 3 + (pi * 2);
+      tr.cells[amountCellIndex].textContent = fmtJPY.format(Math.round(amount));
+    });
+  });
+
+  // extras
+  const sec = document.getElementById("extraSection");
+  const extraRows = [...sec.querySelectorAll("tr")].slice(1);
+  extraRows.forEach((tr, idx) => {
+    const row = state.extras[idx];
+    PERIODS.forEach((p, pi) => {
+      const amount = calcRowAmount(row, p.key);
+      const amountCellIndex = 3 + (pi * 2);
+      tr.cells[amountCellIndex].textContent = fmtJPY.format(Math.round(amount));
+    });
+  });
+
+  // 合計計算
+  const sum = { "2_5":0, "4_5":0, "6_5":0, "10":0 };
+  const extraSum = { "2_5":0, "4_5":0, "6_5":0, "10":0 };
+
+  state.rows.forEach(r => PERIODS.forEach(p => sum[p.key] += calcRowAmount(r, p.key)));
+  state.extras.forEach(r => PERIODS.forEach(p => extraSum[p.key] += calcRowAmount(r, p.key)));
+
+  document.getElementById("sum_2_5").textContent = fmtJPY.format(Math.round(sum["2_5"]));
+  document.getElementById("sum_4_5").textContent = fmtJPY.format(Math.round(sum["4_5"]));
+  document.getElementById("sum_6_5").textContent = fmtJPY.format(Math.round(sum["6_5"]));
+  document.getElementById("sum_10").textContent   = fmtJPY.format(Math.round(sum["10"]));
+
+  document.getElementById("grand_2_5").textContent = fmtJPY.format(Math.round(sum["2_5"] + extraSum["2_5"]));
+  document.getElementById("grand_4_5").textContent = fmtJPY.format(Math.round(sum["4_5"] + extraSum["4_5"]));
+  document.getElementById("grand_6_5").textContent = fmtJPY.format(Math.round(sum["6_5"] + extraSum["6_5"]));
+  document.getElementById("grand_10").textContent  = fmtJPY.format(Math.round(sum["10"]  + extraSum["10"]));
+}
+
+function resetToBase(){
+  buildStateFromBase(state.vehicle);
+  render();
+}
+
+function copyCurrentJson(){
+  const payload = {
+    vehicle: state.vehicle,
+    taxClass: document.getElementById("taxClass").value,
+    rows: state.rows,
+    extras: state.extras
+  };
+  const txt = JSON.stringify(payload, null, 2);
+  navigator.clipboard.writeText(txt).then(() => {
+    setCopyStatus("コピーしました（JSON）");
+  }).catch(() => {
+    setCopyStatus("コピーに失敗しました。ブラウザの権限をご確認ください。");
+  });
+}
+
+let statusTimer = null;
+function setCopyStatus(msg){
+  const el = document.getElementById("copyStatus");
+  el.textContent = msg;
+  if(statusTimer) clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => el.textContent = "", 2500);
+}
+
+function init(){
+  // 初期
+  buildStateFromBase("kei");
+  render();
+
+  const vehicleSel = document.getElementById("vehicleType");
+  vehicleSel.addEventListener("change", () => {
+    const v = vehicleSel.value;
+    buildStateFromBase(v);
+    render();
+  });
+
+  const taxSel = document.getElementById("taxClass");
+  taxSel.addEventListener("change", () => {
+    // normal のときだけ extras を組み直して再描画
+    if(state.vehicle === "normal"){
+      render(); // render内で extras 再生成
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", resetToBase);
+  document.getElementById("copyJsonBtn").addEventListener("click", copyCurrentJson);
+}
+
+init();
+</script>
+</body>
+</html>
