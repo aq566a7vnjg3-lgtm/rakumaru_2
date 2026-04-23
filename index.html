@@ -80,6 +80,101 @@
       th, td{padding:6px 6px;}
       select, input[type="number"]{min-width: 140px;}
     }
+
+    /* 燃費比較モーダル */
+    .modal-overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,.52);
+      display:flex; align-items:flex-start; justify-content:center;
+      z-index:1000; padding:16px; overflow-y:auto;
+    }
+    .modal-overlay.hidden{display:none;}
+    .modal-content{
+      background:#fff; border-radius:16px; width:100%; max-width:860px;
+      box-shadow:0 8px 40px rgba(0,0,0,.25); overflow:hidden; margin-top:8px;
+    }
+    .modal-header{
+      background:var(--bg); color:#fff;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 16px; gap:10px;
+    }
+    .modal-header h2{margin:0; font-size:16px; font-weight:800; flex:1;}
+    .modal-close-btn{
+      background:transparent; border:1px solid rgba(255,255,255,.4);
+      color:#fff; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:14px;
+    }
+    .modal-body{padding:16px;}
+
+    /* 燃費入力エリア */
+    .fuel-inputs{
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+      gap:12px; margin-bottom:16px;
+    }
+    .fuel-inputs label{font-size:12px; color:#111; display:flex; flex-direction:column; gap:5px;}
+    .fuel-inputs input{
+      padding:8px 10px; border:1px solid var(--line); border-radius:10px;
+      font-size:14px; background:#fff; width:100%;
+    }
+    .fuel-inputs .input-hint{font-size:11px; color:var(--muted); margin-top:2px;}
+    .fuel-section-title{
+      font-size:12px; font-weight:800; color:var(--muted);
+      text-transform:uppercase; letter-spacing:.5px;
+      margin:4px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line);
+      grid-column:1/-1;
+    }
+
+    /* 結果テーブル */
+    .fuel-result-wrap{overflow-x:auto; margin-top:4px;}
+    .fuel-result-wrap table{
+      border-collapse:separate; border-spacing:0; width:100%; font-size:13px;
+    }
+    .fuel-result-wrap thead th{
+      background:#f3f7f5; border-bottom:1px solid var(--line);
+      padding:9px 10px; text-align:center; white-space:nowrap;
+    }
+    .fuel-result-wrap th.th-gas{background:#fff3e0;}
+    .fuel-result-wrap th.th-hv {background:#e8f5e9;}
+    .fuel-result-wrap td{border-bottom:1px solid var(--line); padding:8px 10px;}
+    .fuel-result-wrap td.num{text-align:right; white-space:nowrap;}
+    .fuel-result-wrap td.center{text-align:center;}
+    .fuel-result-wrap td.td-gas{background:#fffdf7;}
+    .fuel-result-wrap td.td-hv {background:#f7fff8;}
+    .fuel-result-wrap tbody tr:hover td{filter:brightness(.97);}
+    .fuel-result-wrap .best-row td{font-weight:700;}
+    .save-val{color:#080; font-weight:700;}
+    .cost-val{color:#c00; font-weight:700;}
+
+    /* サマリーカード */
+    .fuel-summary{
+      margin-top:14px; display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .fuel-card{
+      flex:1; min-width:160px; padding:12px 14px;
+      border-radius:12px; border:1px solid var(--line);
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .fuel-card.card-gas{background:#fff8ee; border-color:#f5d99a;}
+    .fuel-card.card-hv {background:#f0faf2; border-color:#9dcfab;}
+    .fuel-card.card-diff{background:#f3f7f5; border-color:#c0d8c8;}
+    .fuel-card .card-label{font-size:11px; color:var(--muted);}
+    .fuel-card .card-val  {font-size:18px; font-weight:900;}
+    .fuel-card .card-sub  {font-size:11px; color:var(--muted);}
+
+    /* 損益分岐点バー */
+    .breakeven-wrap{
+      margin-top:14px; padding:12px 14px;
+      background:#f8faf9; border-radius:12px; border:1px solid var(--line);
+    }
+    .breakeven-title{font-size:12px; font-weight:800; margin-bottom:8px;}
+    .breakeven-bar-bg{
+      height:14px; background:#e0e0e0; border-radius:99px; overflow:hidden; margin-bottom:6px;
+    }
+    .breakeven-bar-fill{
+      height:100%; background:var(--bg); border-radius:99px;
+      transition: width .4s ease;
+    }
+    .breakeven-note{font-size:11.5px; color:var(--muted);}
+
+    .fuel-note{font-size:11.5px; color:var(--muted); margin-top:12px; line-height:1.5;}
   </style>
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152.png">
@@ -178,10 +273,82 @@
 
   <div class="footer-actions">
     <button class="primary" id="resetBtn">この車両区分の基準値に戻す</button>
+    <button id="fuelCompareBtn">燃費による維持費比較</button>
     <button id="copyJsonBtn">現在値をJSONでコピー</button>
     <div class="small" id="copyStatus"></div>
   </div>
 </main>
+
+<!-- 燃費比較モーダル -->
+<div id="fuelModal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>燃費による維持費比較　ガソリン車 vs ハイブリッド車</h2>
+      <button class="modal-close-btn" id="closeFuelBtn">✕ 閉じる</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="fuel-inputs">
+        <div class="fuel-section-title">共通条件</div>
+
+        <label>年間走行距離（km）
+          <input type="text" id="fuelAnnualKm" value="10,000" inputmode="numeric"/>
+          <span class="input-hint">全国平均 約8,000〜10,000km</span>
+        </label>
+        <label>ガソリン単価（円/L）
+          <input type="number" id="fuelPrice" value="175" min="1" step="1"/>
+          <span class="input-hint">レギュラー参考価格</span>
+        </label>
+
+        <div class="fuel-section-title">燃費（実燃費）</div>
+
+        <label>ガソリン車の燃費（km/L）
+          <input type="number" id="gasMpg" value="18" min="1" step="0.1"/>
+          <span class="input-hint">実際の燃費を入力してください</span>
+        </label>
+        <label>ハイブリッド車の燃費（km/L）
+          <input type="number" id="hvMpg" value="28" min="1" step="0.1"/>
+          <span class="input-hint">実際の燃費を入力してください</span>
+        </label>
+
+        <div class="fuel-section-title">損益分岐点の計算（任意）</div>
+
+        <label>ハイブリッド車の車両価格差（円）
+          <input type="text" id="hvPremium" value="300,000" inputmode="numeric"/>
+          <span class="input-hint">ガソリン車との車両本体価格の差額</span>
+        </label>
+      </div>
+
+      <div class="fuel-result-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>期間</th>
+              <th class="th-gas">ガソリン車<br/>燃料費</th>
+              <th class="th-hv">ハイブリッド車<br/>燃料費</th>
+              <th>燃料費の差額<br/><span style="font-size:10px;font-weight:400;">（HV節約分）</span></th>
+              <th>価格差 差引後<br/><span style="font-size:10px;font-weight:400;">（損益）</span></th>
+            </tr>
+          </thead>
+          <tbody id="fuelTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="fuel-summary" id="fuelSummary"></div>
+
+      <div class="breakeven-wrap" id="breakevenWrap">
+        <div class="breakeven-title">損益分岐点</div>
+        <div class="breakeven-bar-bg"><div class="breakeven-bar-fill" id="breakevenBar" style="width:0%"></div></div>
+        <div class="breakeven-note" id="breakevenNote"></div>
+      </div>
+
+      <div class="fuel-note">
+        ※ 燃料費のみの比較です。メンテナンス費用・税金・保険は含みません。<br/>
+        ※ 実燃費は走行環境・運転スタイルにより大きく異なります。<span id="fuelCalcNote"></span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 /** 期間キー */
@@ -516,6 +683,153 @@ function init(){
 }
 
 init();
+
+/* ===== 燃費比較モーダル ===== */
+
+// カンマ付きフォーマット
+function addCommas(val){
+  const n = val.replace(/,/g, "").replace(/[^0-9]/g, "");
+  return n === "" ? "" : Number(n).toLocaleString("ja-JP");
+}
+function parseComma(val){
+  return Math.max(0, Number(String(val).replace(/,/g, "")) || 0);
+}
+
+// カンマ入力欄の共通処理（入力中にカンマを自動付与）
+["fuelAnnualKm", "hvPremium"].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("input", () => {
+    const pos = el.selectionStart;
+    const before = el.value.length;
+    el.value = addCommas(el.value);
+    const after = el.value.length;
+    el.setSelectionRange(pos + (after - before), pos + (after - before));
+    renderFuelCompare();
+  });
+});
+
+// 期間キー → 年数
+const PERIOD_YEARS = {
+  "2_5": 2.5, "3": 3, "4_5": 4.5, "5": 5, "6_5": 6.5, "7": 7, "10": 10
+};
+
+function calcFuelCostPerYear(annualKm, mpg, pricePerL){
+  return (annualKm / mpg) * pricePerL;
+}
+
+function renderFuelCompare(){
+  const annualKm  = Math.max(1, parseComma(document.getElementById("fuelAnnualKm").value) || 10000);
+  const pricePerL = Math.max(1, Number(document.getElementById("fuelPrice").value) || 175);
+  const gasMpg    = Math.max(0.1, Number(document.getElementById("gasMpg").value) || 18);
+  const hvMpg     = Math.max(0.1, Number(document.getElementById("hvMpg").value) || 28);
+  const hvPremium = parseComma(document.getElementById("hvPremium").value);
+
+  const gasYearly = calcFuelCostPerYear(annualKm, gasMpg, pricePerL);
+  const hvYearly  = calcFuelCostPerYear(annualKm, hvMpg,  pricePerL);
+  const saveYearly = gasYearly - hvYearly;
+
+  const tbody = document.getElementById("fuelTbody");
+  tbody.innerHTML = "";
+
+  PERIODS.forEach(p => {
+    const yrs    = PERIOD_YEARS[p.key];
+    const gasAmt = Math.round(gasYearly * yrs);
+    const hvAmt  = Math.round(hvYearly  * yrs);
+    const save   = Math.round(saveYearly * yrs);
+    const netSave = save - hvPremium; // 価格差を引いた損益
+
+    const tr = document.createElement("tr");
+    const netCls = netSave >= 0 ? "save-val" : "cost-val";
+    const netPrefix = netSave >= 0 ? "+" : "";
+    tr.innerHTML = `
+      <td class="center"><b>${p.label}</b></td>
+      <td class="num td-gas">${fmtJPY.format(gasAmt)}</td>
+      <td class="num td-hv">${fmtJPY.format(hvAmt)}</td>
+      <td class="num save-val">${fmtJPY.format(save)} 節約</td>
+      <td class="num ${hvPremium > 0 ? netCls : ""}">
+        ${hvPremium > 0
+          ? netPrefix + fmtJPY.format(netSave)
+          : "<span style='color:var(--muted);font-size:11px;'>価格差を入力</span>"}
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // サマリーカード（1年・5年・10年）
+  const summary = document.getElementById("fuelSummary");
+  const gas5y  = Math.round(gasYearly * 5);
+  const hv5y   = Math.round(hvYearly  * 5);
+  const save5y = Math.round(saveYearly * 5);
+  summary.innerHTML = `
+    <div class="fuel-card card-gas">
+      <span class="card-label">ガソリン車 年間燃料費</span>
+      <span class="card-val">${fmtJPY.format(Math.round(gasYearly))}</span>
+      <span class="card-sub">5年計: ${fmtJPY.format(gas5y)}</span>
+    </div>
+    <div class="fuel-card card-hv">
+      <span class="card-label">ハイブリッド車 年間燃料費</span>
+      <span class="card-val">${fmtJPY.format(Math.round(hvYearly))}</span>
+      <span class="card-sub">5年計: ${fmtJPY.format(hv5y)}</span>
+    </div>
+    <div class="fuel-card card-diff">
+      <span class="card-label">年間燃料費の節約額（HV優位）</span>
+      <span class="card-val save-val">${fmtJPY.format(Math.round(saveYearly))}</span>
+      <span class="card-sub">5年計: ${fmtJPY.format(save5y)} 節約</span>
+    </div>
+  `;
+
+  // 損益分岐点
+  const breakevenWrap = document.getElementById("breakevenWrap");
+  const breakevenBar  = document.getElementById("breakevenBar");
+  const breakevenNote = document.getElementById("breakevenNote");
+
+  if(hvPremium <= 0){
+    breakevenWrap.style.display = "none";
+  } else {
+    breakevenWrap.style.display = "";
+    if(saveYearly <= 0){
+      breakevenBar.style.width = "0%";
+      breakevenNote.textContent = "ハイブリッド車の燃費がガソリン車以下のため、燃料費では元が取れません。";
+    } else {
+      const breakevenYears = hvPremium / saveYearly;
+      const pct = Math.min(100, (breakevenYears / 10) * 100);
+      breakevenBar.style.width = pct + "%";
+      if(breakevenYears <= 10){
+        breakevenNote.textContent =
+          `車両価格差 ${fmtJPY.format(hvPremium)} を燃料費の節約で回収できるまで 約 ${breakevenYears.toFixed(1)} 年（走行距離 ${Math.round(annualKm * breakevenYears).toLocaleString()} km）`;
+      } else {
+        breakevenNote.textContent =
+          `回収まで 約 ${breakevenYears.toFixed(1)} 年（10年以内に回収できない見込み）`;
+      }
+    }
+  }
+
+  // 計算根拠を注記
+  document.getElementById("fuelCalcNote").textContent =
+    ` 計算条件: 年間${annualKm.toLocaleString()}km走行・${pricePerL}円/L・ガソリン車${gasMpg}km/L・HV${hvMpg}km/L。`;
+}
+
+function openFuelModal(){
+  renderFuelCompare();
+  document.getElementById("fuelModal").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeFuelModal(){
+  document.getElementById("fuelModal").classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+// 入力値変更で即時再計算（fuelAnnualKm・hvPremium はカンマ処理側で登録済み）
+["fuelPrice","gasMpg","hvMpg"].forEach(id => {
+  document.getElementById(id).addEventListener("input", renderFuelCompare);
+});
+
+document.getElementById("fuelCompareBtn").addEventListener("click", openFuelModal);
+document.getElementById("closeFuelBtn").addEventListener("click", closeFuelModal);
+document.getElementById("fuelModal").addEventListener("click", (e) => {
+  if(e.target === document.getElementById("fuelModal")) closeFuelModal();
+});
 </script>
 </body>
 </html>
