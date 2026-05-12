@@ -3,282 +3,275 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>メンテナンス維持費 簡易計算シート（1画面表示）</title>
+  <title>車両費用計算ツール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0aa64f;
-      --line:#d9d9d9;
-      --muted:#666;
-      --card:#fff;
-    }
+    /* ===== ベース ===== */
     *{box-sizing:border-box;}
-    body{
-      font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Arial, sans-serif;
-      margin:0; background:#fafafa;
-      -webkit-text-size-adjust: 100%;
-    }
-    header{background:var(--bg); color:#fff; padding:12px 14px;}
-    header h1{margin:0; font-size:16px; font-weight:800; letter-spacing:.2px;}
-    main{padding:12px 12px 18px; max-width:1100px; margin:0 auto;}
-    .controls{
-      display:flex; flex-wrap:wrap; gap:10px 12px; align-items:flex-end;
-      margin-bottom:10px;
-    }
-    label{display:flex; flex-direction:column; gap:6px; font-size:12px; color:#111;}
-    select, input[type="number"]{
-      padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#fff; font-size:14px;
-      min-width: 150px;
-    }
-    .note{font-size:12px; color:var(--muted); margin:6px 0 10px; line-height:1.35;}
-    .sheet{
-      background:var(--card); border:1px solid var(--line); border-radius:14px;
-      overflow:hidden;
-      box-shadow:0 2px 10px rgba(0,0,0,.04);
-    }
-    table{border-collapse:separate; border-spacing:0; width:100%; font-size:13px;}
-    thead th{
-      background:#f3f7f5; border-bottom:1px solid var(--line);
-      padding:10px 8px; text-align:center; white-space:nowrap;
-    }
-    th, td{border-bottom:1px solid var(--line); padding:8px 8px;}
-    tbody tr:hover td{background:#fcfffd;}
-    td.num{text-align:right; white-space:nowrap;}
-    td.center{text-align:center;}
-    .col-name{width:38%;}
-    .col-unit{width:20%;}
-    .col-count{width:18%;}
-    .col-amt{width:24%;}
-    .input-mini{width:100%; max-width:150px;}
-    .input-count{width:100%; max-width:120px;}
-    .yen{font-variant-numeric: tabular-nums;}
-    .section-row td{background:#f8faf9; font-weight:800;}
-    .total-row td{background:#f3f7f5; font-weight:900;}
-    .badge{
-      display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px;
-      background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25);
-      margin-left:8px;
-    }
+    body{font-family:system-ui,-apple-system,"Segoe UI","Hiragino Kaku Gothic ProN","Noto Sans JP",Arial,sans-serif;margin:0;background:#fafafa;-webkit-text-size-adjust:100%;}
+
+    /* ===== タブナビゲーション ===== */
+    .tab-nav{display:flex;overflow-x:auto;background:#0aa64f;position:sticky;top:0;z-index:500;}
+    .tab-btn{color:rgba(255,255,255,.7);border:none;background:transparent;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;font-family:inherit;}
+    .tab-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
+    .tab-btn.active{color:#fff;border-bottom-color:#fff;background:rgba(255,255,255,.15);}
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+
+    /* ===== CSS変数（メンテナンス基準） ===== */
+    :root{--bg:#0aa64f;--line:#d9d9d9;--muted:#666;--card:#fff;}
+
+    /* ===== メンテナンス維持費計算 ===== */
+    #tab-maintenance header{background:var(--bg);color:#fff;padding:12px 14px;}
+    #tab-maintenance header h1{margin:0;font-size:16px;font-weight:800;letter-spacing:.2px;}
+    #tab-maintenance main{padding:12px 12px 18px;max-width:1100px;margin:0 auto;}
+    .controls{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-end;margin-bottom:10px;}
+    #tab-maintenance label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#111;}
+    #tab-maintenance select,#tab-maintenance input[type="number"]{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;min-width:150px;}
+    .sheet{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+    #tab-maintenance table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;}
+    #tab-maintenance thead th{background:#f3f7f5;border-bottom:1px solid var(--line);padding:10px 8px;text-align:center;white-space:nowrap;}
+    #tab-maintenance th,#tab-maintenance td{border-bottom:1px solid var(--line);padding:8px 8px;}
+    #tab-maintenance tbody tr:hover td{background:#fcfffd;}
+    #tab-maintenance td.num{text-align:right;white-space:nowrap;}
+    #tab-maintenance td.center{text-align:center;}
+    .col-name{width:38%;}.col-unit{width:20%;}.col-count{width:18%;}.col-amt{width:24%;}
+    .input-mini{width:100%;max-width:150px;}.input-count{width:100%;max-width:120px;}
+    .yen{font-variant-numeric:tabular-nums;}
+    .section-row td{background:#f8faf9;font-weight:800;}
+    .total-row td{background:#f3f7f5;font-weight:900;}
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);margin-left:8px;}
     .hidden{display:none;}
-    .footer-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; align-items:center;}
-    button{
-      border:1px solid var(--line); background:#fff; padding:10px 12px; border-radius:12px; cursor:pointer;
-      font-size:13px;
-    }
-    button.primary{background:var(--bg); color:#fff; border-color:transparent;}
-    button:active{transform: translateY(1px);}
-    .small{font-size:12px; color:var(--muted);}
-    /* iPad 横画面を想定して、1画面に収まるように少し詰める */
-    @media (max-width: 1024px){
-      header h1{font-size:15px;}
-      table{font-size:12.5px;}
-      th, td{padding:7px 7px;}
-      select, input[type="number"]{font-size:14px; padding:8px 10px;}
-      .controls{gap:9px 10px;}
-    }
-    @media (max-width: 820px){
-      table{font-size:12px;}
-      th, td{padding:6px 6px;}
-      select, input[type="number"]{min-width: 140px;}
-    }
+    .footer-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+    #tab-maintenance button{border:1px solid var(--line);background:#fff;padding:10px 12px;border-radius:12px;cursor:pointer;font-size:13px;}
+    #tab-maintenance button.primary{background:var(--bg);color:#fff;border-color:transparent;}
+    #tab-maintenance button:active{transform:translateY(1px);}
+    .small{font-size:12px;color:var(--muted);}
+    @media(max-width:1024px){#tab-maintenance header h1{font-size:15px;}#tab-maintenance table{font-size:12.5px;}#tab-maintenance th,#tab-maintenance td{padding:7px 7px;}#tab-maintenance select,#tab-maintenance input[type="number"]{font-size:14px;padding:8px 10px;}.controls{gap:9px 10px;}}
+    @media(max-width:820px){#tab-maintenance table{font-size:12px;}#tab-maintenance th,#tab-maintenance td{padding:6px 6px;}#tab-maintenance select,#tab-maintenance input[type="number"]{min-width:140px;}}
 
     /* 燃費比較モーダル */
-    .modal-overlay{
-      position:fixed; inset:0; background:rgba(0,0,0,.52);
-      display:flex; align-items:flex-start; justify-content:center;
-      z-index:1000; padding:16px; overflow-y:auto;
-    }
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);display:flex;align-items:flex-start;justify-content:center;z-index:1000;padding:16px;overflow-y:auto;}
     .modal-overlay.hidden{display:none;}
-    .modal-content{
-      background:#fff; border-radius:16px; width:100%; max-width:860px;
-      box-shadow:0 8px 40px rgba(0,0,0,.25); overflow:hidden; margin-top:8px;
-    }
-    .modal-header{
-      background:var(--bg); color:#fff;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px; gap:10px;
-    }
-    .modal-header h2{margin:0; font-size:16px; font-weight:800; flex:1;}
-    .modal-close-btn{
-      background:transparent; border:1px solid rgba(255,255,255,.4);
-      color:#fff; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:14px;
-    }
+    .modal-content{background:#fff;border-radius:16px;width:100%;max-width:860px;box-shadow:0 8px 40px rgba(0,0,0,.25);overflow:hidden;margin-top:8px;}
+    .modal-header{background:var(--bg);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;gap:10px;}
+    .modal-header h2{margin:0;font-size:16px;font-weight:800;flex:1;}
+    .modal-close-btn{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;font-size:14px;}
     .modal-body{padding:16px;}
-
-    /* 燃費入力エリア */
-    .fuel-inputs{
-      display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
-      gap:12px; margin-bottom:16px;
-    }
-    .fuel-inputs label{font-size:12px; color:#111; display:flex; flex-direction:column; gap:5px;}
-    .fuel-inputs input{
-      padding:8px 10px; border:1px solid var(--line); border-radius:10px;
-      font-size:14px; background:#fff; width:100%;
-    }
-    .fuel-inputs .input-hint{font-size:11px; color:var(--muted); margin-top:2px;}
-    .fuel-section-title{
-      font-size:12px; font-weight:800; color:var(--muted);
-      text-transform:uppercase; letter-spacing:.5px;
-      margin:4px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line);
-      grid-column:1/-1;
-    }
-
-    /* 結果テーブル */
-    .fuel-result-wrap{overflow-x:auto; margin-top:4px;}
-    .fuel-result-wrap table{
-      border-collapse:separate; border-spacing:0; width:100%; font-size:13px;
-    }
-    .fuel-result-wrap thead th{
-      background:#f3f7f5; border-bottom:1px solid var(--line);
-      padding:9px 10px; text-align:center; white-space:nowrap;
-    }
-    .fuel-result-wrap th.th-gas{background:#fff3e0;}
-    .fuel-result-wrap th.th-hv {background:#e8f5e9;}
-    .fuel-result-wrap td{border-bottom:1px solid var(--line); padding:8px 10px;}
-    .fuel-result-wrap td.num{text-align:right; white-space:nowrap;}
-    .fuel-result-wrap td.center{text-align:center;}
-    .fuel-result-wrap td.td-gas{background:#fffdf7;}
-    .fuel-result-wrap td.td-hv {background:#f7fff8;}
+    .fuel-inputs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:16px;}
+    .fuel-inputs label{font-size:12px;color:#111;display:flex;flex-direction:column;gap:5px;}
+    .fuel-inputs input{padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff;width:100%;}
+    .fuel-inputs .input-hint{font-size:11px;color:var(--muted);margin-top:2px;}
+    .fuel-section-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:4px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line);grid-column:1/-1;}
+    .fuel-result-wrap{overflow-x:auto;margin-top:4px;}
+    .fuel-result-wrap table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;}
+    .fuel-result-wrap thead th{background:#f3f7f5;border-bottom:1px solid var(--line);padding:9px 10px;text-align:center;white-space:nowrap;}
+    .fuel-result-wrap th.th-gas{background:#fff3e0;}.fuel-result-wrap th.th-hv{background:#e8f5e9;}
+    .fuel-result-wrap td{border-bottom:1px solid var(--line);padding:8px 10px;}
+    .fuel-result-wrap td.num{text-align:right;white-space:nowrap;}.fuel-result-wrap td.center{text-align:center;}
+    .fuel-result-wrap td.td-gas{background:#fffdf7;}.fuel-result-wrap td.td-hv{background:#f7fff8;}
     .fuel-result-wrap tbody tr:hover td{filter:brightness(.97);}
-    .fuel-result-wrap .best-row td{font-weight:700;}
-    .save-val{color:#080; font-weight:700;}
-    .cost-val{color:#c00; font-weight:700;}
+    .save-val{color:#080;font-weight:700;}.cost-val{color:#c00;font-weight:700;}
+    .fuel-summary{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;}
+    .fuel-card{flex:1;min-width:160px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;gap:4px;}
+    .fuel-card.card-gas{background:#fff8ee;border-color:#f5d99a;}.fuel-card.card-hv{background:#f0faf2;border-color:#9dcfab;}.fuel-card.card-diff{background:#f3f7f5;border-color:#c0d8c8;}
+    .fuel-card .card-label{font-size:11px;color:var(--muted);}.fuel-card .card-val{font-size:18px;font-weight:900;}.fuel-card .card-sub{font-size:11px;color:var(--muted);}
+    .breakeven-wrap{margin-top:14px;padding:12px 14px;background:#f8faf9;border-radius:12px;border:1px solid var(--line);}
+    .breakeven-title{font-size:12px;font-weight:800;margin-bottom:8px;}
+    .breakeven-bar-bg{height:14px;background:#e0e0e0;border-radius:99px;overflow:hidden;margin-bottom:6px;}
+    .breakeven-bar-fill{height:100%;background:var(--bg);border-radius:99px;transition:width .4s ease;}
+    .breakeven-note{font-size:11.5px;color:var(--muted);}
+    .fuel-note{font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.5;}
 
-    /* サマリーカード */
-    .fuel-summary{
-      margin-top:14px; display:flex; flex-wrap:wrap; gap:10px;
-    }
-    .fuel-card{
-      flex:1; min-width:160px; padding:12px 14px;
-      border-radius:12px; border:1px solid var(--line);
-      display:flex; flex-direction:column; gap:4px;
-    }
-    .fuel-card.card-gas{background:#fff8ee; border-color:#f5d99a;}
-    .fuel-card.card-hv {background:#f0faf2; border-color:#9dcfab;}
-    .fuel-card.card-diff{background:#f3f7f5; border-color:#c0d8c8;}
-    .fuel-card .card-label{font-size:11px; color:var(--muted);}
-    .fuel-card .card-val  {font-size:18px; font-weight:900;}
-    .fuel-card .card-sub  {font-size:11px; color:var(--muted);}
+    /* ===== クレジット計算 ===== */
+    #tab-credit{background:#c8d8ee;padding:4px;min-height:calc(100vh - 44px);}
+    #tab-credit *{box-sizing:border-box;margin:0;padding:0;}
+    #tab-credit{font-family:"Meiryo","MS PGothic",sans-serif;font-size:12px;color:#000;}
+    #tab-credit .outer{background:#c8d8ee;padding:4px;}
+    #tab-credit .title-bar{display:flex;align-items:center;justify-content:space-between;background:#c8d8ee;padding:4px 6px 6px;}
+    #tab-credit .title-bar h1{font-size:14px;font-weight:bold;}
+    #tab-credit .title-btns{display:flex;gap:4px;}
+    #tab-credit .tbtn{background:#1a3a7a;color:#fff;border:1px solid #3a5aaa;padding:3px 20px;font-size:12px;cursor:pointer;border-radius:1px;}
+    #tab-credit .main{background:#fff;border:2px solid #8aaacc;}
+    #tab-credit .plan-header{background:#a8c4e0;border-bottom:1px solid #8aaacc;padding:3px 8px;font-weight:bold;font-size:13px;display:flex;align-items:center;}
+    #tab-credit .plan-sep{width:24px;flex-shrink:0;}
+    #tab-credit .plan-hontai{display:flex;align-items:center;gap:5px;font-weight:normal;font-size:12px;}
+    #tab-credit .form-grid{display:grid;grid-template-columns:1fr 1fr;}
+    #tab-credit .col{padding:2px 4px;}
+    #tab-credit .fr{display:flex;align-items:center;border-bottom:1px solid #dde8f4;padding:2px 0;min-height:26px;}
+    #tab-credit .fl{min-width:130px;font-size:12px;white-space:nowrap;}
+    #tab-credit .req{color:#cc0000;font-size:10px;}
+    #tab-credit .fi{flex:1;display:flex;align-items:center;gap:3px;}
+    #tab-credit .fi input,#tab-credit .fi select{border:1px solid #9ab0cc;padding:1px 4px;font-size:12px;background:#fff;min-width:0;}
+    #tab-credit .fi input[type=text]{text-align:right;}
+    #tab-credit .fi input.gray{background:#d8e4f0;color:#444;}
+    #tab-credit .fi input.bluebg{background:#a8c4e0;border:1px solid #7a9ac0;font-weight:bold;text-align:right;}
+    #tab-credit .fu{font-size:11px;white-space:nowrap;margin-left:2px;}
+    #tab-credit .zanka-btn{background:#b0b8c8;border:1px solid #8898b0;color:#444;padding:2px 12px;font-size:12px;cursor:default;border-radius:2px;}
+    #tab-credit .btn-row{display:flex;justify-content:flex-end;gap:6px;padding:5px 8px;border-top:1px solid #c0d4e8;background:#e8f0f8;}
+    #tab-credit .calc-btn{background:#1a3a7a;color:#fff;border:1px solid #3a5aaa;padding:4px 24px;font-size:12px;cursor:pointer;font-weight:bold;}
+    #tab-credit .rst-btn{background:#1a3a7a;color:#fff;border:1px solid #3a5aaa;padding:4px 18px;font-size:12px;cursor:pointer;}
+    #tab-credit .tbl-wrap{overflow-x:auto;border-top:2px solid #8aaacc;}
+    #tab-credit table{width:100%;border-collapse:collapse;font-size:11px;}
+    #tab-credit th{background:#1a3a7a;color:#fff;padding:3px 5px;text-align:center;border:1px solid #4a6aaa;white-space:nowrap;font-weight:normal;line-height:1.4;}
+    #tab-credit td{padding:3px 5px;border:1px solid #b0c8e0;text-align:right;white-space:nowrap;background:#fff;}
+    #tab-credit td.c{text-align:center;}
+    #tab-credit tr.result td{background:#dde8f8;}
 
-    /* 損益分岐点バー */
-    .breakeven-wrap{
-      margin-top:14px; padding:12px 14px;
-      background:#f8faf9; border-radius:12px; border:1px solid var(--line);
+    /* ===== EV vs ガソリン比較 ===== */
+    #tab-ev{
+      --ev:#00c8ff;--gas:#ff6b35;--bg:#0a0e1a;--surface:#111827;--surface2:#1c2536;
+      --border:#2a3550;--text:#e8edf5;--muted:#6b7fa3;--green:#22d3a0;
+      background:#0a0e1a;color:#e8edf5;font-family:'Noto Sans JP',sans-serif;
+      padding:24px 16px 48px;min-height:calc(100vh - 44px);
     }
-    .breakeven-title{font-size:12px; font-weight:800; margin-bottom:8px;}
-    .breakeven-bar-bg{
-      height:14px; background:#e0e0e0; border-radius:99px; overflow:hidden; margin-bottom:6px;
-    }
-    .breakeven-bar-fill{
-      height:100%; background:var(--bg); border-radius:99px;
-      transition: width .4s ease;
-    }
-    .breakeven-note{font-size:11.5px; color:var(--muted);}
-
-    .fuel-note{font-size:11.5px; color:var(--muted); margin-top:12px; line-height:1.5;}
+    #tab-ev .ev-header{text-align:center;margin-bottom:32px;}
+    #tab-ev .ev-header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,8vw,3.5rem);letter-spacing:.05em;background:linear-gradient(135deg,var(--ev),var(--gas));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:4px;}
+    #tab-ev .ev-header p{color:var(--muted);font-size:.85rem;}
+    #tab-ev .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:720px;margin:0 auto 24px;}
+    #tab-ev .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 16px;}
+    #tab-ev .card.ev-card{border-top:3px solid var(--ev);}
+    #tab-ev .card.gas-card{border-top:3px solid var(--gas);}
+    #tab-ev .card-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+    #tab-ev .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+    #tab-ev .dot-ev{background:var(--ev);box-shadow:0 0 8px var(--ev);}
+    #tab-ev .dot-gas{background:var(--gas);box-shadow:0 0 8px var(--gas);}
+    #tab-ev .field{margin-bottom:12px;}
+    #tab-ev label{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px;}
+    #tab-ev .input-row{display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+    #tab-ev .input-row input{flex:1;background:transparent;border:none;outline:none;padding:8px 10px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--text);width:0;}
+    #tab-ev .unit{padding:8px 10px 8px 4px;font-size:.72rem;color:var(--muted);white-space:nowrap;}
+    #tab-ev .cost-per-km{background:var(--surface2);border-radius:10px;padding:10px 12px;margin-top:4px;display:flex;justify-content:space-between;align-items:center;}
+    #tab-ev .cost-per-km .cpk-label{font-size:.72rem;color:var(--muted);}
+    #tab-ev .cost-per-km .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;}
+    #tab-ev .card.ev-card .cost-per-km .val{color:var(--ev);}
+    #tab-ev .card.gas-card .cost-per-km .val{color:var(--gas);}
+    #tab-ev .common{max-width:720px;margin:0 auto 24px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 16px;}
+    #tab-ev .common-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+    #tab-ev .common-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    #tab-ev .result{max-width:720px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 16px;}
+    #tab-ev .result-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;text-align:center;}
+    #tab-ev .chart-wrap{margin-bottom:24px;}
+    #tab-ev .chart-row{display:grid;grid-template-columns:52px 1fr 72px;align-items:center;gap:8px;margin-bottom:10px;}
+    #tab-ev .chart-label{font-size:.72rem;color:var(--muted);text-align:right;}
+    #tab-ev .bar-track{background:var(--surface2);border-radius:4px;height:22px;overflow:hidden;}
+    #tab-ev .bar{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+    #tab-ev .bar-ev{background:linear-gradient(90deg,#006fa8,var(--ev));}
+    #tab-ev .bar-gas{background:linear-gradient(90deg,#b84a1a,var(--gas));}
+    #tab-ev .bar-val{font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--muted);text-align:right;}
+    #tab-ev .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+    #tab-ev .summary-box{background:var(--surface2);border-radius:12px;padding:14px 12px;text-align:center;}
+    #tab-ev .s-label{font-size:.68rem;color:var(--muted);margin-bottom:4px;}
+    #tab-ev .s-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;line-height:1;}
+    #tab-ev .s-sub{font-size:.65rem;color:var(--muted);margin-top:2px;}
+    #tab-ev .ev-color{color:var(--ev);}
+    #tab-ev .gas-color{color:var(--gas);}
+    #tab-ev .diff-box{border:1px solid var(--green);border-radius:12px;padding:16px;text-align:center;background:rgba(34,211,160,.06);}
+    #tab-ev .d-label{font-size:.72rem;color:var(--green);letter-spacing:.1em;margin-bottom:6px;}
+    #tab-ev .d-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--green);line-height:1;}
+    #tab-ev .d-sub{font-size:.72rem;color:var(--muted);margin-top:4px;}
+    #tab-ev .breakdown{margin-top:20px;overflow-x:auto;}
+    #tab-ev table{width:100%;border-collapse:collapse;font-size:.78rem;}
+    #tab-ev th{color:var(--muted);font-weight:400;padding:6px 8px;border-bottom:1px solid var(--border);text-align:right;font-size:.68rem;letter-spacing:.05em;}
+    #tab-ev th:first-child{text-align:left;}
+    #tab-ev td{padding:8px 8px;border-bottom:1px solid var(--border);text-align:right;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.03em;}
+    #tab-ev td:first-child{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;text-align:left;color:var(--muted);}
+    #tab-ev tr:last-child td{border-bottom:none;font-size:1.05rem;}
+    #tab-ev tr:last-child td:first-child{color:var(--text);font-weight:700;}
+    #tab-ev .diff-neg{color:var(--green);}
+    #tab-ev .diff-pos{color:var(--gas);}
+    @media(max-width:480px){#tab-ev .cards{grid-template-columns:1fr;}#tab-ev .common-grid{grid-template-columns:1fr;}}
   </style>
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152.png">
-  <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120.png">
-
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0aa64f">
-
 </head>
 <body>
-<header>
-  <h1>メンテナンス維持費 簡易計算シート（1画面表示）<span class="badge">工賃込み / 税込み</span></h1>
-</header>
 
-<main>
-  <div class="controls">
-    <label>
-      車両区分
-      <select id="vehicleType">
-        <option value="kei">軽自動車</option>
-        <option value="small">小型車</option>
-        <option value="normal">普通車</option>
-        <option value="ev">EV車（N-ONEe）</option>
-      </select>
-    </label>
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="maintenance" onclick="switchTab('maintenance')">メンテナンス費計算</button>
+  <button class="tab-btn" data-tab="credit" onclick="switchTab('credit')">クレジット計算</button>
+  <button class="tab-btn" data-tab="ev" onclick="switchTab('ev')">EV vs ガソリン比較</button>
+</nav>
 
-    <label>
-      期間（表示する列）
-      <select id="periodSel">
-        <option value="2_5">2年半</option>
-        <option value="3">3年</option>
-        <option value="4_5">4年半</option>
-        <option value="5">5年</option>
-        <option value="6_5">6年半</option>
-        <option value="7">7年</option>
-        <option value="10">10年</option>
-      </select>
-    </label>
-
-    <label id="taxClassWrap" class="hidden">
-      普通車 税区分（任意）
-      <select id="taxClass">
-        <option value="1500">自動車税 1500CC</option>
-        <option value="2000">自動車税 2000CC</option>
-      </select>
-    </label>
-
-    <div class="small">
-      ・単価/回数は編集できます（初期値＝基準値）<br/>
-      ・金額は <b>単価 × 回数</b> で自動計算します
+<!-- ===== Tab 1: メンテナンス維持費計算 ===== -->
+<div id="tab-maintenance" class="tab-content active">
+  <header>
+    <h1>メンテナンス維持費 簡易計算シート（1画面表示）<span class="badge">工賃込み / 税込み</span></h1>
+  </header>
+  <main>
+    <div class="controls">
+      <label>
+        車両区分
+        <select id="vehicleType">
+          <option value="kei">軽自動車</option>
+          <option value="small">小型車</option>
+          <option value="normal">普通車</option>
+          <option value="ev">EV車（N-ONEe）</option>
+        </select>
+      </label>
+      <label>
+        期間（表示する列）
+        <select id="periodSel">
+          <option value="2_5">2年半</option>
+          <option value="3">3年</option>
+          <option value="4_5">4年半</option>
+          <option value="5">5年</option>
+          <option value="6_5">6年半</option>
+          <option value="7">7年</option>
+          <option value="10">10年</option>
+        </select>
+      </label>
+      <label id="taxClassWrap" class="hidden">
+        普通車 税区分（任意）
+        <select id="taxClass">
+          <option value="1500">自動車税 1500CC</option>
+          <option value="2000">自動車税 2000CC</option>
+        </select>
+      </label>
+      <div class="small">
+        ・単価/回数は編集できます（初期値＝基準値）<br/>
+        ・金額は <b>単価 × 回数</b> で自動計算します
+      </div>
     </div>
-  </div>
-
-  <div class="sheet">
-    <table id="tbl">
-      <thead>
-        <tr>
-          <th class="col-name">メンテナンス（固定）</th>
-          <th class="col-unit">単価</th>
-          <th class="col-count"><span id="periodLabelHead">2年半</span> 回数</th>
-          <th class="col-amt"><span id="periodLabelHead2">2年半</span> 金額</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-
-      <tbody>
-        <tr class="total-row">
-          <td>合計（メンテナンス）</td>
-          <td></td>
-          <td></td>
-          <td class="num yen" id="sum_main">-</td>
-        </tr>
-      </tbody>
-
-      <tbody id="extraSection">
-        <tr class="section-row">
-          <td>自動車税 / 自賠責保険（自動切替）</td>
-          <td colspan="3" class="small">※ 車両区分により表示/非表示が切り替わります</td>
-        </tr>
-      </tbody>
-
-      <tbody>
-        <tr class="total-row">
-          <td>合計（メンテナンス + 表示中の税/保険）</td>
-          <td></td>
-          <td></td>
-          <td class="num yen" id="sum_grand">-</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer-actions">
-    <button class="primary" id="resetBtn">この車両区分の基準値に戻す</button>
-    <button id="fuelCompareBtn">燃費による維持費比較</button>
-    <button onclick="window.open('ev_vs_gas_calculator.html', '_blank')">EV vs ガソリン車 走行コスト比較</button>
-    <button id="copyJsonBtn">現在値をJSONでコピー</button>
-    <div class="small" id="copyStatus"></div>
-  </div>
-</main>
+    <div class="sheet">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th class="col-name">メンテナンス（固定）</th>
+            <th class="col-unit">単価</th>
+            <th class="col-count"><span id="periodLabelHead">2年半</span> 回数</th>
+            <th class="col-amt"><span id="periodLabelHead2">2年半</span> 金額</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tbody>
+          <tr class="total-row">
+            <td>合計（メンテナンス）</td><td></td><td></td>
+            <td class="num yen" id="sum_main">-</td>
+          </tr>
+        </tbody>
+        <tbody id="extraSection">
+          <tr class="section-row">
+            <td>自動車税 / 自賠責保険（自動切替）</td>
+            <td colspan="3" class="small">※ 車両区分により表示/非表示が切り替わります</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr class="total-row">
+            <td>合計（メンテナンス + 表示中の税/保険）</td><td></td><td></td>
+            <td class="num yen" id="sum_grand">-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-actions">
+      <button class="primary" id="resetBtn">この車両区分の基準値に戻す</button>
+      <button id="fuelCompareBtn">燃費による維持費比較</button>
+      <button onclick="switchTab('ev')">EV vs ガソリン車 走行コスト比較</button>
+      <button id="copyJsonBtn">現在値をJSONでコピー</button>
+      <div class="small" id="copyStatus"></div>
+    </div>
+  </main>
+</div>
 
 <!-- 燃費比較モーダル -->
 <div id="fuelModal" class="modal-overlay hidden">
@@ -288,10 +281,8 @@
       <button class="modal-close-btn" id="closeFuelBtn">✕ 閉じる</button>
     </div>
     <div class="modal-body">
-
       <div class="fuel-inputs">
         <div class="fuel-section-title">共通条件</div>
-
         <label>年間走行距離（km）
           <input type="text" id="fuelAnnualKm" value="10,000" inputmode="numeric"/>
           <span class="input-hint">全国平均 約8,000〜10,000km</span>
@@ -300,9 +291,7 @@
           <input type="number" id="fuelPrice" value="175" min="1" step="1"/>
           <span class="input-hint">レギュラー参考価格</span>
         </label>
-
         <div class="fuel-section-title">燃費（実燃費）</div>
-
         <label>ガソリン車の燃費（km/L）
           <input type="number" id="gasMpg" value="18" min="1" step="0.1"/>
           <span class="input-hint">実際の燃費を入力してください</span>
@@ -311,15 +300,12 @@
           <input type="number" id="hvMpg" value="28" min="1" step="0.1"/>
           <span class="input-hint">実際の燃費を入力してください</span>
         </label>
-
         <div class="fuel-section-title">損益分岐点の計算（任意）</div>
-
         <label>ハイブリッド車の車両価格差（円）
           <input type="text" id="hvPremium" value="300,000" inputmode="numeric"/>
           <span class="input-hint">ガソリン車との車両本体価格の差額</span>
         </label>
       </div>
-
       <div class="fuel-result-wrap">
         <table>
           <thead>
@@ -334,15 +320,12 @@
           <tbody id="fuelTbody"></tbody>
         </table>
       </div>
-
       <div class="fuel-summary" id="fuelSummary"></div>
-
       <div class="breakeven-wrap" id="breakevenWrap">
         <div class="breakeven-title">損益分岐点</div>
         <div class="breakeven-bar-bg"><div class="breakeven-bar-fill" id="breakevenBar" style="width:0%"></div></div>
         <div class="breakeven-note" id="breakevenNote"></div>
       </div>
-
       <div class="fuel-note">
         ※ 燃料費のみの比較です。メンテナンス費用・税金・保険は含みません。<br/>
         ※ 実燃費は走行環境・運転スタイルにより大きく異なります。<span id="fuelCalcNote"></span>
@@ -351,486 +334,556 @@
   </div>
 </div>
 
+<!-- ===== Tab 2: クレジット計算 ===== -->
+<div id="tab-credit" class="tab-content">
+<div class="outer">
+<div class="title-bar">
+  <h1>クレジット計算</h1>
+  <div class="title-btns"><button class="tbtn">確定</button><button class="tbtn">閉じる</button></div>
+</div>
+<div class="main">
+  <div class="plan-header">
+    <span>お支払いプラン１</span>
+    <span class="plan-sep"></span>
+    <div class="plan-hontai">
+      <span>車両本体価格（税込）<span class="req">※</span></span>
+      <input type="text" id="cr_hontai" placeholder="例: 2,197,540" style="width:120px;border:1px solid #7a9ac0;padding:1px 4px;font-size:12px;background:#fff;text-align:right" oninput="crFmtInput(this)" onblur="crOnch()">
+      <span style="font-size:11px">円</span>
+    </div>
+  </div>
+  <div class="form-grid">
+    <div class="col">
+      <div class="fr"><div class="fl">頭金（現金）</div><div class="fi"><input type="text" id="cr_atama" value="0" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span></div></div>
+      <div class="fr"><div class="fl">支払方法</div><div class="fi"><select id="cr_shiharaiHoho" style="width:150px" onchange="crOnShiharaiChange()"><option value="">---選択してください---</option><option value="zanka">残価クレジット</option><option value="normal">通常クレジット</option></select></div></div>
+      <div class="fr"><div class="fl">支払回数 <span class="req">（必須）</span></div><div class="fi"><select id="cr_kaisu_sel" style="width:60px" onchange="crOnch()"><option value="36">36</option><option value="60" selected>60</option></select><input type="text" id="cr_kaisu_inp" style="width:60px;display:none" placeholder="例:84" oninput="crValidateKaisu(this)" onblur="crOnch()"><span class="fu">回</span></div></div>
+      <div class="fr"><div class="fl">実質年率 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_nenri" value="5.20" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
+      <div class="fr"><div class="fl">ボーナス１</div><div class="fi">
+        <select id="cr_b1m" style="width:50px" onchange="crOnch()"><option value="">--</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+        <span class="fu">月</span>
+        <input type="text" id="cr_b1amt" value="0" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
+      </div></div>
+      <div class="fr"><div class="fl">ボーナス２</div><div class="fi">
+        <select id="cr_b2m" style="width:50px" onchange="crOnch()"><option value="">--</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+        <span class="fu">月</span>
+        <input type="text" id="cr_b2amt" value="0" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
+      </div></div>
+      <div class="fr"><div class="fl">納車予定日 <span class="req">（必須）</span></div><div class="fi"><input type="date" id="cr_noshabi" style="width:130px" onchange="crOnch()"></div></div>
+      <div class="fr" id="cr_row_mileage"><div class="fl">月間走行 <span class="req">（必須）</span></div><div class="fi">
+        <select id="cr_mileage" style="width:150px" onchange="crOnch()"><option value="">---選択してください---</option><option value="1000">1,000 km</option><option value="1500">1,500 km</option></select>
+        <button type="button" class="zanka-btn" style="margin-left:6px">残価条件選択</button>
+      </div></div>
+      <div class="fr" id="cr_row_menseki"><div class="fl">免責走行距離</div><div class="fi"><input type="text" id="cr_menseki" readonly class="gray" style="width:80px"><span class="fu">km</span></div></div>
+      <div class="fr" id="cr_row_zankaRate" style="display:none"><div class="fl">据置・残価率</div><div class="fi"><input type="text" id="cr_zankaRate" value="46.00" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
+    </div>
+    <div class="col" style="border-left:2px solid #8aaacc">
+      <div class="fr"><div class="fl">所要資金</div><div class="fi"><input type="text" id="cr_shoyo" class="bluebg" style="width:120px" oninput="crFmtInput(this)" onblur="crOnShoyo()"></div></div>
+      <div class="fr"><div class="fl">計算方法</div><div class="fi"><select id="cr_keisanHoho" style="width:160px" onchange="crOnKeisanChange()"><option value="">---選択してください---</option><option value="kaisu">回数指定</option><option value="atama">頭金逆引き</option><option value="value" id="cr_opt_value">２回払い（バリュー保証プラン）</option></select></div></div>
+      <div class="fr"><div class="fl">月払額</div><div class="fi"><input type="text" id="cr_tsuki" readonly style="width:120px;background:#d8e4f0;color:#888;font-weight:bold;border:1px solid #9ab0cc;text-align:right"></div></div>
+      <div class="fr"><div class="fl">支払開始月 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_startMonth" placeholder="YYYY/MM" style="width:80px;text-align:left" oninput="crFmtStartMonth(this)" onblur="crValidateStartMonth(this)"></div></div>
+      <div class="fr"><div class="fl">加算額１</div><div class="fi"><input type="text" id="cr_kasan1" value="0" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"></div></div>
+      <div class="fr"><div class="fl">加算額２</div><div class="fi">
+        <input type="text" id="cr_kasan2" value="0" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()">
+        <span style="font-size:11px;white-space:nowrap;margin-left:8px">初回ボーナススキップ</span>
+        <input type="checkbox" id="cr_skipBonus" style="margin-left:4px">
+      </div></div>
+      <div class="fr" style="min-height:26px"></div>
+      <div class="fr" id="cr_row_mensekiten"><div class="fl">免責点数</div><div class="fi">
+        <input type="text" value="100" readonly class="gray" style="width:44px"><span class="fu">点</span>
+        <span style="margin-left:10px;font-size:11px">超過走行金額</span>
+        <input type="text" value="5" readonly class="gray" style="width:36px;margin-left:4px"><span class="fu">円／km</span>
+      </div></div>
+      <div class="fr" id="cr_row_zankaGaku" style="display:none"><div class="fl">残価額</div><div class="fi"><input type="text" id="cr_zankaGaku" readonly style="width:120px;background:#fff3cc;font-weight:bold"><span class="fu">円</span></div></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="calc-btn" id="cr_calcBtn" onclick="crDoCalc()">計　算</button>
+    <button class="rst-btn" onclick="crDoReset()">リセット</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th></th><th>支払<br>回数</th><th>終了</th><th>頭金(現金)</th><th>初回</th><th>２回目以降</th><th>×回</th>
+          <th>ボーナス１<br>ボーナス２</th><th>×回</th><th>手数料</th><th>支払総額</th>
+          <th id="cr_th_zankaRate">据置・<br>残価率</th><th id="cr_th_zankaFinal">最終回<br>支払金</th>
+        </tr>
+      </thead>
+      <tbody id="cr_tbody">
+        <tr><td class="c"><input type="radio" checked></td><td class="c" colspan="12" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ===== Tab 3: EV vs ガソリン比較 ===== -->
+<div id="tab-ev" class="tab-content">
+  <div class="ev-header">
+    <h1>EV vs GASOLINE</h1>
+    <p>走行コスト比較シミュレーター</p>
+  </div>
+  <div class="cards">
+    <div class="card ev-card">
+      <div class="card-title"><span class="dot dot-ev"></span>EV（電気自動車）</div>
+      <div class="field">
+        <label>電費（km/kWh）</label>
+        <div class="input-row"><input type="number" id="evEfficiency" value="6.5" min="1" max="20" step="0.1"><span class="unit">km/kWh</span></div>
+      </div>
+      <div class="field">
+        <label>電気料金（円/kWh）</label>
+        <div class="input-row"><input type="number" id="evPrice" value="30" min="10" max="100" step="1"><span class="unit">円/kWh</span></div>
+      </div>
+      <div class="cost-per-km">
+        <span class="cpk-label">1km あたり</span>
+        <span class="val" id="evCostKm">—</span>
+      </div>
+    </div>
+    <div class="card gas-card">
+      <div class="card-title"><span class="dot dot-gas"></span>ガソリン車</div>
+      <div class="field">
+        <label>燃費（km/L）</label>
+        <div class="input-row"><input type="number" id="gasEfficiency" value="15" min="5" max="50" step="0.5"><span class="unit">km/L</span></div>
+      </div>
+      <div class="field">
+        <label>ガソリン価格（円/L）</label>
+        <div class="input-row"><input type="number" id="gasPrice" value="170" min="100" max="300" step="1"><span class="unit">円/L</span></div>
+      </div>
+      <div class="cost-per-km">
+        <span class="cpk-label">1km あたり</span>
+        <span class="val" id="gasCostKm">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="common">
+    <div class="common-title">📊 シミュレーション設定</div>
+    <div class="common-grid">
+      <div class="field">
+        <label>年間走行距離（km）</label>
+        <div class="input-row"><input type="number" id="evAnnualKm" value="10000" min="1000" max="100000" step="500"><span class="unit">km/年</span></div>
+      </div>
+      <div class="field">
+        <label>比較期間（年）</label>
+        <div class="input-row"><input type="number" id="evYears" value="5" min="1" max="20" step="1"><span class="unit">年間</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="result">
+    <div class="result-title">💡 比較結果</div>
+    <div class="chart-wrap" id="evChartWrap"></div>
+    <div class="summary-grid">
+      <div class="summary-box">
+        <div class="s-label">EV 年間燃料費</div>
+        <div class="s-val ev-color" id="evAnnual">—</div>
+        <div class="s-sub">円/年</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-label">ガソリン 年間燃料費</div>
+        <div class="s-val gas-color" id="gasAnnual">—</div>
+        <div class="s-sub">円/年</div>
+      </div>
+    </div>
+    <div class="diff-box">
+      <div class="d-label">▼ EVの年間節約額</div>
+      <div class="d-val" id="evDiffAnnual">—</div>
+      <div class="d-sub" id="evDiffAnnualSub"></div>
+    </div>
+    <div class="breakdown">
+      <table id="evBreakdownTable">
+        <thead>
+          <tr>
+            <th>期間</th><th>EV累計（円）</th><th>ガソリン累計（円）</th><th>差額（円）</th>
+          </tr>
+        </thead>
+        <tbody id="evBreakdownBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script>
-/** 期間キー */
+/* ===== タブ切替 ===== */
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelector('.tab-btn[data-tab="' + name + '"]').classList.add('active');
+}
+</script>
+
+<script>
+/* ===== メンテナンス維持費計算 ===== */
 const PERIODS = [
-  { key: "2_5", label: "2年半" },
-  { key: "3",   label: "3年"   },
-  { key: "4_5", label: "4年半" },
-  { key: "5",   label: "5年"   },
-  { key: "6_5", label: "6年半" },
-  { key: "7",   label: "7年"   },
-  { key: "10",  label: "10年"  },
+  { key:"2_5",label:"2年半" },{ key:"3",label:"3年" },{ key:"4_5",label:"4年半" },
+  { key:"5",label:"5年" },{ key:"6_5",label:"6年半" },{ key:"7",label:"7年" },{ key:"10",label:"10年" },
 ];
-
-const fmtJPY = new Intl.NumberFormat("ja-JP", { style:"currency", currency:"JPY", maximumFractionDigits:0 });
-
-/** 元データ（基準値） */
+const fmtJPY = new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0});
 const BASE = {
-  normal: {
-    label: "普通車",
-    items: [
-      { name:"安全点検", unit:10450, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"12ヶ月点検", unit:18700, counts:{ "2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6 } },
-      { name:"車検（基本料金＋代行費用含む）", unit:53350, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4 } },
-      { name:"エンジンオイル交換", unit:6743, counts:{ "2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20 } },
-      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9 } },
-      { name:"エアクリーンフィルター交換", unit:7260, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"エアクリーナーエレメント交換", unit:3080, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5 } },
-      { name:"フロントブレーキパッド交換", unit:21120, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"リアブレーキパッド/シュー交換", unit:21230, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4 } },
-      { name:"トランスミッションオイル交換", unit:10340, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"エンジンプラグ交換", unit:17050, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"A/Cベルト交換", unit:13585, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ACGベルト交換", unit:13585, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"バッテリー交換", unit:32340, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4 } },
-      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      { name:"パンク修理剤交換", unit:6490, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ノーマルタイヤ4本交換", unit:99000, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3 } },
-    ],
-    extras: {
-      tax_1500: { name:"自動車税1500CC", unit:30500, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      tax_2000: { name:"自動車税2000CC", unit:34500, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      jibaiseki:{ name:"自賠責保険", unit:18160, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":3 } },
-    }
-  },
-  small: {
-    label: "小型車",
-    items: [
-      { name:"安全点検", unit:9350, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"12ヶ月点検", unit:16500, counts:{ "2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6 } },
-      { name:"車検（基本料金＋代行費用含む）", unit:50050, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4 } },
-      { name:"エンジンオイル交換", unit:6226, counts:{ "2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20 } },
-      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9 } },
-      { name:"エアクリーンフィルター交換", unit:5610, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"エアクリーナーエレメント交換", unit:3080, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5 } },
-      { name:"フロントブレーキパッド交換", unit:18810, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"リアブレーキパッド/シュー交換", unit:19250, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4 } },
-      { name:"トランスミッションオイル交換", unit:6600, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"エンジンプラグ交換", unit:16280, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"A/Cベルト交換", unit:9020, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ACGベルト交換", unit:9020, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"バッテリー交換", unit:29590, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4 } },
-      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      { name:"パンク修理剤交換", unit:5500, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ノーマルタイヤ4本交換", unit:80300, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3 } },
-    ],
-    extras: {
-      tax_1500: { name:"自動車税1500CC", unit:30500, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      jibaiseki:{ name:"自賠責保険", unit:18160, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":3 } },
-    }
-  },
-  kei: {
-    label: "軽自動車",
-    items: [
-      { name:"安全点検", unit:8800, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"12ヶ月点検", unit:15400, counts:{ "2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6 } },
-      { name:"車検（基本料金＋代行費用含む）", unit:47850, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4 } },
-      { name:"エンジンオイル交換", unit:5379, counts:{ "2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20 } },
-      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9 } },
-      { name:"エアクリーンフィルター交換", unit:5610, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"エアクリーナーエレメント交換", unit:1980, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5 } },
-      { name:"フロントブレーキパッド交換", unit:16390, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"リアブレーキパッド/シュー交換", unit:17270, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4 } },
-      { name:"トランスミッションオイル交換", unit:6270, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"エンジンプラグ交換", unit:14630, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"A/Cベルト交換", unit:8800, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ACGベルト交換", unit:7700, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"バッテリー交換", unit:18480, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4 } },
-      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      { name:"パンク修理剤交換", unit:4730, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ノーマルタイヤ4本交換", unit:60500, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3 } },
-    ],
-    extras: {
-      tax_660: { name:"自動車税 660CC", unit:10800, counts:{ "2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      jibaiseki:{ name:"自賠責保険", unit:18040, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":3 } },
-    }
-  },
-  ev: {
-    label: "EV車（N-ONEe）",
-    items: [
-      { name:"安全点検", unit:8800, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"12ヶ月点検", unit:15400, counts:{ "2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6 } },
-      { name:"車検（基本料金＋代行費用含む）", unit:47850, counts:{ "2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4 } },
-      { name:"エンジンオイル交換", unit:5379, counts:{ "2_5":0,"3":6,"4_5":0,"5":10,"6_5":13,"7":14,"10":0 } },
-      { name:"エンジンオイルエレメント交換", unit:2530, counts:{ "2_5":0,"3":3,"4_5":0,"5":5,"6_5":6,"7":7,"10":0 } },
-      { name:"エアクリーンフィルター交換", unit:5610, counts:{ "2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9 } },
-      { name:"エアクリーナーエレメント交換", unit:1980, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5 } },
-      { name:"フロントブレーキパッド交換", unit:16390, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"リアブレーキパッド/シュー交換", unit:17270, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2 } },
-      { name:"ブレーキフルード交換", unit:2739, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4 } },
-      { name:"トランスミッションオイル交換", unit:6270, counts:{ "2_5":0,"3":0,"4_5":0,"5":0,"6_5":1,"7":1,"10":0 } },
-      { name:"エンジンプラグ交換", unit:14630, counts:{ "2_5":0,"3":0,"4_5":0,"5":0,"6_5":1,"7":1,"10":0 } },
-      { name:"A/Cベルト交換", unit:8800, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ACGベルト交換", unit:7700, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"バッテリー交換", unit:18480, counts:{ "2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4 } },
-      { name:"ワイパーゴム交換", unit:3520, counts:{ "2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10 } },
-      { name:"パンク修理剤交換", unit:4730, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2 } },
-      { name:"ノーマルタイヤ4本交換", unit:60500, counts:{ "2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3 } },
-    ],
-    extras: {} // 参考データ上は非表示
-  },
+  normal:{label:"普通車",items:[
+    {name:"安全点検",unit:10450,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"12ヶ月点検",unit:18700,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
+    {name:"車検（基本料金＋代行費用含む）",unit:53350,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
+    {name:"エンジンオイル交換",unit:6743,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
+    {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9}},
+    {name:"エアクリーンフィルター交換",unit:7260,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"エアクリーナーエレメント交換",unit:3080,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
+    {name:"フロントブレーキパッド交換",unit:21120,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"リアブレーキパッド/シュー交換",unit:21230,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"ブレーキフルード交換",unit:2739,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4}},
+    {name:"トランスミッションオイル交換",unit:10340,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"エンジンプラグ交換",unit:17050,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"A/Cベルト交換",unit:13585,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ACGベルト交換",unit:13585,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"バッテリー交換",unit:32340,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4}},
+    {name:"ワイパーゴム交換",unit:3520,counts:{"2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    {name:"パンク修理剤交換",unit:6490,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ノーマルタイヤ4本交換",unit:99000,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3}},
+  ],extras:{
+    tax_1500:{name:"自動車税1500CC",unit:30500,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    tax_2000:{name:"自動車税2000CC",unit:34500,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    jibaiseki:{name:"自賠責保険",unit:18160,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":3}},
+  }},
+  small:{label:"小型車",items:[
+    {name:"安全点検",unit:9350,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"12ヶ月点検",unit:16500,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
+    {name:"車検（基本料金＋代行費用含む）",unit:50050,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
+    {name:"エンジンオイル交換",unit:6226,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
+    {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9}},
+    {name:"エアクリーンフィルター交換",unit:5610,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"エアクリーナーエレメント交換",unit:3080,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
+    {name:"フロントブレーキパッド交換",unit:18810,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"リアブレーキパッド/シュー交換",unit:19250,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"ブレーキフルード交換",unit:2739,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4}},
+    {name:"トランスミッションオイル交換",unit:6600,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"エンジンプラグ交換",unit:16280,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"A/Cベルト交換",unit:9020,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ACGベルト交換",unit:9020,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"バッテリー交換",unit:29590,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4}},
+    {name:"ワイパーゴム交換",unit:3520,counts:{"2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    {name:"パンク修理剤交換",unit:5500,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ノーマルタイヤ4本交換",unit:80300,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3}},
+  ],extras:{
+    tax_1500:{name:"自動車税1500CC",unit:30500,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    jibaiseki:{name:"自賠責保険",unit:18160,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":3}},
+  }},
+  kei:{label:"軽自動車",items:[
+    {name:"安全点検",unit:8800,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"12ヶ月点検",unit:15400,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
+    {name:"車検（基本料金＋代行費用含む）",unit:47850,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
+    {name:"エンジンオイル交換",unit:5379,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
+    {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9}},
+    {name:"エアクリーンフィルター交換",unit:5610,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"エアクリーナーエレメント交換",unit:1980,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
+    {name:"フロントブレーキパッド交換",unit:16390,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"リアブレーキパッド/シュー交換",unit:17270,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"ブレーキフルード交換",unit:2739,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4}},
+    {name:"トランスミッションオイル交換",unit:6270,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"エンジンプラグ交換",unit:14630,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"A/Cベルト交換",unit:8800,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ACGベルト交換",unit:7700,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"バッテリー交換",unit:18480,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4}},
+    {name:"ワイパーゴム交換",unit:3520,counts:{"2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    {name:"パンク修理剤交換",unit:4730,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ノーマルタイヤ4本交換",unit:60500,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3}},
+  ],extras:{
+    tax_660:{name:"自動車税 660CC",unit:10800,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    jibaiseki:{name:"自賠責保険",unit:18040,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":3}},
+  }},
+  ev:{label:"EV車（N-ONEe）",items:[
+    {name:"安全点検",unit:8800,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"12ヶ月点検",unit:15400,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
+    {name:"車検（基本料金＋代行費用含む）",unit:47850,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
+    {name:"エンジンオイル交換",unit:5379,counts:{"2_5":0,"3":6,"4_5":0,"5":10,"6_5":13,"7":14,"10":0}},
+    {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":0,"3":3,"4_5":0,"5":5,"6_5":6,"7":7,"10":0}},
+    {name:"エアクリーンフィルター交換",unit:5610,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
+    {name:"エアクリーナーエレメント交換",unit:1980,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
+    {name:"フロントブレーキパッド交換",unit:16390,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"リアブレーキパッド/シュー交換",unit:17270,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":2}},
+    {name:"ブレーキフルード交換",unit:2739,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":2,"7":2,"10":4}},
+    {name:"トランスミッションオイル交換",unit:6270,counts:{"2_5":0,"3":0,"4_5":0,"5":0,"6_5":1,"7":1,"10":0}},
+    {name:"エンジンプラグ交換",unit:14630,counts:{"2_5":0,"3":0,"4_5":0,"5":0,"6_5":1,"7":1,"10":0}},
+    {name:"A/Cベルト交換",unit:8800,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ACGベルト交換",unit:7700,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"バッテリー交換",unit:18480,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":4}},
+    {name:"ワイパーゴム交換",unit:3520,counts:{"2_5":1,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":10}},
+    {name:"パンク修理剤交換",unit:4730,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":2}},
+    {name:"ノーマルタイヤ4本交換",unit:60500,counts:{"2_5":0,"3":0,"4_5":1,"5":1,"6_5":1,"7":1,"10":3}},
+  ],extras:{}}
 };
 
-let state = {
-  vehicle: "kei",
-  period: "2_5",
-  rows: [],
-  extras: []
-};
-
-function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
-
+let state={vehicle:"kei",period:"2_5",rows:[],extras:[]};
+function deepClone(obj){return JSON.parse(JSON.stringify(obj));}
 function buildExtras(vehicleKey){
-  const base = BASE[vehicleKey];
-  const e = base.extras || {};
-  if(vehicleKey === "normal"){
-    const tax = document.getElementById("taxClass").value;
-    const taxKey = (tax === "2000") ? "tax_2000" : "tax_1500";
-    return [ deepClone(e[taxKey]), deepClone(e.jibaiseki) ].filter(Boolean);
-  }
-  if(vehicleKey === "small"){
-    return [ deepClone(e.tax_1500), deepClone(e.jibaiseki) ].filter(Boolean);
-  }
-  if(vehicleKey === "kei"){
-    return [ deepClone(e.tax_660), deepClone(e.jibaiseki) ].filter(Boolean);
-  }
-  return [];
+  const base=BASE[vehicleKey];const e=base.extras||{};
+  if(vehicleKey==="normal"){const tax=document.getElementById("taxClass").value;const taxKey=(tax==="2000")?"tax_2000":"tax_1500";return[deepClone(e[taxKey]),deepClone(e.jibaiseki)].filter(Boolean);}
+  if(vehicleKey==="small"){return[deepClone(e.tax_1500),deepClone(e.jibaiseki)].filter(Boolean);}
+  if(vehicleKey==="kei"){return[deepClone(e.tax_660),deepClone(e.jibaiseki)].filter(Boolean);}
+  return[];
 }
-
-function buildStateFromBase(vehicleKey){
-  state.vehicle = vehicleKey;
-  state.rows = deepClone(BASE[vehicleKey].items);
-  state.extras = buildExtras(vehicleKey);
-}
-
-function createNumInput(value, cls){
-  const inp = document.createElement("input");
-  inp.type = "number";
-  inp.value = Number(value ?? 0);
-  inp.min = "0";
-  inp.step = "1";
-  inp.className = cls;
-  return inp;
-}
-
-function calcRowAmount(row){
-  const unit = Number(row.unit || 0);
-  const cnt = Number(row.counts?.[state.period] || 0);
-  return unit * cnt;
-}
-
-function renderPeriodLabels(){
-  const label = PERIODS.find(p => p.key === state.period)?.label || "";
-  document.getElementById("periodLabelHead").textContent = label;
-  document.getElementById("periodLabelHead2").textContent = label;
-}
-
+function buildStateFromBase(vehicleKey){state.vehicle=vehicleKey;state.rows=deepClone(BASE[vehicleKey].items);state.extras=buildExtras(vehicleKey);}
+function createNumInput(value,cls){const inp=document.createElement("input");inp.type="number";inp.value=Number(value??0);inp.min="0";inp.step="1";inp.className=cls;return inp;}
+function calcRowAmount(row){return Number(row.unit||0)*Number(row.counts?.[state.period]||0);}
+function renderPeriodLabels(){const label=PERIODS.find(p=>p.key===state.period)?.label||"";document.getElementById("periodLabelHead").textContent=label;document.getElementById("periodLabelHead2").textContent=label;}
 function render(){
   renderPeriodLabels();
-
-  const tbody = document.getElementById("tbody");
-  tbody.innerHTML = "";
-
-  state.rows.forEach((row, idx) => {
-    const tr = document.createElement("tr");
-
-    const tdName = document.createElement("td");
-    tdName.textContent = row.name;
-    tr.appendChild(tdName);
-
-    const tdUnit = document.createElement("td");
-    tdUnit.className = "center";
-    const inpUnit = createNumInput(row.unit, "input-mini");
-    inpUnit.addEventListener("input", () => { state.rows[idx].unit = Number(inpUnit.value || 0); recalc(); });
-    tdUnit.appendChild(inpUnit);
-    tr.appendChild(tdUnit);
-
-    const tdC = document.createElement("td");
-    tdC.className = "center";
-    const inpC = createNumInput(row.counts[state.period] ?? 0, "input-count");
-    inpC.addEventListener("input", () => { state.rows[idx].counts[state.period] = Number(inpC.value || 0); recalc(); });
-    tdC.appendChild(inpC);
-    tr.appendChild(tdC);
-
-    const tdA = document.createElement("td");
-    tdA.className = "num yen";
-    tdA.textContent = fmtJPY.format(Math.round(calcRowAmount(row)));
-    tr.appendChild(tdA);
-
+  const tbody=document.getElementById("tbody");tbody.innerHTML="";
+  state.rows.forEach((row,idx)=>{
+    const tr=document.createElement("tr");
+    const tdName=document.createElement("td");tdName.textContent=row.name;tr.appendChild(tdName);
+    const tdUnit=document.createElement("td");tdUnit.className="center";const inpUnit=createNumInput(row.unit,"input-mini");inpUnit.addEventListener("input",()=>{state.rows[idx].unit=Number(inpUnit.value||0);recalc();});tdUnit.appendChild(inpUnit);tr.appendChild(tdUnit);
+    const tdC=document.createElement("td");tdC.className="center";const inpC=createNumInput(row.counts[state.period]??0,"input-count");inpC.addEventListener("input",()=>{state.rows[idx].counts[state.period]=Number(inpC.value||0);recalc();});tdC.appendChild(inpC);tr.appendChild(tdC);
+    const tdA=document.createElement("td");tdA.className="num yen";tdA.textContent=fmtJPY.format(Math.round(calcRowAmount(row)));tr.appendChild(tdA);
     tbody.appendChild(tr);
   });
-
-  renderExtras();
-  recalc();
+  renderExtras();recalc();
 }
-
 function renderExtras(){
-  const sec = document.getElementById("extraSection");
-  [...sec.querySelectorAll("tr")].slice(1).forEach(tr => tr.remove());
-
-  state.extras = buildExtras(state.vehicle);
-
-  const showExtras = state.extras.length > 0;
-  sec.classList.toggle("hidden", !showExtras);
-
-  const taxWrap = document.getElementById("taxClassWrap");
-  taxWrap.classList.toggle("hidden", state.vehicle !== "normal");
-
-  if(!showExtras) return;
-
-  state.extras.forEach((row, idx) => {
-    const tr = document.createElement("tr");
-
-    const tdName = document.createElement("td");
-    tdName.textContent = row.name;
-    tr.appendChild(tdName);
-
-    const tdUnit = document.createElement("td");
-    tdUnit.className = "center";
-    const inpUnit = createNumInput(row.unit, "input-mini");
-    inpUnit.addEventListener("input", () => { state.extras[idx].unit = Number(inpUnit.value || 0); recalc(); });
-    tdUnit.appendChild(inpUnit);
-    tr.appendChild(tdUnit);
-
-    const tdC = document.createElement("td");
-    tdC.className = "center";
-    const inpC = createNumInput(row.counts[state.period] ?? 0, "input-count");
-    inpC.addEventListener("input", () => { state.extras[idx].counts[state.period] = Number(inpC.value || 0); recalc(); });
-    tdC.appendChild(inpC);
-    tr.appendChild(tdC);
-
-    const tdA = document.createElement("td");
-    tdA.className = "num yen";
-    tdA.textContent = fmtJPY.format(Math.round(calcRowAmount(row)));
-    tr.appendChild(tdA);
-
+  const sec=document.getElementById("extraSection");[...sec.querySelectorAll("tr")].slice(1).forEach(tr=>tr.remove());
+  state.extras=buildExtras(state.vehicle);
+  const showExtras=state.extras.length>0;sec.classList.toggle("hidden",!showExtras);
+  const taxWrap=document.getElementById("taxClassWrap");taxWrap.classList.toggle("hidden",state.vehicle!=="normal");
+  if(!showExtras)return;
+  state.extras.forEach((row,idx)=>{
+    const tr=document.createElement("tr");
+    const tdName=document.createElement("td");tdName.textContent=row.name;tr.appendChild(tdName);
+    const tdUnit=document.createElement("td");tdUnit.className="center";const inpUnit=createNumInput(row.unit,"input-mini");inpUnit.addEventListener("input",()=>{state.extras[idx].unit=Number(inpUnit.value||0);recalc();});tdUnit.appendChild(inpUnit);tr.appendChild(tdUnit);
+    const tdC=document.createElement("td");tdC.className="center";const inpC=createNumInput(row.counts[state.period]??0,"input-count");inpC.addEventListener("input",()=>{state.extras[idx].counts[state.period]=Number(inpC.value||0);recalc();});tdC.appendChild(inpC);tr.appendChild(tdC);
+    const tdA=document.createElement("td");tdA.className="num yen";tdA.textContent=fmtJPY.format(Math.round(calcRowAmount(row)));tr.appendChild(tdA);
     sec.appendChild(tr);
   });
 }
-
 function recalc(){
-  // 金額更新
-  const tbody = document.getElementById("tbody");
-  [...tbody.rows].forEach((tr, idx) => {
-    tr.cells[3].textContent = fmtJPY.format(Math.round(calcRowAmount(state.rows[idx])));
-  });
-
-  const sec = document.getElementById("extraSection");
-  const extraRows = [...sec.querySelectorAll("tr")].slice(1);
-  extraRows.forEach((tr, idx) => {
-    tr.cells[3].textContent = fmtJPY.format(Math.round(calcRowAmount(state.extras[idx])));
-  });
-
-  // 合計
-  let sumMain = 0;
-  let sumExtra = 0;
-  state.rows.forEach(r => sumMain += calcRowAmount(r));
-  state.extras.forEach(r => sumExtra += calcRowAmount(r));
-
-  document.getElementById("sum_main").textContent = fmtJPY.format(Math.round(sumMain));
-  document.getElementById("sum_grand").textContent = fmtJPY.format(Math.round(sumMain + sumExtra));
+  const tbody=document.getElementById("tbody");[...tbody.rows].forEach((tr,idx)=>{tr.cells[3].textContent=fmtJPY.format(Math.round(calcRowAmount(state.rows[idx])));});
+  const sec=document.getElementById("extraSection");const extraRows=[...sec.querySelectorAll("tr")].slice(1);extraRows.forEach((tr,idx)=>{tr.cells[3].textContent=fmtJPY.format(Math.round(calcRowAmount(state.extras[idx])));});
+  let sumMain=0,sumExtra=0;state.rows.forEach(r=>sumMain+=calcRowAmount(r));state.extras.forEach(r=>sumExtra+=calcRowAmount(r));
+  document.getElementById("sum_main").textContent=fmtJPY.format(Math.round(sumMain));
+  document.getElementById("sum_grand").textContent=fmtJPY.format(Math.round(sumMain+sumExtra));
 }
-
-function resetToBase(){
-  buildStateFromBase(state.vehicle);
-  render();
-}
-
+function resetToBase(){buildStateFromBase(state.vehicle);render();}
 function copyCurrentJson(){
-  const payload = {
-    vehicle: state.vehicle,
-    period: state.period,
-    taxClass: document.getElementById("taxClass").value,
-    rows: state.rows,
-    extras: state.extras
-  };
-  const txt = JSON.stringify(payload, null, 2);
-  navigator.clipboard.writeText(txt).then(() => setCopyStatus("コピーしました（JSON）"))
-    .catch(() => setCopyStatus("コピーに失敗しました。ブラウザの権限をご確認ください。"));
+  const payload={vehicle:state.vehicle,period:state.period,taxClass:document.getElementById("taxClass").value,rows:state.rows,extras:state.extras};
+  const txt=JSON.stringify(payload,null,2);
+  navigator.clipboard.writeText(txt).then(()=>setCopyStatus("コピーしました（JSON）")).catch(()=>setCopyStatus("コピーに失敗しました。"));
 }
+let statusTimer=null;
+function setCopyStatus(msg){const el=document.getElementById("copyStatus");el.textContent=msg;if(statusTimer)clearTimeout(statusTimer);statusTimer=setTimeout(()=>el.textContent="",2500);}
 
-let statusTimer = null;
-function setCopyStatus(msg){
-  const el = document.getElementById("copyStatus");
-  el.textContent = msg;
-  if(statusTimer) clearTimeout(statusTimer);
-  statusTimer = setTimeout(() => el.textContent = "", 2500);
+function mInit(){
+  buildStateFromBase("kei");render();
+  document.getElementById("vehicleType").addEventListener("change",(e)=>{buildStateFromBase(e.target.value);render();});
+  document.getElementById("periodSel").addEventListener("change",(e)=>{state.period=e.target.value;render();});
+  document.getElementById("taxClass").addEventListener("change",()=>{if(state.vehicle==="normal")render();});
+  document.getElementById("resetBtn").addEventListener("click",resetToBase);
+  document.getElementById("copyJsonBtn").addEventListener("click",copyCurrentJson);
 }
+mInit();
 
-function init(){
-  buildStateFromBase("kei");
-  render();
-
-  document.getElementById("vehicleType").addEventListener("change", (e) => {
-    buildStateFromBase(e.target.value);
-    render();
-  });
-
-  document.getElementById("periodSel").addEventListener("change", (e) => {
-    state.period = e.target.value;
-    render(); // 回数入力も期間に合わせて切替
-  });
-
-  document.getElementById("taxClass").addEventListener("change", () => {
-    if(state.vehicle === "normal") render();
-  });
-
-  document.getElementById("resetBtn").addEventListener("click", resetToBase);
-  document.getElementById("copyJsonBtn").addEventListener("click", copyCurrentJson);
-}
-
-init();
-
-/* ===== 燃費比較モーダル ===== */
-
-// カンマ付きフォーマット
-function addCommas(val){
-  const n = val.replace(/,/g, "").replace(/[^0-9]/g, "");
-  return n === "" ? "" : Number(n).toLocaleString("ja-JP");
-}
-function parseComma(val){
-  return Math.max(0, Number(String(val).replace(/,/g, "")) || 0);
-}
-
-// カンマ入力欄の共通処理（入力中にカンマを自動付与）
-["fuelAnnualKm", "hvPremium"].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener("input", () => {
-    const pos = el.selectionStart;
-    const before = el.value.length;
-    el.value = addCommas(el.value);
-    const after = el.value.length;
-    el.setSelectionRange(pos + (after - before), pos + (after - before));
-    renderFuelCompare();
-  });
+/* 燃費比較モーダル */
+function mAddCommas(val){const n=val.replace(/,/g,"").replace(/[^0-9]/g,"");return n===""?"":Number(n).toLocaleString("ja-JP");}
+function mParseComma(val){return Math.max(0,Number(String(val).replace(/,/g,""))||0);}
+["fuelAnnualKm","hvPremium"].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener("input",()=>{const pos=el.selectionStart;const before=el.value.length;el.value=mAddCommas(el.value);const after=el.value.length;el.setSelectionRange(pos+(after-before),pos+(after-before));renderFuelCompare();});
 });
-
-// 期間キー → 年数
-const PERIOD_YEARS = {
-  "2_5": 2.5, "3": 3, "4_5": 4.5, "5": 5, "6_5": 6.5, "7": 7, "10": 10
-};
-
-function calcFuelCostPerYear(annualKm, mpg, pricePerL){
-  return (annualKm / mpg) * pricePerL;
-}
-
+const PERIOD_YEARS={"2_5":2.5,"3":3,"4_5":4.5,"5":5,"6_5":6.5,"7":7,"10":10};
+function calcFuelCostPerYear(annualKm,mpg,pricePerL){return(annualKm/mpg)*pricePerL;}
 function renderFuelCompare(){
-  const annualKm  = Math.max(1, parseComma(document.getElementById("fuelAnnualKm").value) || 10000);
-  const pricePerL = Math.max(1, Number(document.getElementById("fuelPrice").value) || 175);
-  const gasMpg    = Math.max(0.1, Number(document.getElementById("gasMpg").value) || 18);
-  const hvMpg     = Math.max(0.1, Number(document.getElementById("hvMpg").value) || 28);
-  const hvPremium = parseComma(document.getElementById("hvPremium").value);
-
-  const gasYearly = calcFuelCostPerYear(annualKm, gasMpg, pricePerL);
-  const hvYearly  = calcFuelCostPerYear(annualKm, hvMpg,  pricePerL);
-  const saveYearly = gasYearly - hvYearly;
-
-  const tbody = document.getElementById("fuelTbody");
-  tbody.innerHTML = "";
-
-  PERIODS.forEach(p => {
-    const yrs    = PERIOD_YEARS[p.key];
-    const gasAmt = Math.round(gasYearly * yrs);
-    const hvAmt  = Math.round(hvYearly  * yrs);
-    const save   = Math.round(saveYearly * yrs);
-    const netSave = save - hvPremium; // 価格差を引いた損益
-
-    const tr = document.createElement("tr");
-    const netCls = netSave >= 0 ? "save-val" : "cost-val";
-    const netPrefix = netSave >= 0 ? "+" : "";
-    tr.innerHTML = `
-      <td class="center"><b>${p.label}</b></td>
-      <td class="num td-gas">${fmtJPY.format(gasAmt)}</td>
-      <td class="num td-hv">${fmtJPY.format(hvAmt)}</td>
-      <td class="num save-val">${fmtJPY.format(save)} 節約</td>
-      <td class="num ${hvPremium > 0 ? netCls : ""}">
-        ${hvPremium > 0
-          ? netPrefix + fmtJPY.format(netSave)
-          : "<span style='color:var(--muted);font-size:11px;'>価格差を入力</span>"}
-      </td>
-    `;
+  const annualKm=Math.max(1,mParseComma(document.getElementById("fuelAnnualKm").value)||10000);
+  const pricePerL=Math.max(1,Number(document.getElementById("fuelPrice").value)||175);
+  const gasMpg=Math.max(0.1,Number(document.getElementById("gasMpg").value)||18);
+  const hvMpg=Math.max(0.1,Number(document.getElementById("hvMpg").value)||28);
+  const hvPremium=mParseComma(document.getElementById("hvPremium").value);
+  const gasYearly=calcFuelCostPerYear(annualKm,gasMpg,pricePerL);
+  const hvYearly=calcFuelCostPerYear(annualKm,hvMpg,pricePerL);
+  const saveYearly=gasYearly-hvYearly;
+  const tbody=document.getElementById("fuelTbody");tbody.innerHTML="";
+  PERIODS.forEach(p=>{
+    const yrs=PERIOD_YEARS[p.key];const gasAmt=Math.round(gasYearly*yrs);const hvAmt=Math.round(hvYearly*yrs);const save=Math.round(saveYearly*yrs);const netSave=save-hvPremium;
+    const tr=document.createElement("tr");const netCls=netSave>=0?"save-val":"cost-val";const netPrefix=netSave>=0?"+":"";
+    tr.innerHTML=`<td class="center"><b>${p.label}</b></td><td class="num td-gas">${fmtJPY.format(gasAmt)}</td><td class="num td-hv">${fmtJPY.format(hvAmt)}</td><td class="num save-val">${fmtJPY.format(save)} 節約</td><td class="num ${hvPremium>0?netCls:""}">${hvPremium>0?netPrefix+fmtJPY.format(netSave):"<span style='color:var(--muted);font-size:11px;'>価格差を入力</span>"}</td>`;
     tbody.appendChild(tr);
   });
+  const summary=document.getElementById("fuelSummary");const gas5y=Math.round(gasYearly*5);const hv5y=Math.round(hvYearly*5);const save5y=Math.round(saveYearly*5);
+  summary.innerHTML=`<div class="fuel-card card-gas"><span class="card-label">ガソリン車 年間燃料費</span><span class="card-val">${fmtJPY.format(Math.round(gasYearly))}</span><span class="card-sub">5年計: ${fmtJPY.format(gas5y)}</span></div><div class="fuel-card card-hv"><span class="card-label">ハイブリッド車 年間燃料費</span><span class="card-val">${fmtJPY.format(Math.round(hvYearly))}</span><span class="card-sub">5年計: ${fmtJPY.format(hv5y)}</span></div><div class="fuel-card card-diff"><span class="card-label">年間燃料費の節約額（HV優位）</span><span class="card-val save-val">${fmtJPY.format(Math.round(saveYearly))}</span><span class="card-sub">5年計: ${fmtJPY.format(save5y)} 節約</span></div>`;
+  const breakevenWrap=document.getElementById("breakevenWrap");const breakevenBar=document.getElementById("breakevenBar");const breakevenNote=document.getElementById("breakevenNote");
+  if(hvPremium<=0){breakevenWrap.style.display="none";}else{breakevenWrap.style.display="";if(saveYearly<=0){breakevenBar.style.width="0%";breakevenNote.textContent="ハイブリッド車の燃費がガソリン車以下のため、燃料費では元が取れません。";}else{const breakevenYears=hvPremium/saveYearly;const pct=Math.min(100,(breakevenYears/10)*100);breakevenBar.style.width=pct+"%";if(breakevenYears<=10){breakevenNote.textContent=`車両価格差 ${fmtJPY.format(hvPremium)} を燃料費の節約で回収できるまで 約 ${breakevenYears.toFixed(1)} 年（走行距離 ${Math.round(annualKm*breakevenYears).toLocaleString()} km）`;}else{breakevenNote.textContent=`回収まで 約 ${breakevenYears.toFixed(1)} 年（10年以内に回収できない見込み）`;}}}
+  document.getElementById("fuelCalcNote").textContent=` 計算条件: 年間${annualKm.toLocaleString()}km走行・${pricePerL}円/L・ガソリン車${gasMpg}km/L・HV${hvMpg}km/L。`;
+}
+function openFuelModal(){renderFuelCompare();document.getElementById("fuelModal").classList.remove("hidden");document.body.style.overflow="hidden";}
+function closeFuelModal(){document.getElementById("fuelModal").classList.add("hidden");document.body.style.overflow="";}
+["fuelPrice","gasMpg","hvMpg"].forEach(id=>{document.getElementById(id).addEventListener("input",renderFuelCompare);});
+document.getElementById("fuelCompareBtn").addEventListener("click",openFuelModal);
+document.getElementById("closeFuelBtn").addEventListener("click",closeFuelModal);
+document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target===document.getElementById("fuelModal"))closeFuelModal();});
+</script>
 
-  // サマリーカード（1年・5年・10年）
-  const summary = document.getElementById("fuelSummary");
-  const gas5y  = Math.round(gasYearly * 5);
-  const hv5y   = Math.round(hvYearly  * 5);
-  const save5y = Math.round(saveYearly * 5);
-  summary.innerHTML = `
-    <div class="fuel-card card-gas">
-      <span class="card-label">ガソリン車 年間燃料費</span>
-      <span class="card-val">${fmtJPY.format(Math.round(gasYearly))}</span>
-      <span class="card-sub">5年計: ${fmtJPY.format(gas5y)}</span>
-    </div>
-    <div class="fuel-card card-hv">
-      <span class="card-label">ハイブリッド車 年間燃料費</span>
-      <span class="card-val">${fmtJPY.format(Math.round(hvYearly))}</span>
-      <span class="card-sub">5年計: ${fmtJPY.format(hv5y)}</span>
-    </div>
-    <div class="fuel-card card-diff">
-      <span class="card-label">年間燃料費の節約額（HV優位）</span>
-      <span class="card-val save-val">${fmtJPY.format(Math.round(saveYearly))}</span>
-      <span class="card-sub">5年計: ${fmtJPY.format(save5y)} 節約</span>
-    </div>
-  `;
+<script>
+/* ===== クレジット計算 ===== */
+var crShoyoManual=false;
+function crFmt(n){return Math.round(n).toLocaleString('ja-JP');}
+function crParseVal(id){return parseFloat((document.getElementById(id).value||'').replace(/,/g,''))||0;}
+function crFmtInput(el){var raw=el.value.replace(/,/g,'').replace(/[^0-9]/g,'');if(raw==='')return;el.value=parseInt(raw,10).toLocaleString('ja-JP');}
+function crFmtStartMonth(el){var raw=el.value.replace(/[^0-9\/]/g,'');if(raw.length===6&&raw.indexOf('/')===-1)raw=raw.slice(0,4)+'/'+raw.slice(4);el.value=raw;}
+function crValidateStartMonth(el){var v=el.value.trim();if(v==='')return;el.style.borderColor=v.match(/^(\d{4})\/(\d{2})$/)?'':'#cc0000';}
+function crGetStartMonthAuto(){var d=new Date(document.getElementById('cr_noshabi').value);if(isNaN(d.getTime()))return '';d.setMonth(d.getMonth()+2);return d.getFullYear()+'/'+(('0'+(d.getMonth()+1)).slice(-2));}
+function crGetEndMonth(){
+  var sm=document.getElementById('cr_startMonth').value.trim(),y,mo;
+  if(sm.match(/^(\d{4})\/(\d{2})$/)){y=parseInt(sm.slice(0,4));mo=parseInt(sm.slice(5,7))-1;}
+  else{var d=new Date(document.getElementById('cr_noshabi').value);if(isNaN(d.getTime()))return '';d.setMonth(d.getMonth()+2);y=d.getFullYear();mo=d.getMonth();}
+  var tc=crGetKaisu();var end=new Date(y,mo+tc-1);
+  return end.getFullYear()+'/'+(('0'+(end.getMonth()+1)).slice(-2));
+}
+function crUpdateMenseki(){var v=document.getElementById('cr_mileage').value,tc=crGetKaisu();document.getElementById('cr_menseki').value=v?(parseInt(v)*tc).toLocaleString('ja-JP'):'';}
+function crCalcTsukiAddon(shoyo,zankaGaku,nenri,tc){var g=shoyo-zankaGaku;if(g<=0)return 0;var nen=tc/12,t=g*(nenri/100)*nen;return Math.ceil((g+t)/tc);}
+function crCalcAtamaAddon(shoyo,zankaGaku,nenri,tc,tsuki){var nen=tc/12,rate=nenri/100,g=(tsuki*tc)/(1+rate*nen),a=(shoyo-zankaGaku)-g;if(a<0)a=0;if(a>shoyo)a=shoyo;return Math.round(a);}
+function crGetKaisu(){var n=crIsNormal();if(n){var v=parseInt(document.getElementById('cr_kaisu_inp').value)||0;return v>0?v:0;}return parseInt(document.getElementById('cr_kaisu_sel').value)||60;}
+function crValidateKaisu(el){var raw=el.value.replace(/[^0-9]/g,'');var v=parseInt(raw)||0;if(v>120)v=120;el.value=v||'';}
+function crIsZanka(){return document.getElementById('cr_shiharaiHoho').value==='zanka';}
+function crIsNormal(){return document.getElementById('cr_shiharaiHoho').value==='normal';}
+function crShow(id,v){document.getElementById(id).style.display=v?'':'none';}
+function crUpdateZankaCols(z){document.getElementById('cr_th_zankaRate').style.display=z?'':'none';document.getElementById('cr_th_zankaFinal').style.display=z?'':'none';}
+function crSetTsukiEditable(e){var el=document.getElementById('cr_tsuki');if(e){el.removeAttribute('readonly');el.style.background='#fff';el.style.color='#000';el.placeholder='月払額を入力';}else{el.setAttribute('readonly','');el.style.background='#d8e4f0';el.style.color='#888';el.placeholder='';el.value='';}}
+function crOnShiharaiChange(){
+  var z=crIsZanka(),n=crIsNormal();
+  crShow('cr_row_zankaRate',z);crShow('cr_row_zankaGaku',z);crShow('cr_row_mileage',z);crShow('cr_row_menseki',z);crShow('cr_row_mensekiten',z);
+  crUpdateZankaCols(z);
+  var optVal=document.getElementById('cr_opt_value');
+  if(optVal)optVal.style.display=z?'':'none';
+  if(n&&document.getElementById('cr_keisanHoho').value==='value'){document.getElementById('cr_keisanHoho').value='';crSetTsukiEditable(false);}
+  document.getElementById('cr_kaisu_sel').style.display=z?'':'none';document.getElementById('cr_kaisu_inp').style.display=n?'':'none';
+  if(n){document.getElementById('cr_kaisu_inp').value='';}else{document.getElementById('cr_kaisu_sel').value='60';}
+  var nenriEl=document.getElementById('cr_nenri');if(z)nenriEl.value='5.20';else if(n)nenriEl.value='5.50';
+  crOnch();
+}
+function crOnKeisanChange(){crSetTsukiEditable(document.getElementById('cr_keisanHoho').value==='atama');crOnch();}
+function crOnShoyo(){crShoyoManual=true;crCalcAndShowTsuki();}
+function crCalcAndShowTsuki(){
+  var hontai=crParseVal('cr_hontai'),zankaRate=parseFloat(document.getElementById('cr_zankaRate').value)||0;
+  var nenri=parseFloat(document.getElementById('cr_nenri').value)||0,tc=crGetKaisu();
+  var shoyo=crParseVal('cr_shoyo'),zankaGaku=crIsZanka()?Math.round(hontai*zankaRate/100):0;
+  if(crIsZanka())document.getElementById('cr_zankaGaku').value=hontai>0?crFmt(zankaGaku):'';
+  if(document.getElementById('cr_keisanHoho').value!=='atama')
+    document.getElementById('cr_tsuki').value=(shoyo>0&&hontai>0)?crFmt(crCalcTsukiAddon(shoyo,zankaGaku,nenri,tc)):'';
+}
+function crOnch(){
+  crUpdateMenseki();
+  var hontai=crParseVal('cr_hontai'),atama=crParseVal('cr_atama'),kasan1=crParseVal('cr_kasan1'),kasan2=crParseVal('cr_kasan2');
+  var total=hontai+kasan1+kasan2;
+  if(!crShoyoManual){var s=total-atama;document.getElementById('cr_shoyo').value=s>0?crFmt(s):'';}
+  if(!document.getElementById('cr_startMonth').value.trim())document.getElementById('cr_startMonth').value=crGetStartMonthAuto();
+  crCalcAndShowTsuki();
+}
+function crDoCalc(){
+  crOnch();
+  var hontai=crParseVal('cr_hontai');if(!hontai){alert('車両本体価格（税込）を入力してください');return;}
+  if(!document.getElementById('cr_shiharaiHoho').value){alert('支払方法を選択してください');return;}
+  var z=crIsZanka();
+  if(z&&!document.getElementById('cr_mileage').value){alert('月間走行距離を選択してください');return;}
+  var zankaRate=z?(parseFloat(document.getElementById('cr_zankaRate').value)||0):0;
+  if(z&&!zankaRate){alert('据置・残価率を入力してください');return;}
+  var sm=document.getElementById('cr_startMonth').value.trim();
+  if(!sm.match(/^\d{4}\/\d{2}$/)){alert('支払開始月をYYYY/MM形式で入力してください');return;}
+  var nenri=parseFloat(document.getElementById('cr_nenri').value)||0,tc=crGetKaisu();
+  var kasan1=crParseVal('cr_kasan1'),kasan2=crParseVal('cr_kasan2'),shoyo=crParseVal('cr_shoyo');
+  var zankaGaku=z?Math.round(hontai*zankaRate/100):0;
+  var km=document.getElementById('cr_keisanHoho').value;
+  var b1amt=crParseVal('cr_b1amt'),b2amt=crParseVal('cr_b2amt');
+  var b1has=document.getElementById('cr_b1m').value!='',b2has=document.getElementById('cr_b2m').value!='';
+  var nen=tc/12,b1kai=b1has?Math.floor(nen):0,b2kai=b2has?Math.floor(nen):0;
+  var bonusKai=b1kai+b2kai,bonusAmtPer=(b1has&&b2has)?(b1amt+b2amt):(b1has?b1amt:(b2has?b2amt:0));
+  var tsuki,atamaResult;
+  if(km==='atama'){tsuki=crParseVal('cr_tsuki');if(!tsuki){alert('月払額を入力してください');return;}atamaResult=crCalcAtamaAddon(shoyo,zankaGaku,nenri,tc,tsuki);}
+  else{atamaResult=crParseVal('cr_atama');tsuki=crCalcTsukiAddon(shoyo,zankaGaku,nenri,tc);}
+  var total=hontai+kasan1+kasan2,bonusTotal=0;
+  if(b1has)bonusTotal+=b1amt*b1kai;if(b2has)bonusTotal+=b2amt*b2kai;
+  var shiharaiTotal=atamaResult+tsuki*tc+bonusTotal+zankaGaku,tesuryo=Math.max(shiharaiTotal-total,0);
+  document.getElementById('cr_tbody').innerHTML=
+    '<tr class="result"><td class="c"><input type="radio" checked></td>'
+    +'<td class="c">'+tc+'回</td><td class="c">'+crGetEndMonth()+'</td>'
+    +'<td>'+crFmt(atamaResult)+'</td><td>'+crFmt(tsuki)+'</td><td>'+crFmt(tsuki)+'</td>'
+    +'<td class="c">'+(tc-1)+'回</td>'
+    +'<td>'+(bonusAmtPer>0?crFmt(bonusAmtPer):'')+'</td>'
+    +'<td class="c">'+(bonusKai>0?bonusKai+'回':'')+'</td>'
+    +'<td>'+crFmt(tesuryo)+'</td><td>'+crFmt(shiharaiTotal)+'</td>'
+    +'<td style="'+(z?'':'display:none')+'">'+(z?zankaRate.toFixed(2):'')+'</td>'
+    +'<td style="'+(z?'':'display:none')+'">'+(z?crFmt(zankaGaku):'')+'</td></tr>';
+}
+function crDoReset(){
+  crShoyoManual=false;
+  ['cr_hontai','cr_kasan1','cr_kasan2','cr_b1amt','cr_b2amt','cr_shoyo'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('cr_atama').value='0';document.getElementById('cr_nenri').value='5.20';document.getElementById('cr_zankaRate').value='46.00';
+  document.getElementById('cr_kaisu_sel').value='60';document.getElementById('cr_kaisu_inp').value='';
+  document.getElementById('cr_kaisu_sel').style.display='';document.getElementById('cr_kaisu_inp').style.display='none';
+  document.getElementById('cr_b1m').value='';document.getElementById('cr_b2m').value='';document.getElementById('cr_skipBonus').checked=false;
+  document.getElementById('cr_shiharaiHoho').value='';document.getElementById('cr_keisanHoho').value='';
+  document.getElementById('cr_mileage').value='';document.getElementById('cr_menseki').value='';
+  document.getElementById('cr_startMonth').value='';document.getElementById('cr_startMonth').style.borderColor='';
+  ['cr_row_zankaRate','cr_row_zankaGaku','cr_row_mileage','cr_row_menseki','cr_row_mensekiten'].forEach(id=>{document.getElementById(id).style.display='';});
+  var optVal=document.getElementById('cr_opt_value');if(optVal)optVal.style.display='';
+  crUpdateZankaCols(true);
+  document.getElementById('cr_tbody').innerHTML='<tr><td class="c"><input type="radio" checked></td><td class="c" colspan="12" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>';
+  crSetTsukiEditable(false);document.getElementById('cr_startMonth').value=crGetStartMonthAuto();
+}
 
-  // 損益分岐点
-  const breakevenWrap = document.getElementById("breakevenWrap");
-  const breakevenBar  = document.getElementById("breakevenBar");
-  const breakevenNote = document.getElementById("breakevenNote");
+window.addEventListener('load',function(){
+  ['cr_hontai','cr_atama','cr_nenri','cr_b1amt','cr_b2amt','cr_shoyo','cr_startMonth','cr_kasan1','cr_kasan2','cr_zankaRate'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.removeAttribute('readonly');
+  });
+  document.getElementById('cr_noshabi').value='2026-05-01';
+  document.getElementById('cr_startMonth').value=crGetStartMonthAuto();
+});
+</script>
 
-  if(hvPremium <= 0){
-    breakevenWrap.style.display = "none";
-  } else {
-    breakevenWrap.style.display = "";
-    if(saveYearly <= 0){
-      breakevenBar.style.width = "0%";
-      breakevenNote.textContent = "ハイブリッド車の燃費がガソリン車以下のため、燃料費では元が取れません。";
-    } else {
-      const breakevenYears = hvPremium / saveYearly;
-      const pct = Math.min(100, (breakevenYears / 10) * 100);
-      breakevenBar.style.width = pct + "%";
-      if(breakevenYears <= 10){
-        breakevenNote.textContent =
-          `車両価格差 ${fmtJPY.format(hvPremium)} を燃料費の節約で回収できるまで 約 ${breakevenYears.toFixed(1)} 年（走行距離 ${Math.round(annualKm * breakevenYears).toLocaleString()} km）`;
-      } else {
-        breakevenNote.textContent =
-          `回収まで 約 ${breakevenYears.toFixed(1)} 年（10年以内に回収できない見込み）`;
-      }
+<script>
+/* ===== EV vs ガソリン比較 ===== */
+(function(){
+  function gId(id){return document.getElementById(id);}
+  function evFmt(n){return Math.round(n).toLocaleString('ja-JP');}
+  function evCalc(){
+    var evEff=parseFloat(gId('evEfficiency').value)||6.5;
+    var evPrice=parseFloat(gId('evPrice').value)||30;
+    var gasEff=parseFloat(gId('gasEfficiency').value)||15;
+    var gasPrice=parseFloat(gId('gasPrice').value)||170;
+    var annualKm=parseFloat(gId('evAnnualKm').value)||10000;
+    var years=parseInt(gId('evYears').value)||5;
+    var evCostPerKm=evPrice/evEff;var gasCostPerKm=gasPrice/gasEff;
+    gId('evCostKm').textContent=evCostPerKm.toFixed(2)+'円';
+    gId('gasCostKm').textContent=gasCostPerKm.toFixed(2)+'円';
+    var evAnnual=evCostPerKm*annualKm;var gasAnnual=gasCostPerKm*annualKm;var diffAnnual=gasAnnual-evAnnual;
+    gId('evAnnual').textContent=evFmt(evAnnual);gId('gasAnnual').textContent=evFmt(gasAnnual);
+    if(diffAnnual>0){
+      gId('evDiffAnnual').textContent=evFmt(diffAnnual)+' 円';
+      gId('evDiffAnnualSub').textContent=years+'年間では約 '+evFmt(diffAnnual*years)+' 円の節約';
+      gId('evDiffAnnual').style.color='var(--green)';
+    }else{
+      gId('evDiffAnnual').textContent=evFmt(Math.abs(diffAnnual))+' 円';
+      gId('evDiffAnnualSub').textContent='ガソリン車のほうが '+years+'年間で約 '+evFmt(Math.abs(diffAnnual)*years)+' 円安い';
+      gId('evDiffAnnual').style.color='var(--gas)';
     }
+    var maxVal=Math.max(evAnnual,gasAnnual);
+    gId('evChartWrap').innerHTML=
+      '<div class="chart-row"><div class="chart-label" style="font-size:.65rem;color:var(--ev)">EV</div>'
+      +'<div class="bar-track"><div class="bar bar-ev" style="width:'+(evAnnual/maxVal*100).toFixed(1)+'%"></div></div>'
+      +'<div class="bar-val ev-color">'+evFmt(evAnnual)+'円</div></div>'
+      +'<div class="chart-row"><div class="chart-label" style="font-size:.65rem;color:var(--gas)">GAS</div>'
+      +'<div class="bar-track"><div class="bar bar-gas" style="width:'+(gasAnnual/maxVal*100).toFixed(1)+'%"></div></div>'
+      +'<div class="bar-val gas-color">'+evFmt(gasAnnual)+'円</div></div>';
+    var body=gId('evBreakdownBody');body.innerHTML='';
+    var maxYears=Math.min(years,20);var rows=[];var step=maxYears<=10?1:Math.ceil(maxYears/10);
+    for(var y=step;y<=maxYears;y+=step)rows.push(y);
+    if(rows[rows.length-1]!==maxYears)rows.push(maxYears);
+    rows.forEach(function(y,i){
+      var evTotal=evAnnual*y;var gasTotal=gasAnnual*y;var diff=gasTotal-evTotal;
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td>'+y+'年後</td><td class="ev-color">'+evFmt(evTotal)+'</td><td class="gas-color">'+evFmt(gasTotal)+'</td><td class="'+(diff>=0?'diff-neg':'diff-pos')+'">'+(diff>=0?'-':'+')+evFmt(Math.abs(diff))+'</td>';
+      body.appendChild(tr);
+    });
   }
-
-  // 計算根拠を注記
-  document.getElementById("fuelCalcNote").textContent =
-    ` 計算条件: 年間${annualKm.toLocaleString()}km走行・${pricePerL}円/L・ガソリン車${gasMpg}km/L・HV${hvMpg}km/L。`;
-}
-
-function openFuelModal(){
-  renderFuelCompare();
-  document.getElementById("fuelModal").classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-}
-
-function closeFuelModal(){
-  document.getElementById("fuelModal").classList.add("hidden");
-  document.body.style.overflow = "";
-}
-
-// 入力値変更で即時再計算（fuelAnnualKm・hvPremium はカンマ処理側で登録済み）
-["fuelPrice","gasMpg","hvMpg"].forEach(id => {
-  document.getElementById(id).addEventListener("input", renderFuelCompare);
-});
-
-document.getElementById("fuelCompareBtn").addEventListener("click", openFuelModal);
-document.getElementById("closeFuelBtn").addEventListener("click", closeFuelModal);
-document.getElementById("fuelModal").addEventListener("click", (e) => {
-  if(e.target === document.getElementById("fuelModal")) closeFuelModal();
-});
+  ['evEfficiency','evPrice','gasEfficiency','gasPrice','evAnnualKm','evYears'].forEach(function(id){
+    gId(id).addEventListener('input',evCalc);
+  });
+  evCalc();
+})();
 </script>
 </body>
 </html>
