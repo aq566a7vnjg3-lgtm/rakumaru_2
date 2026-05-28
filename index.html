@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>車両費用計算ツール</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     /* ===== ベース ===== */
     *{box-sizing:border-box;}
@@ -182,6 +182,138 @@
     #tab-ev .diff-neg{color:var(--green);}
     #tab-ev .diff-pos{color:var(--gas);}
     @media(max-width:480px){#tab-ev .cards{grid-template-columns:1fr;}#tab-ev .common-grid{grid-template-columns:1fr;}}
+
+    /* ===== 概算残債計算 ===== */
+    #tab-zandai{
+      --bg:#f4f1ed; --surface:#faf8f5; --surface2:#f0ece6; --border:#e2dbd3;
+      --sage:#9aab99; --sage-light:#e8ede8; --sage-mid:#c5d0c4;
+      --dusty-blue:#8fa3b1; --blue-light:#e4ecf0;
+      --amber:#c8a97d; --amber-light:#fdf6ee;
+      --rose:#c47a6e; --rose-light:#fdf0ee; --rose-mid:#d9a49e;
+      --blush:#c9a99e; --blush-light:#f5ebe9;
+      --text-dark:#3d3830; --text-mid:#6b6257; --text-light:#9e9086;
+      --radius-sm:10px; --radius-md:16px; --radius-lg:24px; --radius-xl:32px;
+      --shadow-sm:0 2px 12px rgba(80,60,40,0.06);
+      font-family:'Noto Sans JP','DM Sans',sans-serif; font-weight:400;
+      background:var(--bg); color:var(--text-dark);
+      padding:40px 20px 80px; min-height:calc(100vh - 44px);
+    }
+    #tab-zandai *,#tab-zandai *::before,#tab-zandai *::after{margin:0;padding:0;}
+    #tab-zandai .page-wrap{max-width:680px;margin:0 auto;}
+    #tab-zandai .page-header{text-align:center;margin-bottom:32px;}
+    #tab-zandai .badge{display:inline-block;background:var(--rose-light);color:var(--rose);font-size:11px;font-weight:500;letter-spacing:.12em;padding:5px 14px;border-radius:99px;margin-bottom:14px;text-transform:uppercase;border:none;}
+    #tab-zandai .page-header h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:300;letter-spacing:-.01em;margin-bottom:8px;}
+    #tab-zandai .page-header p{font-size:13px;color:var(--text-light);font-weight:300;line-height:1.7;}
+    #tab-zandai .notice-banner{background:var(--amber-light);border:1.5px solid #e8d5bc;border-left:5px solid var(--amber);border-radius:var(--radius-md);padding:16px 20px;margin-bottom:28px;}
+    #tab-zandai .notice-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--amber);letter-spacing:.05em;margin-bottom:8px;}
+    #tab-zandai .notice-icon{width:20px;height:20px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+    #tab-zandai .notice-banner ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+    #tab-zandai .notice-banner li{font-size:12px;color:var(--text-mid);font-weight:300;padding-left:12px;position:relative;line-height:1.6;}
+    #tab-zandai .notice-banner li::before{content:'·';position:absolute;left:3px;color:var(--amber);font-size:16px;line-height:1.3;}
+    #tab-zandai .card{background:var(--surface);border-radius:var(--radius-xl);padding:28px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border);animation:zdFadeUp .4s ease both;}
+    @keyframes zdFadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+    #tab-zandai .card-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text-mid);letter-spacing:.06em;margin-bottom:20px;}
+    #tab-zandai .dot{width:8px;height:8px;border-radius:50%;background:var(--sage-mid);flex-shrink:0;box-shadow:none;}
+    #tab-zandai .dot.rose{background:var(--rose-mid);}
+    #tab-zandai .dot.blue{background:#b5c8d4;}
+    #tab-zandai .dot.amber{background:#d9c29a;}
+    #tab-zandai .field-grid{display:grid;gap:16px;}
+    #tab-zandai .g2{grid-template-columns:1fr 1fr;}
+    #tab-zandai .g3{grid-template-columns:1fr 1fr 1fr;}
+    #tab-zandai .field{display:flex;flex-direction:column;gap:6px;margin-bottom:0;}
+    #tab-zandai .field label{display:block;font-size:11.5px;font-weight:500;color:var(--text-light);letter-spacing:.04em;margin-bottom:0;}
+    #tab-zandai .field-note{font-size:11px;color:var(--text-light);margin-top:2px;font-weight:300;line-height:1.5;}
+    #tab-zandai input[type="number"],#tab-zandai input[type="text"],#tab-zandai select{
+      width:100%;padding:11px 14px;font-size:14px;font-family:inherit;color:var(--text-dark);
+      background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);outline:none;
+      transition:border-color .2s,background .2s,box-shadow .2s;-moz-appearance:textfield;min-width:0;
+    }
+    #tab-zandai input[type="number"]::-webkit-outer-spin-button,
+    #tab-zandai input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
+    #tab-zandai input:focus,#tab-zandai select:focus{border-color:var(--sage-mid);background:#fff;box-shadow:0 0 0 3px rgba(154,171,153,.15);}
+    #tab-zandai .section-label{font-size:11px;font-weight:500;color:var(--text-light);letter-spacing:.08em;text-transform:uppercase;margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+    #tab-zandai .bonus-header,#tab-zandai .bonus-row{display:grid;grid-template-columns:90px 1fr 1fr 32px;gap:10px;align-items:center;margin-bottom:8px;}
+    #tab-zandai .bonus-header{margin-bottom:6px;}
+    #tab-zandai .bonus-header span{font-size:11px;color:var(--text-light);font-weight:500;}
+    #tab-zandai .del-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--text-light);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-family:inherit;}
+    #tab-zandai .del-btn:hover{border-color:var(--blush);color:var(--blush);background:var(--blush-light);}
+    #tab-zandai .add-btn{width:100%;padding:10px 16px;background:none;border:1.5px dashed var(--sage-mid);border-radius:var(--radius-sm);color:var(--sage);font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,border-color .2s;margin-top:4px;}
+    #tab-zandai .add-btn:hover{background:var(--sage-light);border-color:var(--sage);}
+    #tab-zandai .add-btn::before{content:'+';font-size:18px;font-weight:300;line-height:1;}
+    #tab-zandai .hint{font-size:11.5px;color:var(--text-light);margin-top:10px;line-height:1.6;font-weight:300;}
+    #tab-zandai .balloon-row{display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px 16px;background:var(--surface2);border-radius:var(--radius-md);border:1px solid var(--border);}
+    #tab-zandai .balloon-row label{font-size:13px;color:var(--text-mid);flex-shrink:0;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:0;}
+    #tab-zandai .balloon-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--rose);cursor:pointer;}
+    #tab-zandai .balloon-input-wrap{flex:1;display:none;}
+    #tab-zandai .balloon-input-wrap.show{display:block;}
+    #tab-zandai .balloon-input-wrap input{margin-top:0;}
+    #tab-zandai .calc-btn{width:100%;padding:16px;background:var(--rose);color:#fff;border:none;border-radius:var(--radius-lg);font-size:15px;font-family:inherit;font-weight:500;letter-spacing:.05em;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(196,122,110,.3);}
+    #tab-zandai .calc-btn:hover{background:#b36d62;box-shadow:0 6px 20px rgba(196,122,110,.4);transform:translateY(-1px);}
+    #tab-zandai .calc-btn:active{transform:translateY(0);}
+    #tab-zandai #results{display:none;}
+    #tab-zandai #results.show{display:block;animation:zdFadeUp .45s ease both;}
+    #tab-zandai .result-card{background:var(--rose-light);border:1.5px solid #e8c8c3;border-radius:var(--radius-xl);padding:28px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
+    #tab-zandai .hero-amount{text-align:center;padding:24px 0 20px;border-bottom:1px solid #f0deda;margin-bottom:20px;}
+    #tab-zandai .hero-label{font-size:12px;font-weight:500;color:var(--rose);letter-spacing:.1em;margin-bottom:10px;}
+    #tab-zandai .hero-value{font-family:'DM Sans',sans-serif;font-size:48px;font-weight:300;color:var(--rose);letter-spacing:-.03em;line-height:1;}
+    #tab-zandai .hero-sub{font-size:13px;color:var(--text-light);margin-top:8px;font-weight:300;}
+    #tab-zandai .breakdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+    #tab-zandai .breakdown-item{background:rgba(255,255,255,.65);border:1px solid #f0deda;border-radius:var(--radius-md);padding:14px 16px;}
+    #tab-zandai .breakdown-label{font-size:11px;color:var(--text-light);font-weight:500;margin-bottom:6px;letter-spacing:.03em;}
+    #tab-zandai .breakdown-value{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:300;color:var(--text-dark);letter-spacing:-.01em;}
+    #tab-zandai .breakdown-value.highlight{color:var(--dusty-blue);}
+    #tab-zandai .breakdown-value.saving{color:var(--sage);}
+    #tab-zandai .breakdown-value.small{font-size:13px;color:var(--text-mid);margin-top:3px;}
+    #tab-zandai .formula-box{background:rgba(255,255,255,.5);border:1px solid #f0deda;border-radius:var(--radius-md);padding:16px 18px;margin-bottom:16px;}
+    #tab-zandai .formula-title{font-size:11px;font-weight:500;color:var(--text-light);letter-spacing:.06em;margin-bottom:10px;}
+    #tab-zandai .formula-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid rgba(230,200,195,.4);font-size:13px;min-height:auto;}
+    #tab-zandai .formula-row:last-child{border-bottom:none;}
+    #tab-zandai .formula-row .fl{color:var(--text-mid);font-size:12px;line-height:1.5;min-width:0;white-space:normal;}
+    #tab-zandai .formula-row .fv{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--text-dark);white-space:nowrap;margin-left:12px;}
+    #tab-zandai .formula-row.total-row{padding-top:10px;margin-top:4px;border-top:1.5px solid #e8c8c3;border-bottom:none;}
+    #tab-zandai .formula-row.total-row .fl{font-weight:500;color:var(--rose);font-size:13px;}
+    #tab-zandai .formula-row.total-row .fv{font-size:18px;color:var(--rose);}
+    #tab-zandai .divider-line{height:1px;background:#f0deda;margin:10px 0;}
+    #tab-zandai .result-note{font-size:11px;color:var(--text-light);line-height:1.7;font-weight:300;padding-top:8px;border-top:1px solid #f0deda;}
+    #tab-zandai .compare-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
+    #tab-zandai .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);}
+    #tab-zandai .compare-col{padding:18px 20px;}
+    #tab-zandai .compare-col:first-child{border-right:1px solid var(--border);background:var(--surface2);}
+    #tab-zandai .compare-col:last-child{background:var(--rose-light);}
+    #tab-zandai .compare-head{font-size:11px;font-weight:500;letter-spacing:.06em;margin-bottom:12px;color:var(--text-light);}
+    #tab-zandai .compare-col:last-child .compare-head{color:var(--rose);}
+    #tab-zandai .compare-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;min-height:auto;}
+    #tab-zandai .compare-row .cl{color:var(--text-light);}
+    #tab-zandai .compare-row .cv{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:var(--text-dark);}
+    #tab-zandai .compare-col:last-child .compare-row .cv{color:var(--rose);}
+    #tab-zandai .compare-divider{height:1px;background:var(--border);margin:8px 0;}
+    #tab-zandai .compare-total .cv{font-size:16px;font-weight:400;}
+    #tab-zandai .info-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);color:var(--dusty-blue);font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:99px;margin-bottom:12px;}
+    #tab-zandai .schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
+    #tab-zandai .table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border);}
+    #tab-zandai table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
+    #tab-zandai thead tr{background:var(--surface2);}
+    #tab-zandai th{padding:10px 12px;font-size:11px;font-weight:500;color:var(--text-light);letter-spacing:.05em;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface2);border-top:none;border-left:none;border-right:none;}
+    #tab-zandai th:first-child,#tab-zandai th:nth-child(2){text-align:left;}
+    #tab-zandai td{padding:9px 12px;text-align:right;border-bottom:1px solid #ede9e3;color:var(--text-dark);font-variant-numeric:tabular-nums;background:transparent;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
+    #tab-zandai td:first-child,#tab-zandai td:nth-child(2){text-align:left;color:var(--text-mid);}
+    #tab-zandai tbody tr:last-child td{border-bottom:none;}
+    #tab-zandai tbody tr:hover td{background:#faf7f4;}
+    #tab-zandai tr.repay-row td{background:var(--rose-light);color:var(--rose);font-weight:500;}
+    #tab-zandai tr.repay-row td:first-child,#tab-zandai tr.repay-row td:nth-child(2){color:var(--rose);}
+    #tab-zandai tr.bonus-month td{background:#f6f2ec;}
+    #tab-zandai tr.bonus-month td:first-child,#tab-zandai tr.bonus-month td:nth-child(2){color:var(--amber);}
+    @media(max-width:540px){
+      #tab-zandai{padding:24px 14px 60px;}
+      #tab-zandai .card,#tab-zandai .result-card,#tab-zandai .compare-card,#tab-zandai .schedule-card{padding:22px 18px;border-radius:var(--radius-lg);}
+      #tab-zandai .g2,#tab-zandai .g3{grid-template-columns:1fr 1fr;}
+      #tab-zandai .hero-value{font-size:36px;}
+      #tab-zandai .breakdown-grid{grid-template-columns:1fr 1fr;}
+      #tab-zandai .compare-grid{grid-template-columns:1fr;}
+      #tab-zandai .compare-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
+      #tab-zandai .bonus-row,#tab-zandai .bonus-header{grid-template-columns:76px 1fr 1fr 32px;}
+      #tab-zandai .page-header h1{font-size:22px;}
+    }
   </style>
 </head>
 <body>
@@ -189,6 +321,7 @@
 <nav class="tab-nav">
   <button class="tab-btn active" data-tab="maintenance" onclick="switchTab('maintenance')">メンテナンス費計算</button>
   <button class="tab-btn" data-tab="credit" onclick="switchTab('credit')">クレジット計算</button>
+  <button class="tab-btn" data-tab="zandai" onclick="switchTab('zandai')">概算残債計算</button>
   <button class="tab-btn" data-tab="ev" onclick="switchTab('ev')">EV vs ガソリン比較</button>
 </nav>
 
@@ -417,7 +550,141 @@
 </div>
 </div>
 
-<!-- ===== Tab 3: EV vs ガソリン比較 ===== -->
+<!-- ===== Tab 3: 概算残債計算 ===== -->
+<div id="tab-zandai" class="tab-content">
+  <div class="page-wrap">
+    <header class="page-header">
+      <div class="badge">Early Repayment</div>
+      <h1>早期一括返済 試算ツール</h1>
+      <p>アドオン方式（78分法）による未経過利息の戻し額と<br>実際の一括返済金額を概算します</p>
+    </header>
+
+    <div class="notice-banner">
+      <div class="notice-title"><div class="notice-icon">!</div>概算ツールです — 必ず金融機関にご確認ください</div>
+      <ul>
+        <li>78分法はアドオン方式の標準的な計算方式ですが、ホンダファイナンス・ジャックス等の実際の計算は各社規定により異なります。</li>
+        <li>手数料・事務手数料・違約金が別途発生する場合があります。</li>
+        <li>残クレジット（残価設定型）の場合、残価分の扱いが別途あります。</li>
+      </ul>
+    </div>
+
+    <!-- 契約内容 -->
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>契約内容</div>
+
+      <div class="field-grid g3" style="margin-bottom:16px;">
+        <div class="field">
+          <label>借入金額（所要資金）</label>
+          <input type="text" id="principal" placeholder="2,500,000" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label>アドオン利率（年率 %）</label>
+          <input type="number" id="addonRate" placeholder="3.9" min="0" step="0.01">
+          <span class="field-note">契約書の「実質年率」ではなく「利率」欄の値</span>
+        </div>
+        <div class="field">
+          <label>支払回数（回）</label>
+          <input type="number" id="totalMonths" placeholder="60" min="1" step="1">
+        </div>
+      </div>
+
+      <div class="field-grid g2" style="margin-bottom:16px;">
+        <div class="field">
+          <label>月々の支払額（円）</label>
+          <input type="text" id="monthlyPayment" placeholder="40,000" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label>支払開始月</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <input type="number" id="startYear" placeholder="年（例：2023）" min="2000" max="2099" step="1">
+            <input type="number" id="startMonth" placeholder="月（1〜12）" min="1" max="12" step="1">
+          </div>
+        </div>
+      </div>
+
+      <!-- 残クレ残価 -->
+      <div class="balloon-row">
+        <label>
+          <input type="checkbox" id="hasBalloon" onchange="zdToggleBalloon(this)">
+          残クレジット（残価設定）がある
+        </label>
+        <div class="balloon-input-wrap" id="balloonWrap">
+          <input type="text" id="balloonAmount" placeholder="残価（例：800,000）" inputmode="numeric">
+          <span class="field-note" style="display:block;margin-top:4px;">残価は元本に含まれている扱いのため、残元本の計算に影響します</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ボーナス加算 -->
+    <div class="card">
+      <div class="card-title"><span class="dot amber"></span>ボーナス加算（任意）</div>
+
+      <div class="info-badge">
+        ℹ︎ ボーナス加算は残元本の計算に影響します（戻し金額には影響しません）
+      </div>
+
+      <div class="bonus-header">
+        <span>月（1〜12）</span>
+        <span>加算額（円）</span>
+        <span>繰り返し</span>
+        <span></span>
+      </div>
+      <div id="bonusRows"></div>
+      <button class="add-btn" onclick="zdAddBonusRow()">ボーナス月を追加</button>
+      <p class="hint">※ 月は暦の月（1〜12）で入力。「毎年」を選ぶとローン終了まで毎年その月に加算されます。</p>
+    </div>
+
+    <!-- 一括返済タイミング -->
+    <div class="card">
+      <div class="card-title"><span class="dot rose"></span>一括返済のタイミング</div>
+      <div class="field-grid g2">
+        <div class="field">
+          <label>一括返済する年</label>
+          <input type="number" id="repayYear" placeholder="2025" min="2000" max="2099" step="1">
+        </div>
+        <div class="field">
+          <label>一括返済する月（1〜12）</label>
+          <input type="number" id="repayMonth" placeholder="8" min="1" max="12" step="1">
+        </div>
+      </div>
+      <p class="hint" style="margin-top:12px;">※ 指定した月の支払いが終わった直後（その月の支払い済み後）に一括返済する想定で計算します。</p>
+    </div>
+
+    <button class="calc-btn" onclick="zdCalculate()">一括返済額を試算する</button>
+
+    <!-- 結果 -->
+    <div id="results">
+
+      <div class="result-card" style="margin-top:24px;">
+        <div class="hero-amount">
+          <div class="hero-label">一括返済に必要な金額（概算）</div>
+          <div class="hero-value" id="heroVal">—</div>
+          <div class="hero-sub" id="heroSub"></div>
+        </div>
+
+        <div class="breakdown-grid" id="breakdownGrid"></div>
+        <div class="formula-box" id="formulaBox"></div>
+        <p class="result-note" id="resultNote"></p>
+      </div>
+
+      <!-- 比較 -->
+      <div class="compare-card">
+        <div class="card-title" style="margin-bottom:16px;"><span class="dot blue"></span>継続返済 vs 早期一括返済 — 比較</div>
+        <div class="compare-grid" id="compareGrid"></div>
+      </div>
+
+      <!-- スケジュール -->
+      <div class="schedule-card">
+        <div class="card-title" style="margin-bottom:16px;"><span class="dot rose"></span>一括返済月〜その後12ヶ月の試算スケジュール</div>
+        <div class="table-wrap"><table id="scheduleTable"></table></div>
+        <p style="font-size:11.5px;color:var(--text-light);margin-top:10px;font-weight:300;">※ ◀マークの行が指定した一括返済月。以降は継続した場合の返済額を表示しています。</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== Tab 4: EV vs ガソリン比較 ===== -->
 <div id="tab-ev" class="tab-content">
   <div class="ev-header">
     <h1>EV vs GASOLINE</h1>
@@ -883,6 +1150,263 @@ window.addEventListener('load',function(){
     gId(id).addEventListener('input',evCalc);
   });
   evCalc();
+})();
+</script>
+
+<script>
+/* ===== 概算残債計算 ===== */
+(function(){
+  let bonusCount = 0;
+
+  function toComma(val) {
+    const n = parseInt(String(val).replace(/,/g, ''), 10);
+    return isNaN(n) ? '' : n.toLocaleString('ja-JP');
+  }
+  function fromComma(str) {
+    return parseFloat(String(str).replace(/,/g, '')) || 0;
+  }
+  function bindComma(el) {
+    el.addEventListener('blur', () => { if (el.value) el.value = toComma(el.value); });
+    el.addEventListener('focus', () => { el.value = String(el.value).replace(/,/g, ''); });
+    el.addEventListener('input', () => {
+      const raw = el.value.replace(/[^0-9]/g, '');
+      el.value = raw ? parseInt(raw,10).toLocaleString('ja-JP') : '';
+    });
+  }
+  function initCommaInputs() {
+    ['principal','monthlyPayment','balloonAmount'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) bindComma(el);
+    });
+  }
+
+  window.zdToggleBalloon = function(cb) {
+    document.getElementById('balloonWrap').classList.toggle('show', cb.checked);
+  };
+
+  window.zdAddBonusRow = function(cm, am) {
+    bonusCount++;
+    const id = bonusCount;
+    const div = document.createElement('div');
+    div.className = 'bonus-row'; div.id = 'zd-bonus-' + id;
+    const i1 = document.createElement('input'); i1.type='number'; i1.placeholder='8'; i1.value=cm||''; i1.min=1; i1.max=12; i1.step=1; i1.className='bonus-calmonth';
+    const i2 = document.createElement('input'); i2.type='text'; i2.placeholder='100,000'; i2.value=am ? toComma(am) : ''; i2.className='bonus-amount';
+    bindComma(i2);
+    const sel = document.createElement('select'); sel.className='bonus-repeat';
+    sel.innerHTML='<option value="yearly">毎年（ローン終了まで）</option><option value="once">一回のみ</option>';
+    const btn = document.createElement('button'); btn.type='button'; btn.className='del-btn'; btn.setAttribute('aria-label','削除'); btn.textContent='×';
+    btn.onclick = () => document.getElementById('zd-bonus-'+id)?.remove();
+    div.append(i1, i2, sel, btn);
+    document.getElementById('bonusRows').appendChild(div);
+  };
+
+  function fmt(n) { return Math.round(n).toLocaleString('ja-JP'); }
+
+  function getYM(sy, sm, idx) {
+    const d = new Date(sy, sm - 1 + idx, 1);
+    return { year: d.getFullYear(), month: d.getMonth() + 1 };
+  }
+
+  function buildBonusMap(sy, sm, total) {
+    const map = {};
+    document.querySelectorAll('#bonusRows .bonus-row').forEach(row => {
+      const cm  = parseInt(row.querySelector('.bonus-calmonth').value);
+      const am  = fromComma(row.querySelector('.bonus-amount').value);
+      const rep = row.querySelector('.bonus-repeat').value;
+      if (!cm || !am || isNaN(cm)) return;
+      for (let i = 0; i < total; i++) {
+        const ym = getYM(sy, sm, i);
+        if (ym.month === cm) {
+          const no = i + 1;
+          map[no] = (map[no] || 0) + am;
+          if (rep === 'once') break;
+        }
+      }
+    });
+    return map;
+  }
+
+  window.zdCalculate = function() {
+    const principal     = fromComma(document.getElementById('principal').value);
+    const addonRate     = parseFloat(document.getElementById('addonRate').value) / 100;
+    const totalMonths   = parseInt(document.getElementById('totalMonths').value);
+    const monthlyStdIn  = fromComma(document.getElementById('monthlyPayment').value);
+    const startYear     = parseInt(document.getElementById('startYear').value);
+    const startMonth    = parseInt(document.getElementById('startMonth').value);
+    const repayYear     = parseInt(document.getElementById('repayYear').value);
+    const repayMonth    = parseInt(document.getElementById('repayMonth').value);
+    const hasBalloon    = document.getElementById('hasBalloon').checked;
+    const balloonAmount = hasBalloon ? fromComma(document.getElementById('balloonAmount').value) : 0;
+
+    if (!principal || !addonRate || !totalMonths || !monthlyStdIn || !startYear || !startMonth || !repayYear || !repayMonth) {
+      alert('すべての項目を入力してください。'); return;
+    }
+
+    const paidMonths = (repayYear - startYear) * 12 + (repayMonth - startMonth) + 1;
+    if (paidMonths <= 0) { alert('一括返済月は支払開始月以降を入力してください。'); return; }
+    if (paidMonths >= totalMonths) { alert('すでに全回数の支払いが完了しています。'); return; }
+
+    const remainMonths = totalMonths - paidMonths;
+
+    const totalInterest   = principal * addonRate * (totalMonths / 12);
+    const totalRepay      = principal + totalInterest;
+    const principalRatio  = principal / totalRepay;
+    const interestRatio   = totalInterest / totalRepay;
+
+    const bonusMap = buildBonusMap(startYear, startMonth, totalMonths);
+
+    let cumPrincipalPaid = 0;
+    let cumBonusPaid     = 0;
+
+    for (let i = 1; i <= paidMonths; i++) {
+      const bonus       = bonusMap[i] || 0;
+      const totalPay    = monthlyStdIn + bonus;
+      const principalPart = totalPay * principalRatio;
+      cumPrincipalPaid += principalPart;
+      if (bonus > 0) cumBonusPaid += bonus;
+    }
+
+    const remainBalance = Math.max(0, principal - cumPrincipalPaid);
+
+    const rule78Num   = remainMonths * (remainMonths + 1);
+    const rule78Den   = totalMonths  * (totalMonths  + 1);
+    const rule78Ratio = rule78Num / rule78Den;
+    const unearned    = totalInterest * rule78Ratio;
+
+    const earlyPayment  = Math.max(0, remainBalance - unearned);
+
+    let continuePay = 0;
+    for (let i = paidMonths + 1; i <= totalMonths; i++) {
+      continuePay += (monthlyStdIn + (bonusMap[i] || 0));
+    }
+    const paidInterest = totalInterest - unearned;
+    const saving       = unearned;
+
+    document.getElementById('heroVal').textContent = '¥' + fmt(earlyPayment);
+    document.getElementById('heroSub').textContent =
+      `支払開始から ${paidMonths} 回目終了時点 ／ 残 ${remainMonths} 回分を一括返済`;
+
+    const bonusNote = cumBonusPaid > 0
+      ? `（うちボーナス加算 ¥${fmt(cumBonusPaid)} 分を元本充当済み）`
+      : '';
+
+    document.getElementById('breakdownGrid').innerHTML = `
+      <div class="breakdown-item">
+        <div class="breakdown-label">残元本（実績ベース）</div>
+        <div class="breakdown-value">¥${fmt(remainBalance)}</div>
+        ${bonusNote ? `<div class="breakdown-value small">${bonusNote}</div>` : ''}
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-label">未経過利息（78分法 戻し額）</div>
+        <div class="breakdown-value highlight">▲ ¥${fmt(unearned)}</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-label">支払済み利息累計（概算）</div>
+        <div class="breakdown-value">¥${fmt(paidInterest)}</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-label">利息の節約額</div>
+        <div class="breakdown-value saving">¥${fmt(saving)}</div>
+      </div>
+    `;
+
+    document.getElementById('formulaBox').innerHTML = `
+      <div class="formula-title">計算の内訳</div>
+      <div class="formula-row"><span class="fl">借入金額</span><span class="fv">¥${fmt(principal)}</span></div>
+      <div class="formula-row"><span class="fl">総利息（${(addonRate*100).toFixed(2)}% × ${(totalMonths/12).toFixed(2)}年）</span><span class="fv">¥${fmt(totalInterest)}</span></div>
+      <div class="formula-row"><span class="fl">支払済み回数 / 総回数</span><span class="fv">${paidMonths} 回 ／ ${totalMonths} 回</span></div>
+      <div class="formula-row"><span class="fl">支払済み元本充当累計（ボーナス込み）</span><span class="fv">¥${fmt(cumPrincipalPaid)}</span></div>
+      <div class="formula-row"><span class="fl">残元本 = 借入 − 支払済み元本</span><span class="fv">¥${fmt(remainBalance)}</span></div>
+      <div class="divider-line"></div>
+      <div class="formula-row"><span class="fl">78分法 戻し係数（残${remainMonths}×${remainMonths+1} ÷ 全${totalMonths}×${totalMonths+1}）</span><span class="fv">${(rule78Ratio*100).toFixed(3)} %</span></div>
+      <div class="formula-row"><span class="fl">未経過利息 = 総利息 × 戻し係数</span><span class="fv">¥${fmt(unearned)}</span></div>
+      <div class="formula-row total-row"><span class="fl">一括返済額 = 残元本 − 未経過利息</span><span class="fv">¥${fmt(earlyPayment)}</span></div>
+    `;
+
+    document.getElementById('resultNote').innerHTML =
+      `※ 残元本はボーナス加算分も含めた実際の支払い実績をもとに計算しています。<br>
+       ※ 78分法（戻し係数）は回数ベースのため、ボーナスの有無にかかわらず同一になります。<br>
+       ※ ホンダファイナンス・ジャックス等の実際の金額は各社の規定・端数処理により異なる場合があります。<br>
+       ※ 手数料・事務手数料が別途発生する場合があります。実際の返済前に必ず金融機関にご確認ください。`;
+
+    document.getElementById('compareGrid').innerHTML = `
+      <div class="compare-col">
+        <div class="compare-head">継続して返済した場合</div>
+        <div class="compare-row"><span class="cl">残り回数</span><span class="cv">${remainMonths} 回</span></div>
+        <div class="compare-row"><span class="cl">今後の支払い総額</span><span class="cv">¥${fmt(continuePay)}</span></div>
+        <div class="compare-divider"></div>
+        <div class="compare-row compare-total"><span class="cl">うち利息分</span><span class="cv">¥${fmt(unearned)}</span></div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head">今すぐ一括返済した場合</div>
+        <div class="compare-row"><span class="cl">一括返済額</span><span class="cv">¥${fmt(earlyPayment)}</span></div>
+        <div class="compare-row"><span class="cl">継続との差額</span><span class="cv">▲ ¥${fmt(continuePay - earlyPayment)}</span></div>
+        <div class="compare-divider"></div>
+        <div class="compare-row compare-total"><span class="cl">利息の節約額</span><span class="cv">¥${fmt(saving)}</span></div>
+      </div>
+    `;
+
+    const res = document.getElementById('results');
+    res.classList.add('show');
+    setTimeout(() => res.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+
+    /* スケジュール表 */
+    const scheduleRows = [];
+    let cumP2 = 0;
+    for (let i = 1; i <= totalMonths; i++) {
+      const ym    = getYM(startYear, startMonth, i - 1);
+      const bonus = bonusMap[i] || 0;
+      const pay   = monthlyStdIn + bonus;
+      const pPart = pay * principalRatio;
+      const iPart = pay * interestRatio;
+      cumP2 += pPart;
+      const bal = Math.max(0, principal - cumP2);
+      scheduleRows.push({ no: i, year: ym.year, month: ym.month, pay, bonus, pPart, iPart, bal });
+    }
+
+    const startIdx = paidMonths - 1;
+    const endIdx   = Math.min(startIdx + 12, scheduleRows.length - 1);
+
+    let thtml = `<thead><tr>
+      <th>回</th><th>年月</th><th>月々</th><th>ボーナス</th><th>元金充当</th><th>手数料充当</th><th>残元本</th><th style="color:var(--rose);">一括返済額</th>
+    </tr></thead><tbody>`;
+
+    for (let i = startIdx; i <= endIdx; i++) {
+      const r       = scheduleRows[i];
+      const isRepay = i === startIdx;
+      const cls     = isRepay ? 'repay-row' : (r.bonus > 0 ? 'bonus-month' : '');
+
+      const remN       = totalMonths - r.no;
+      const earlyR78   = remN * (remN + 1) / (totalMonths * (totalMonths + 1));
+      const unearnedR  = totalInterest * earlyR78;
+      const earlyPayR  = Math.max(0, r.bal - unearnedR);
+      const earlyCell  = remN <= 0 ? '完済' : `¥${fmt(earlyPayR)}`;
+
+      thtml += `<tr class="${cls}">
+        <td>${r.no}${isRepay ? ' ◀' : ''}</td>
+        <td>${r.year}/${String(r.month).padStart(2,'0')}</td>
+        <td>¥${fmt(r.pay - r.bonus)}</td>
+        <td>${r.bonus > 0 ? '¥' + fmt(r.bonus) : '—'}</td>
+        <td>¥${fmt(r.pPart)}</td>
+        <td>¥${fmt(r.iPart)}</td>
+        <td>¥${fmt(r.bal)}</td>
+        <td style="font-weight:500;color:var(--rose);">${earlyCell}</td>
+      </tr>`;
+    }
+    thtml += '</tbody>';
+    document.getElementById('scheduleTable').innerHTML = thtml;
+  };
+
+  /* 初期化 */
+  window.addEventListener('load', function() {
+    const now = new Date();
+    document.getElementById('repayYear').value  = now.getFullYear();
+    document.getElementById('repayMonth').value = now.getMonth() + 1;
+    initCommaInputs();
+    /* デフォルトボーナス */
+    window.zdAddBonusRow(8, 100000);
+    window.zdAddBonusRow(12, 100000);
+  });
 })();
 </script>
 </body>
