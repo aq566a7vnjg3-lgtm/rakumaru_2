@@ -480,25 +480,25 @@
     <span class="plan-sep"></span>
     <div class="plan-hontai">
       <span>車両本体価格（税込）<span class="req">※</span></span>
-      <input type="text" id="cr_hontai" placeholder="例: 2,197,540" style="width:120px;border:1px solid #7a9ac0;padding:1px 4px;font-size:12px;background:#fff;text-align:right" oninput="crFmtInput(this)" onblur="crOnch()">
+      <input type="text" id="cr_hontai" placeholder="例: 2,197,540" autocomplete="off" style="width:120px;border:1px solid #7a9ac0;padding:1px 4px;font-size:12px;background:#fff;text-align:right" oninput="crFmtInput(this)" onblur="crOnch()">
       <span style="font-size:11px">円</span>
     </div>
   </div>
   <div class="form-grid">
     <div class="col">
-      <div class="fr"><div class="fl">頭金（現金）</div><div class="fi"><input type="text" id="cr_atama" value="0" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span></div></div>
+      <div class="fr"><div class="fl">頭金（現金）</div><div class="fi"><input type="text" id="cr_atama" value="0" autocomplete="off" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span></div></div>
       <div class="fr"><div class="fl">支払方法</div><div class="fi"><select id="cr_shiharaiHoho" style="width:150px" onchange="crOnShiharaiChange()"><option value="">---選択してください---</option><option value="zanka">残価クレジット</option><option value="normal">通常クレジット</option></select></div></div>
-      <div class="fr"><div class="fl">支払回数 <span class="req">（必須）</span></div><div class="fi"><select id="cr_kaisu_sel" style="width:60px" onchange="crOnch()"><option value="36">36</option><option value="60" selected>60</option></select><input type="text" id="cr_kaisu_inp" style="width:60px;display:none" placeholder="例:84" oninput="crValidateKaisu(this)" onblur="crOnch()"><span class="fu">回</span></div></div>
-      <div class="fr"><div class="fl">実質年率 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_nenri" value="5.20" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
+      <div class="fr"><div class="fl">支払回数 <span class="req">（必須）</span></div><div class="fi"><select id="cr_kaisu_sel" style="width:60px" onchange="crOnch()"><option value="36">36</option><option value="60" selected>60</option></select><input type="text" id="cr_kaisu_inp" autocomplete="off" style="width:60px;display:none" placeholder="例:84" oninput="crValidateKaisu(this)" onblur="crOnch()"><span class="fu">回</span></div></div>
+      <div class="fr"><div class="fl">実質年率 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_nenri" value="5.20" autocomplete="off" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
       <div class="fr"><div class="fl">ボーナス１</div><div class="fi">
         <select id="cr_b1m" style="width:50px" onchange="crOnch()"><option value="">--</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
         <span class="fu">月</span>
-        <input type="text" id="cr_b1amt" value="0" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
+        <input type="text" id="cr_b1amt" value="0" autocomplete="off" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
       </div></div>
       <div class="fr"><div class="fl">ボーナス２</div><div class="fi">
         <select id="cr_b2m" style="width:50px" onchange="crOnch()"><option value="">--</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
         <span class="fu">月</span>
-        <input type="text" id="cr_b2amt" value="0" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
+        <input type="text" id="cr_b2amt" value="0" autocomplete="off" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
       </div></div>
       <div class="fr"><div class="fl">納車予定日 <span class="req">（必須）</span></div><div class="fi"><input type="date" id="cr_noshabi" style="width:130px" onchange="crOnch()"></div></div>
       <div class="fr" id="cr_row_mileage"><div class="fl">月間走行 <span class="req">（必須）</span></div><div class="fi">
@@ -506,16 +506,16 @@
         <button type="button" class="zanka-btn" style="margin-left:6px">残価条件選択</button>
       </div></div>
       <div class="fr" id="cr_row_menseki"><div class="fl">免責走行距離</div><div class="fi"><input type="text" id="cr_menseki" readonly class="gray" style="width:80px"><span class="fu">km</span></div></div>
-      <div class="fr" id="cr_row_zankaRate" style="display:none"><div class="fl">据置・残価率</div><div class="fi"><input type="text" id="cr_zankaRate" value="46.00" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
+      <div class="fr" id="cr_row_zankaRate" style="display:none"><div class="fl">据置・残価率</div><div class="fi"><input type="text" id="cr_zankaRate" value="46.00" autocomplete="off" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
     </div>
     <div class="col" style="border-left:2px solid #8aaacc">
-      <div class="fr"><div class="fl">所要資金</div><div class="fi"><input type="text" id="cr_shoyo" class="bluebg" style="width:120px" oninput="crFmtInput(this)" onblur="crOnShoyo()"></div></div>
+      <div class="fr"><div class="fl">所要資金</div><div class="fi"><input type="text" id="cr_shoyo" class="bluebg" autocomplete="off" style="width:120px" oninput="crFmtInput(this)" onblur="crOnShoyo()"></div></div>
       <div class="fr"><div class="fl">計算方法</div><div class="fi"><select id="cr_keisanHoho" style="width:160px" onchange="crOnKeisanChange()"><option value="">---選択してください---</option><option value="kaisu">回数指定</option><option value="atama">頭金逆引き</option><option value="value" id="cr_opt_value">２回払い（バリュー保証プラン）</option></select></div></div>
       <div class="fr"><div class="fl">月払額</div><div class="fi"><input type="text" id="cr_tsuki" readonly style="width:120px;background:#d8e4f0;color:#888;font-weight:bold;border:1px solid #9ab0cc;text-align:right"></div></div>
-      <div class="fr"><div class="fl">支払開始月 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_startMonth" placeholder="YYYY/MM" style="width:80px;text-align:left" oninput="crFmtStartMonth(this)" onblur="crValidateStartMonth(this)"></div></div>
-      <div class="fr"><div class="fl">加算額１</div><div class="fi"><input type="text" id="cr_kasan1" value="0" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"></div></div>
+      <div class="fr"><div class="fl">支払開始月 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_startMonth" placeholder="YYYY/MM" autocomplete="off" style="width:80px;text-align:left" oninput="crFmtStartMonth(this)" onblur="crValidateStartMonth(this)"></div></div>
+      <div class="fr"><div class="fl">加算額１</div><div class="fi"><input type="text" id="cr_kasan1" value="0" autocomplete="off" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"></div></div>
       <div class="fr"><div class="fl">加算額２</div><div class="fi">
-        <input type="text" id="cr_kasan2" value="0" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()">
+        <input type="text" id="cr_kasan2" value="0" autocomplete="off" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()">
         <span style="font-size:11px;white-space:nowrap;margin-left:8px">初回ボーナススキップ</span>
         <input type="checkbox" id="cr_skipBonus" style="margin-left:4px">
       </div></div>
