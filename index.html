@@ -183,6 +183,70 @@
     #tab-ev .diff-pos{color:var(--gas);}
     @media(max-width:480px){#tab-ev .cards{grid-template-columns:1fr;}#tab-ev .common-grid{grid-template-columns:1fr;}}
 
+    /* ===== EV/GAS/HV 走行コスト比較 共通 ===== */
+    .ev-compare{
+      --ev:#00c8ff;--gas:#ff6b35;--bg:#0a0e1a;--surface:#111827;--surface2:#1c2536;
+      --border:#2a3550;--text:#e8edf5;--muted:#6b7fa3;--green:#22d3a0;
+      background:#0a0e1a;color:#e8edf5;font-family:'Noto Sans JP',sans-serif;
+      padding:24px 16px 48px;min-height:calc(100vh - 44px);
+    }
+    .ev-compare .ev-header{text-align:center;margin-bottom:32px;}
+    .ev-compare .ev-header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,8vw,3.5rem);letter-spacing:.05em;background:linear-gradient(135deg,var(--ev),var(--gas));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:4px;}
+    .ev-compare .ev-header p{color:var(--muted);font-size:.85rem;}
+    .ev-compare .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:720px;margin:0 auto 24px;}
+    .ev-compare .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 16px;}
+    .ev-compare .card.ev-card{border-top:3px solid var(--ev);}
+    .ev-compare .card.gas-card{border-top:3px solid var(--gas);}
+    .ev-compare .card-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+    .ev-compare .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+    .ev-compare .dot-ev{background:var(--ev);box-shadow:0 0 8px var(--ev);}
+    .ev-compare .dot-gas{background:var(--gas);box-shadow:0 0 8px var(--gas);}
+    .ev-compare .field{margin-bottom:12px;}
+    .ev-compare label{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px;}
+    .ev-compare .input-row{display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+    .ev-compare .input-row input{flex:1;background:transparent;border:none;outline:none;padding:8px 10px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--text);width:0;}
+    .ev-compare .unit{padding:8px 10px 8px 4px;font-size:.72rem;color:var(--muted);white-space:nowrap;}
+    .ev-compare .cost-per-km{background:var(--surface2);border-radius:10px;padding:10px 12px;margin-top:4px;display:flex;justify-content:space-between;align-items:center;}
+    .ev-compare .cost-per-km .cpk-label{font-size:.72rem;color:var(--muted);}
+    .ev-compare .cost-per-km .val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;}
+    .ev-compare .card.ev-card .cost-per-km .val{color:var(--ev);}
+    .ev-compare .card.gas-card .cost-per-km .val{color:var(--gas);}
+    .ev-compare .common{max-width:720px;margin:0 auto 24px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px 16px;}
+    .ev-compare .common-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+    .ev-compare .common-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .ev-compare .result{max-width:720px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 16px;}
+    .ev-compare .result-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;text-align:center;}
+    .ev-compare .chart-wrap{margin-bottom:24px;}
+    .ev-compare .chart-row{display:grid;grid-template-columns:52px 1fr 72px;align-items:center;gap:8px;margin-bottom:10px;}
+    .ev-compare .chart-label{font-size:.72rem;color:var(--muted);text-align:right;}
+    .ev-compare .bar-track{background:var(--surface2);border-radius:4px;height:22px;overflow:hidden;}
+    .ev-compare .bar{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+    .ev-compare .bar-ev{background:linear-gradient(90deg,#006fa8,var(--ev));}
+    .ev-compare .bar-gas{background:linear-gradient(90deg,#b84a1a,var(--gas));}
+    .ev-compare .bar-val{font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--muted);text-align:right;}
+    .ev-compare .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+    .ev-compare .summary-box{background:var(--surface2);border-radius:12px;padding:14px 12px;text-align:center;}
+    .ev-compare .s-label{font-size:.68rem;color:var(--muted);margin-bottom:4px;}
+    .ev-compare .s-val{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;line-height:1;}
+    .ev-compare .s-sub{font-size:.65rem;color:var(--muted);margin-top:2px;}
+    .ev-compare .ev-color{color:var(--ev);}
+    .ev-compare .gas-color{color:var(--gas);}
+    .ev-compare .diff-box{border:1px solid var(--green);border-radius:12px;padding:16px;text-align:center;background:rgba(34,211,160,.06);}
+    .ev-compare .d-label{font-size:.72rem;color:var(--green);letter-spacing:.1em;margin-bottom:6px;}
+    .ev-compare .d-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--green);line-height:1;}
+    .ev-compare .d-sub{font-size:.72rem;color:var(--muted);margin-top:4px;}
+    .ev-compare .breakdown{margin-top:20px;overflow-x:auto;}
+    .ev-compare table{width:100%;border-collapse:collapse;font-size:.78rem;}
+    .ev-compare th{color:var(--muted);font-weight:400;padding:6px 8px;border-bottom:1px solid var(--border);text-align:right;font-size:.68rem;letter-spacing:.05em;}
+    .ev-compare th:first-child{text-align:left;}
+    .ev-compare td{padding:8px 8px;border-bottom:1px solid var(--border);text-align:right;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.03em;}
+    .ev-compare td:first-child{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;text-align:left;color:var(--muted);}
+    .ev-compare tr:last-child td{border-bottom:none;font-size:1.05rem;}
+    .ev-compare tr:last-child td:first-child{color:var(--text);font-weight:700;}
+    .ev-compare .diff-neg{color:var(--green);}
+    .ev-compare .diff-pos{color:var(--gas);}
+    @media(max-width:480px){.ev-compare .cards{grid-template-columns:1fr;}.ev-compare .common-grid{grid-template-columns:1fr;}}
+
     /* ===== 概算残債計算 ===== */
     #tab-zandai{
       --bg:#f4f1ed; --surface:#faf8f5; --surface2:#f0ece6; --border:#e2dbd3;
@@ -323,6 +387,7 @@
   <button class="tab-btn" data-tab="credit" onclick="switchTab('credit')">クレジット計算</button>
   <button class="tab-btn" data-tab="zandai" onclick="switchTab('zandai')">概算残債計算</button>
   <button class="tab-btn" data-tab="ev" onclick="switchTab('ev')">EV vs ガソリン比較</button>
+  <button class="tab-btn" data-tab="hv" onclick="switchTab('hv')">GAS vs HV比較</button>
 </nav>
 
 <!-- ===== Tab 1: メンテナンス維持費計算 ===== -->
@@ -685,7 +750,7 @@
 </div>
 
 <!-- ===== Tab 4: EV vs ガソリン比較 ===== -->
-<div id="tab-ev" class="tab-content">
+<div id="tab-ev" class="tab-content ev-compare">
   <div class="ev-header">
     <h1>EV vs GASOLINE</h1>
     <p>走行コスト比較シミュレーター</p>
@@ -763,6 +828,90 @@
           </tr>
         </thead>
         <tbody id="evBreakdownBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Tab 5: GAS vs HV比較 ===== -->
+<div id="tab-hv" class="tab-content ev-compare">
+  <div class="ev-header">
+    <h1>HV vs GASOLINE</h1>
+    <p>走行コスト比較シミュレーター</p>
+  </div>
+  <div class="cards">
+    <div class="card ev-card">
+      <div class="card-title"><span class="dot dot-ev"></span>HV（ハイブリッド車）</div>
+      <div class="field">
+        <label>燃費（km/L）</label>
+        <div class="input-row"><input type="number" id="hvEfficiency" value="25" min="5" max="60" step="0.5"><span class="unit">km/L</span></div>
+      </div>
+      <div class="field">
+        <label>ガソリン価格（円/L）</label>
+        <div class="input-row"><input type="number" id="hvPrice" value="170" min="100" max="300" step="1"><span class="unit">円/L</span></div>
+      </div>
+      <div class="cost-per-km">
+        <span class="cpk-label">1km あたり</span>
+        <span class="val" id="hvCostKm">—</span>
+      </div>
+    </div>
+    <div class="card gas-card">
+      <div class="card-title"><span class="dot dot-gas"></span>GAS（ガソリン車）</div>
+      <div class="field">
+        <label>燃費（km/L）</label>
+        <div class="input-row"><input type="number" id="hvGasEfficiency" value="15" min="5" max="50" step="0.5"><span class="unit">km/L</span></div>
+      </div>
+      <div class="field">
+        <label>ガソリン価格（円/L）</label>
+        <div class="input-row"><input type="number" id="hvGasPrice" value="170" min="100" max="300" step="1"><span class="unit">円/L</span></div>
+      </div>
+      <div class="cost-per-km">
+        <span class="cpk-label">1km あたり</span>
+        <span class="val" id="hvGasCostKm">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="common">
+    <div class="common-title">📊 シミュレーション設定</div>
+    <div class="common-grid">
+      <div class="field">
+        <label>年間走行距離（km）</label>
+        <div class="input-row"><input type="number" id="hvAnnualKm" value="10000" min="1000" max="100000" step="500"><span class="unit">km/年</span></div>
+      </div>
+      <div class="field">
+        <label>比較期間（年）</label>
+        <div class="input-row"><input type="number" id="hvYears" value="5" min="1" max="20" step="1"><span class="unit">年間</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="result">
+    <div class="result-title">💡 比較結果</div>
+    <div class="chart-wrap" id="hvChartWrap"></div>
+    <div class="summary-grid">
+      <div class="summary-box">
+        <div class="s-label">HV 年間燃料費</div>
+        <div class="s-val ev-color" id="hvAnnual">—</div>
+        <div class="s-sub">円/年</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-label">GAS 年間燃料費</div>
+        <div class="s-val gas-color" id="hvGasAnnual">—</div>
+        <div class="s-sub">円/年</div>
+      </div>
+    </div>
+    <div class="diff-box">
+      <div class="d-label">▼ HVの年間節約額</div>
+      <div class="d-val" id="hvDiffAnnual">—</div>
+      <div class="d-sub" id="hvDiffAnnualSub"></div>
+    </div>
+    <div class="breakdown">
+      <table id="hvBreakdownTable">
+        <thead>
+          <tr>
+            <th>期間</th><th>HV累計（円）</th><th>GAS累計（円）</th><th>差額（円）</th>
+          </tr>
+        </thead>
+        <tbody id="hvBreakdownBody"></tbody>
       </table>
     </div>
   </div>
@@ -1150,6 +1299,67 @@ window.addEventListener('load',function(){
     gId(id).addEventListener('input',evCalc);
   });
   evCalc();
+})();
+</script>
+
+<script>
+/* ===== GAS vs HV比較 ===== */
+(function(){
+  function gId(id){return document.getElementById(id);}
+  function hvFmt(n){return Math.round(n).toLocaleString('ja-JP');}
+  function hvCalc(){
+    var hvEff=parseFloat(gId('hvEfficiency').value)||25;
+    var hvPrice=parseFloat(gId('hvPrice').value)||170;
+    var gasEff=parseFloat(gId('hvGasEfficiency').value)||15;
+    var gasPrice=parseFloat(gId('hvGasPrice').value)||170;
+    var annualKm=parseFloat(gId('hvAnnualKm').value)||10000;
+    var years=parseInt(gId('hvYears').value)||5;
+    var hvCostPerKm=hvPrice/hvEff;
+    var gasCostPerKm=gasPrice/gasEff;
+    gId('hvCostKm').textContent=hvCostPerKm.toFixed(2)+'円';
+    gId('hvGasCostKm').textContent=gasCostPerKm.toFixed(2)+'円';
+    var hvAnnual=hvCostPerKm*annualKm;
+    var gasAnnual=gasCostPerKm*annualKm;
+    var diffAnnual=gasAnnual-hvAnnual;
+    gId('hvAnnual').textContent=hvFmt(hvAnnual);
+    gId('hvGasAnnual').textContent=hvFmt(gasAnnual);
+    if(diffAnnual>0){
+      gId('hvDiffAnnual').textContent=hvFmt(diffAnnual)+' 円';
+      gId('hvDiffAnnualSub').textContent=years+'年間では約 '+hvFmt(diffAnnual*years)+' 円の節約';
+      gId('hvDiffAnnual').style.color='var(--green)';
+    }else{
+      gId('hvDiffAnnual').textContent=hvFmt(Math.abs(diffAnnual))+' 円';
+      gId('hvDiffAnnualSub').textContent='GAS車のほうが '+years+'年間で約 '+hvFmt(Math.abs(diffAnnual)*years)+' 円安い';
+      gId('hvDiffAnnual').style.color='var(--gas)';
+    }
+    var maxVal=Math.max(hvAnnual,gasAnnual);
+    gId('hvChartWrap').innerHTML=
+      '<div class="chart-row"><div class="chart-label" style="font-size:.65rem;color:var(--ev)">HV</div>'
+      +'<div class="bar-track"><div class="bar bar-ev" style="width:'+(hvAnnual/maxVal*100).toFixed(1)+'%"></div></div>'
+      +'<div class="bar-val ev-color">'+hvFmt(hvAnnual)+'円</div></div>'
+      +'<div class="chart-row"><div class="chart-label" style="font-size:.65rem;color:var(--gas)">GAS</div>'
+      +'<div class="bar-track"><div class="bar bar-gas" style="width:'+(gasAnnual/maxVal*100).toFixed(1)+'%"></div></div>'
+      +'<div class="bar-val gas-color">'+hvFmt(gasAnnual)+'円</div></div>';
+    var body=gId('hvBreakdownBody');
+    body.innerHTML='';
+    var maxYears=Math.min(years,20);
+    var rows=[];
+    var step=maxYears<=10?1:Math.ceil(maxYears/10);
+    for(var y=step;y<=maxYears;y+=step)rows.push(y);
+    if(rows[rows.length-1]!==maxYears)rows.push(maxYears);
+    rows.forEach(function(y){
+      var hvTotal=hvAnnual*y;
+      var gasTotal=gasAnnual*y;
+      var diff=gasTotal-hvTotal;
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td>'+y+'年後</td><td class="ev-color">'+hvFmt(hvTotal)+'</td><td class="gas-color">'+hvFmt(gasTotal)+'</td><td class="'+(diff>=0?'diff-neg':'diff-pos')+'">'+(diff>=0?'-':'+')+hvFmt(Math.abs(diff))+'</td>';
+      body.appendChild(tr);
+    });
+  }
+  ['hvEfficiency','hvPrice','hvGasEfficiency','hvGasPrice','hvAnnualKm','hvYears'].forEach(function(id){
+    gId(id).addEventListener('input',hvCalc);
+  });
+  hvCalc();
 })();
 </script>
 
