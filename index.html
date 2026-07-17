@@ -4,6 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>車両費用計算ツール</title>
+  <meta name="theme-color" content="#0aa64f" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152.png" />
+  <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -118,6 +126,37 @@
     #tab-credit td{padding:3px 5px;border:1px solid #b0c8e0;text-align:right;white-space:nowrap;background:#fff;}
     #tab-credit td.c{text-align:center;}
     #tab-credit tr.result td{background:#dde8f8;}
+    #tab-credit>.outer{display:none;}
+    #tab-credit{background:#f4f6f8;padding:0;min-height:calc(100vh - 44px);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;color:#1f2933;}
+    #tab-credit .cr-simple{max-width:760px;margin:0 auto;padding:18px 12px 28px;}
+    #tab-credit .cr-simple .title-bar{background:transparent;padding:0 0 12px;}
+    #tab-credit .cr-simple .title-bar h1{font-size:22px;font-weight:800;letter-spacing:0;margin:0;color:#102a43;}
+    #tab-credit .cr-simple .main{border:1px solid #d7dee8;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 24px rgba(16,42,67,.08);}
+    #tab-credit .cr-simple .plan-header{background:#0aa64f;color:#fff;padding:12px 16px;font-size:14px;font-weight:800;border:0;}
+    #tab-credit .cr-simple .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px;}
+    #tab-credit .cr-simple .col{padding:0;}
+    #tab-credit .cr-simple .col[style]{border-left:none!important;}
+    #tab-credit .cr-simple .fr{display:block;border:0;padding:0;margin:0 0 14px;min-height:0;}
+    #tab-credit .cr-simple .fr:last-child{margin-bottom:0;}
+    #tab-credit .cr-simple .fl{min-width:0;font-size:13px;font-weight:700;color:#334e68;margin-bottom:6px;white-space:normal;}
+    #tab-credit .cr-simple .req{font-size:10px;color:#d64545;margin-left:4px;}
+    #tab-credit .cr-simple .fi{display:flex;align-items:center;gap:6px;}
+    #tab-credit .cr-simple .fi input,#tab-credit .cr-simple .fi select{width:100%!important;height:42px;border:1px solid #cbd5e1;border-radius:8px;padding:8px 10px;font-size:16px;background:#fff;color:#102a43;}
+    #tab-credit .cr-simple .fi input:focus,#tab-credit .cr-simple .fi select:focus{outline:2px solid rgba(10,166,79,.18);border-color:#0aa64f;}
+    #tab-credit .cr-simple .fu{font-size:13px;color:#52606d;white-space:nowrap;}
+    #tab-credit .cr-simple input[readonly],#tab-credit .cr-simple input:disabled{background:#eef2f6;color:#52606d;}
+    #tab-credit .cr-simple .btn-row{display:flex;gap:10px;justify-content:flex-start;padding:0 18px 18px;border:0;background:#fff;}
+    #tab-credit .cr-simple .calc-btn,#tab-credit .cr-simple .rst-btn{height:42px;border-radius:8px;padding:0 22px;font-size:14px;border:1px solid #0aa64f;cursor:pointer;}
+    #tab-credit .cr-simple .calc-btn{background:#0aa64f;color:#fff;font-weight:800;}
+    #tab-credit .cr-simple .rst-btn{background:#fff;color:#0a7f3e;}
+    #tab-credit .cr-simple .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px;border-top:1px solid #e5eaf0;background:#f8fafc;}
+    #tab-credit .cr-simple .summary-box{border:1px solid #d7dee8;background:#fff;border-radius:8px;padding:14px;text-align:right;}
+    #tab-credit .cr-simple .summary-box span{display:block;color:#52606d;font-size:12px;font-weight:700;text-align:left;margin-bottom:8px;}
+    #tab-credit .cr-simple .summary-box b{font-size:24px;color:#102a43;line-height:1.1;}
+    #tab-credit .cr-simple .summary-box:first-child b,#tab-credit .cr-simple .summary-box:nth-child(2) b{color:#0a7f3e;}
+    #tab-credit .cr-simple .tbl-wrap{display:none;}
+    #tab-credit .cr-simple .note{padding:12px 18px;color:#52606d;font-size:12px;line-height:1.6;background:#fff;border-top:1px solid #e5eaf0;}
+    @media(max-width:700px){#tab-credit .cr-simple .form-grid{grid-template-columns:1fr;gap:0;}#tab-credit .cr-simple .summary{grid-template-columns:1fr;}#tab-credit .cr-simple .summary-box b{font-size:22px;}}
 
     /* ===== EV vs ガソリン比較 ===== */
     #tab-ev{
@@ -378,6 +417,89 @@
       #tab-zandai .bonus-row,#tab-zandai .bonus-header{grid-template-columns:76px 1fr 1fr 32px;}
       #tab-zandai .page-header h1{font-size:22px;}
     }
+
+    /* ===== 全ページの色味統一 ===== */
+    :root{
+      --brand:#0aa64f;
+      --brand-dark:#087a3b;
+      --brand-soft:#eaf7ef;
+      --page-bg:#f4f6f8;
+      --app-surface:#fff;
+      --app-surface-soft:#f8faf9;
+      --border-soft:#d9e2dd;
+      --text-main:#102a43;
+      --text-sub:#52606d;
+    }
+    body{background:var(--page-bg);color:var(--text-main);}
+    .tab-nav{background:var(--brand);}
+    :root{--bg:var(--brand);--line:var(--border-soft);--muted:var(--text-sub);--card:var(--app-surface);}
+    #tab-maintenance main,#tab-credit,#tab-zandai,#tab-ev,.ev-compare{background:var(--page-bg);}
+    #tab-maintenance thead th,.section-row td,.total-row td,.fuel-result-wrap thead th{background:var(--app-surface-soft);}
+    #tab-maintenance tbody tr:hover td,.fuel-result-wrap tbody tr:hover td{background:var(--brand-soft);}
+    .fuel-result-wrap th.th-gas,.fuel-result-wrap th.th-hv,.fuel-result-wrap td.td-gas,.fuel-result-wrap td.td-hv,
+    .fuel-card.card-gas,.fuel-card.card-hv,.fuel-card.card-diff,.breakeven-wrap{background:var(--app-surface-soft);border-color:var(--border-soft);}
+    .save-val,.cost-val{color:var(--brand-dark);}
+
+    #tab-credit .cr-simple .plan-header,
+    #tab-credit .cr-simple .calc-btn,
+    #tab-zandai .calc-btn{background:var(--brand);color:#fff;border-color:var(--brand);}
+    #tab-credit .cr-simple .rst-btn,
+    #tab-credit .cr-simple .summary-box:first-child b,
+    #tab-credit .cr-simple .summary-box:nth-child(2) b{color:var(--brand-dark);}
+
+    #tab-ev,.ev-compare{
+      --ev:var(--brand);
+      --gas:#6b7c93;
+      --bg:var(--page-bg);
+      --surface:var(--app-surface);
+      --surface2:var(--app-surface-soft);
+      --border:var(--border-soft);
+      --text:var(--text-main);
+      --muted:var(--text-sub);
+      --green:var(--brand-dark);
+      color:var(--text-main);
+    }
+    #tab-ev .ev-header h1,.ev-compare .ev-header h1{
+      background:none;
+      -webkit-text-fill-color:var(--text-main);
+      color:var(--text-main);
+    }
+    #tab-ev .bar-ev,.ev-compare .bar-ev{background:var(--brand);}
+    #tab-ev .bar-gas,.ev-compare .bar-gas{background:#9aa6b2;}
+    #tab-ev .dot-ev,.ev-compare .dot-ev{box-shadow:none;}
+    #tab-ev .dot-gas,.ev-compare .dot-gas{box-shadow:none;}
+    #tab-ev .diff-box,.ev-compare .diff-box{background:var(--brand-soft);border-color:var(--brand);}
+
+    #tab-zandai{
+      --bg:var(--page-bg);
+      --surface:var(--app-surface);
+      --surface2:var(--app-surface-soft);
+      --border:var(--border-soft);
+      --sage:var(--brand-dark);
+      --sage-light:var(--brand-soft);
+      --sage-mid:var(--brand);
+      --dusty-blue:var(--brand-dark);
+      --blue-light:var(--brand-soft);
+      --amber:var(--brand-dark);
+      --amber-light:var(--brand-soft);
+      --rose:var(--brand-dark);
+      --rose-light:var(--brand-soft);
+      --rose-mid:var(--brand);
+      --blush:var(--brand-dark);
+      --blush-light:var(--brand-soft);
+      --text-dark:var(--text-main);
+      --text-mid:#334e68;
+      --text-light:var(--text-sub);
+      --shadow-sm:0 8px 24px rgba(16,42,67,.08);
+    }
+    #tab-zandai .notice-banner,
+    #tab-zandai .result-card,
+    #tab-zandai .compare-col:last-child,
+    #tab-zandai tr.repay-row td{border-color:var(--border-soft);}
+    #tab-zandai .hero-amount,
+    #tab-zandai .formula-row.total-row,
+    #tab-zandai .divider-line,
+    #tab-zandai .result-note{border-color:var(--border-soft);}
   </style>
 </head>
 <body>
@@ -534,6 +656,50 @@
 
 <!-- ===== Tab 2: クレジット計算 ===== -->
 <div id="tab-credit" class="tab-content">
+<div class="cr-simple">
+  <div class="title-bar">
+    <h1>クレジット計算</h1>
+  </div>
+  <div class="main">
+    <div class="plan-header">単純月払いシミュレーション</div>
+    <div class="form-grid">
+      <div class="col">
+        <div class="fr"><div class="fl">計算方法 <span class="req">必須</span></div><div class="fi"><select id="crs_mode" style="width:180px" onchange="crsModeChange()"><option value="monthly">月々を計算</option><option value="down">月々固定で頭金を逆算</option></select></div></div>
+        <div class="fr"><div class="fl">総額 <span class="req">必須</span></div><div class="fi"><input type="text" id="crs_total" placeholder="例: 2,500,000" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric"><span class="fu">円</span></div></div>
+        <div class="fr"><div class="fl">頭金</div><div class="fi"><input type="text" id="crs_down" value="0" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric"><span class="fu">円</span></div></div>
+        <div class="fr"><div class="fl">金利 <span class="req">必須</span></div><div class="fi"><input type="text" id="crs_rate" value="5.50" autocomplete="off" style="width:70px;text-align:right" inputmode="decimal"><span class="fu">%</span></div></div>
+        <div class="fr"><div class="fl">支払い回数 <span class="req">必須</span></div><div class="fi"><input type="text" id="crs_count" value="60" autocomplete="off" style="width:70px;text-align:right" inputmode="numeric"><span class="fu">回</span></div></div>
+      </div>
+      <div class="col" style="border-left:2px solid #8aaacc">
+        <div class="fr"><div class="fl">固定する月々支払額</div><div class="fi"><input type="text" id="crs_fixed" placeholder="例: 35,000" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric" disabled><span class="fu">円</span></div></div>
+        <div class="fr"><div class="fl">所要資金</div><div class="fi"><input type="text" id="crs_principal" readonly style="width:130px;text-align:right"><span class="fu">円</span></div></div>
+        <div class="fr"><div class="fl">手数料</div><div class="fi"><input type="text" id="crs_fee" readonly style="width:130px;text-align:right"><span class="fu">円</span></div></div>
+        <div class="fr"><div class="fl">支払対象合計</div><div class="fi"><input type="text" id="crs_financed" readonly style="width:130px;text-align:right"><span class="fu">円</span></div></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="calc-btn" onclick="crsCalc()">計　算</button>
+      <button class="rst-btn" onclick="crsReset()">リセット</button>
+    </div>
+    <div class="summary">
+      <div class="summary-box"><span>初回支払額</span><b id="crs_first">-</b></div>
+      <div class="summary-box"><span>2回目以降</span><b id="crs_monthly">-</b></div>
+      <div class="summary-box"><span>逆算頭金</span><b id="crs_down_result">-</b></div>
+      <div class="summary-box"><span>総支払額</span><b id="crs_total_payment">-</b></div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>計算方法</th><th>総額</th><th>頭金</th><th>所要資金</th><th>金利</th><th>支払い回数</th><th>初回</th><th>2回目以降</th><th>手数料</th><th>総支払額</th></tr>
+        </thead>
+        <tbody id="crs_tbody">
+          <tr><td class="c" colspan="10" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">金利は入力した年率％を反映します。計算は元のクレジット計算と同じアドオン式（所要資金 × 年率 × 支払い年数）です。月々の支払額は100円単位にそろえ、100円未満の端数は初回支払額で調整します。</div>
+  </div>
+</div>
 <div class="outer">
 <div class="title-bar">
   <h1>クレジット計算</h1>
@@ -1135,6 +1301,106 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
 
 <script>
 /* ===== クレジット計算 ===== */
+/* ===== シンプル版クレジット計算 ===== */
+(function(){
+  function id(name){return document.getElementById(name);}
+  function fmt(n){return Math.round(n).toLocaleString('ja-JP');}
+  function money(name){return parseFloat((id(name).value||'').replace(/,/g,''))||0;}
+  function setVal(name,val){id(name).value=val>0?fmt(val):'';}
+  function bindMoney(name){
+    var el=id(name);
+    if(!el)return;
+    el.addEventListener('input',function(){
+      var raw=el.value.replace(/,/g,'').replace(/[^0-9]/g,'');
+      el.value=raw?parseInt(raw,10).toLocaleString('ja-JP'):'';
+    });
+  }
+  function calcFee(principal,rate,count){
+    return principal*(rate/100)*(count/12);
+  }
+  function splitPayment(financed,count){
+    var regular=Math.floor((financed/count)/100)*100;
+    if(regular<=0)regular=Math.floor(financed/count);
+    var first=financed-(regular*(count-1));
+    return {first:first,regular:regular};
+  }
+  function renderEmpty(){
+    ['crs_principal','crs_fee','crs_financed'].forEach(function(name){id(name).value='';});
+    ['crs_first','crs_monthly','crs_down_result','crs_total_payment'].forEach(function(name){id(name).textContent='-';});
+    id('crs_tbody').innerHTML='<tr><td class="c" colspan="10" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>';
+  }
+  function updateMode(){
+    var downMode=id('crs_mode').value==='down';
+    id('crs_fixed').disabled=!downMode;
+    id('crs_down').readOnly=downMode;
+    if(downMode){
+      id('crs_down').value='';
+      id('crs_down').placeholder='自動計算';
+    }else{
+      id('crs_down').readOnly=false;
+      id('crs_down').placeholder='';
+      if(!id('crs_down').value)id('crs_down').value='0';
+    }
+    renderEmpty();
+  }
+  window.crsModeChange=updateMode;
+  window.crsCalc=function(){
+    var mode=id('crs_mode').value;
+    var total=money('crs_total');
+    var down=money('crs_down');
+    var rate=parseFloat((id('crs_rate').value||'').replace(/[^0-9.]/g,''))||0;
+    var count=parseInt((id('crs_count').value||'').replace(/[^0-9]/g,''),10)||0;
+    if(!total){alert('総額を入力してください');return;}
+    if(count<=0){alert('支払い回数を入力してください');return;}
+    if(mode==='down'){
+      var fixed=money('crs_fixed');
+      if(!fixed){alert('固定する月々支払額を入力してください');return;}
+      var factor=1+(rate/100)*(count/12);
+      var reversePrincipal=(fixed*count)/factor;
+      down=Math.max(0,Math.round(total-reversePrincipal));
+      id('crs_down').value=fmt(down);
+    }
+    var principal=Math.max(0,total-down);
+    if(principal<=0){alert('所要資金が0円以下です。総額と頭金を確認してください');return;}
+    var fee=calcFee(principal,rate,count);
+    var financed=principal+fee;
+    var pay=splitPayment(financed,count);
+    var totalPayment=down+pay.first+(pay.regular*(count-1));
+    setVal('crs_principal',principal);
+    setVal('crs_fee',fee);
+    setVal('crs_financed',financed);
+    id('crs_first').textContent='¥'+fmt(pay.first);
+    id('crs_monthly').textContent='¥'+fmt(pay.regular);
+    id('crs_down_result').textContent='¥'+fmt(down);
+    id('crs_total_payment').textContent='¥'+fmt(totalPayment);
+    id('crs_tbody').innerHTML='<tr class="result">'
+      +'<td class="c">'+(mode==='down'?'頭金逆算':'月々計算')+'</td>'
+      +'<td>'+fmt(total)+'</td>'
+      +'<td>'+fmt(down)+'</td>'
+      +'<td>'+fmt(principal)+'</td>'
+      +'<td class="c">'+rate.toFixed(2)+'%</td>'
+      +'<td class="c">'+count+'回</td>'
+      +'<td>'+fmt(pay.first)+'</td>'
+      +'<td>'+fmt(pay.regular)+'</td>'
+      +'<td>'+fmt(fee)+'</td>'
+      +'<td>'+fmt(totalPayment)+'</td>'
+      +'</tr>';
+  };
+  window.crsReset=function(){
+    id('crs_mode').value='monthly';
+    id('crs_total').value='';
+    id('crs_down').value='0';
+    id('crs_rate').value='5.50';
+    id('crs_count').value='60';
+    id('crs_fixed').value='';
+    updateMode();
+  };
+  ['crs_total','crs_down','crs_fixed'].forEach(bindMoney);
+  id('crs_rate').addEventListener('input',function(){this.value=this.value.replace(/[^0-9.]/g,'');});
+  id('crs_count').addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');});
+  updateMode();
+})();
+
 var crShoyoManual=false;
 function crFmt(n){return Math.round(n).toLocaleString('ja-JP');}
 function crParseVal(id){return parseFloat((document.getElementById(id).value||'').replace(/,/g,''))||0;}
