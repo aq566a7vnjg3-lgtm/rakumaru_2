@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>車両費用計算ツール</title>
+  <title>車両費用計算ツール 最新版 2026-07-27</title>
+  <meta name="version" content="latest-fixed-2026-07-27" />
   <meta name="theme-color" content="#0aa64f" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
@@ -789,13 +790,14 @@
     <header class="page-header">
       <div class="badge">Early Repayment</div>
       <h1>早期一括返済 試算ツール</h1>
-      <p>アドオン方式（78分法）による未経過利息の戻し額と<br>実際の一括返済金額を概算します</p>
+      <p>契約書の支払総額をもとに、戻し手数料と<br>実際の一括返済金額を概算します</p>
     </header>
 
     <div class="notice-banner">
       <div class="notice-title"><div class="notice-icon">!</div>概算ツールです — 必ず金融機関にご確認ください</div>
       <ul>
-        <li>78分法はアドオン方式の標準的な計算方式ですが、ホンダファイナンス・ジャックス等の実際の計算は各社規定により異なります。</li>
+        <li>契約書の「実質年率」はアドオン率ではありません。支払総額・分割払手数料をもとに概算します。</li>
+        <li>戻し手数料の計算方法は、ホンダファイナンス・ジャックス等の各社規定により異なります。</li>
         <li>手数料・事務手数料・違約金が別途発生する場合があります。</li>
         <li>残クレジット（残価設定型）の場合、残価分の扱いが別途あります。</li>
       </ul>
@@ -811,9 +813,9 @@
           <input type="text" id="principal" placeholder="2,500,000" inputmode="numeric">
         </div>
         <div class="field">
-          <label>アドオン利率（年率 %）</label>
-          <input type="number" id="addonRate" placeholder="3.9" min="0" step="0.01">
-          <span class="field-note">契約書の「実質年率」ではなく「利率」欄の値</span>
+          <label>支払総額（円）</label>
+          <input type="text" id="totalRepay" placeholder="5,320,000" inputmode="numeric">
+          <span class="field-note">契約書の支払総額。実質年率では計算しません</span>
         </div>
         <div class="field">
           <label>支払回数（回）</label>
@@ -827,11 +829,12 @@
           <input type="text" id="monthlyPayment" placeholder="40,000" inputmode="numeric">
         </div>
         <div class="field">
-          <label>支払開始月</label>
+          <label>支払開始月（初回引落月）</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
             <input type="number" id="startYear" placeholder="年（例：2023）" min="2000" max="2099" step="1">
             <input type="number" id="startMonth" placeholder="月（1〜12）" min="1" max="12" step="1">
           </div>
+          <span class="field-note">契約月ではなく、初回に口座から落ちる月を入力してください</span>
         </div>
       </div>
 
@@ -843,7 +846,7 @@
         </label>
         <div class="balloon-input-wrap" id="balloonWrap">
           <input type="text" id="balloonAmount" placeholder="残価（例：800,000）" inputmode="numeric">
-          <span class="field-note" style="display:block;margin-top:4px;">残価は元本に含まれている扱いのため、残元本の計算に影響します</span>
+          <span class="field-note" style="display:block;margin-top:4px;">残価の扱いは契約により異なります。必要に応じて支払総額・最終回支払額に含めてください</span>
         </div>
       </div>
     </div>
@@ -853,7 +856,7 @@
       <div class="card-title"><span class="dot amber"></span>ボーナス加算（任意）</div>
 
       <div class="info-badge">
-        ℹ︎ ボーナス加算は残元本の計算に影響します（戻し金額には影響しません）
+        ℹ︎ ボーナス加算は残り支払予定額の計算に影響します
       </div>
 
       <div class="bonus-header">
@@ -880,7 +883,21 @@
           <input type="number" id="repayMonth" placeholder="8" min="1" max="12" step="1">
         </div>
       </div>
-      <p class="hint" style="margin-top:12px;">※ 指定した月の支払いが終わった直後（その月の支払い済み後）に一括返済する想定で計算します。</p>
+      <div class="field-grid g2" style="margin-top:16px;">
+        <div class="field">
+          <label>一括返済月の引き落とし</label>
+          <select id="repayTiming">
+            <option value="before">まだ落ちていない</option>
+            <option value="after">落ちた後</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>戻し手数料の実務補正率（%）</label>
+          <input type="number" id="refundFactor" value="66.42" min="0" max="100" step="0.01">
+          <span class="field-note">78分法の戻し額に掛ける係数。ジャックス照会例に寄せる初期値です</span>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:12px;">※ 27日前など当月の引き落とし前なら「まだ落ちていない」を選んでください。</p>
     </div>
 
     <button class="calc-btn" onclick="zdCalculate()">一括返済額を試算する</button>
@@ -1694,7 +1711,7 @@ window.addEventListener('load',function(){
     });
   }
   function initCommaInputs() {
-    ['principal','monthlyPayment','balloonAmount'].forEach(id => {
+    ['principal','totalRepay','monthlyPayment','balloonAmount'].forEach(id => {
       const el = document.getElementById(id);
       if (el) bindComma(el);
     });
@@ -1748,28 +1765,32 @@ window.addEventListener('load',function(){
 
   window.zdCalculate = function() {
     const principal     = fromComma(document.getElementById('principal').value);
-    const addonRate     = parseFloat(document.getElementById('addonRate').value) / 100;
+    const totalRepay    = fromComma(document.getElementById('totalRepay').value);
     const totalMonths   = parseInt(document.getElementById('totalMonths').value);
     const monthlyStdIn  = fromComma(document.getElementById('monthlyPayment').value);
     const startYear     = parseInt(document.getElementById('startYear').value);
     const startMonth    = parseInt(document.getElementById('startMonth').value);
     const repayYear     = parseInt(document.getElementById('repayYear').value);
     const repayMonth    = parseInt(document.getElementById('repayMonth').value);
+    const repayTiming   = document.getElementById('repayTiming').value;
+    const refundFactor  = Math.max(0, Math.min(100, parseFloat(document.getElementById('refundFactor').value) || 0)) / 100;
     const hasBalloon    = document.getElementById('hasBalloon').checked;
     const balloonAmount = hasBalloon ? fromComma(document.getElementById('balloonAmount').value) : 0;
 
-    if (!principal || !addonRate || !totalMonths || !monthlyStdIn || !startYear || !startMonth || !repayYear || !repayMonth) {
+    if (!principal || !totalRepay || !totalMonths || !monthlyStdIn || !startYear || !startMonth || !repayYear || !repayMonth) {
       alert('すべての項目を入力してください。'); return;
     }
+    if (totalRepay < principal) { alert('支払総額は借入金額以上で入力してください。'); return; }
 
-    const paidMonths = (repayYear - startYear) * 12 + (repayMonth - startMonth) + 1;
-    if (paidMonths <= 0) { alert('一括返済月は支払開始月以降を入力してください。'); return; }
+    const targetMonthIndex = (repayYear - startYear) * 12 + (repayMonth - startMonth) + 1;
+    const paidMonths = targetMonthIndex - (repayTiming === 'before' ? 1 : 0);
+    if (targetMonthIndex <= 0) { alert('一括返済月は支払開始月以降を入力してください。'); return; }
+    if (paidMonths < 0) { alert('支払開始月より前のタイミングは計算できません。'); return; }
     if (paidMonths >= totalMonths) { alert('すでに全回数の支払いが完了しています。'); return; }
 
     const remainMonths = totalMonths - paidMonths;
 
-    const totalInterest   = principal * addonRate * (totalMonths / 12);
-    const totalRepay      = principal + totalInterest;
+    const totalInterest   = totalRepay - principal;
     const principalRatio  = principal / totalRepay;
     const interestRatio   = totalInterest / totalRepay;
 
@@ -1786,25 +1807,23 @@ window.addEventListener('load',function(){
       if (bonus > 0) cumBonusPaid += bonus;
     }
 
-    const remainBalance = Math.max(0, principal - cumPrincipalPaid);
-
     const rule78Num   = remainMonths * (remainMonths + 1);
     const rule78Den   = totalMonths  * (totalMonths  + 1);
     const rule78Ratio = rule78Num / rule78Den;
-    const unearned    = totalInterest * rule78Ratio;
-
-    const earlyPayment  = Math.max(0, remainBalance - unearned);
+    const unearned78  = totalInterest * rule78Ratio;
+    const unearned    = unearned78 * refundFactor;
 
     let continuePay = 0;
     for (let i = paidMonths + 1; i <= totalMonths; i++) {
       continuePay += (monthlyStdIn + (bonusMap[i] || 0));
     }
+    const earlyPayment  = Math.max(0, continuePay - unearned);
     const paidInterest = totalInterest - unearned;
     const saving       = unearned;
 
     document.getElementById('heroVal').textContent = '¥' + fmt(earlyPayment);
     document.getElementById('heroSub').textContent =
-      `支払開始から ${paidMonths} 回目終了時点 ／ 残 ${remainMonths} 回分を一括返済`;
+      `支払開始から ${paidMonths} 回支払済み ／ 残 ${remainMonths} 回分を一括返済`;
 
     const bonusNote = cumBonusPaid > 0
       ? `（うちボーナス加算 ¥${fmt(cumBonusPaid)} 分を元本充当済み）`
@@ -1812,40 +1831,41 @@ window.addEventListener('load',function(){
 
     document.getElementById('breakdownGrid').innerHTML = `
       <div class="breakdown-item">
-        <div class="breakdown-label">残元本（実績ベース）</div>
-        <div class="breakdown-value">¥${fmt(remainBalance)}</div>
+        <div class="breakdown-label">残り支払予定額（戻し前）</div>
+        <div class="breakdown-value">¥${fmt(continuePay)}</div>
         ${bonusNote ? `<div class="breakdown-value small">${bonusNote}</div>` : ''}
       </div>
       <div class="breakdown-item">
-        <div class="breakdown-label">未経過利息（78分法 戻し額）</div>
+        <div class="breakdown-label">戻し手数料（実務補正後）</div>
         <div class="breakdown-value highlight">▲ ¥${fmt(unearned)}</div>
       </div>
       <div class="breakdown-item">
-        <div class="breakdown-label">支払済み利息累計（概算）</div>
-        <div class="breakdown-value">¥${fmt(paidInterest)}</div>
+        <div class="breakdown-label">78分法そのままの戻し額</div>
+        <div class="breakdown-value">¥${fmt(unearned78)}</div>
       </div>
       <div class="breakdown-item">
-        <div class="breakdown-label">利息の節約額</div>
-        <div class="breakdown-value saving">¥${fmt(saving)}</div>
+        <div class="breakdown-label">補正差額</div>
+        <div class="breakdown-value saving">¥${fmt(unearned78 - unearned)}</div>
       </div>
     `;
 
     document.getElementById('formulaBox').innerHTML = `
       <div class="formula-title">計算の内訳</div>
-      <div class="formula-row"><span class="fl">借入金額</span><span class="fv">¥${fmt(principal)}</span></div>
-      <div class="formula-row"><span class="fl">総利息（${(addonRate*100).toFixed(2)}% × ${(totalMonths/12).toFixed(2)}年）</span><span class="fv">¥${fmt(totalInterest)}</span></div>
+      <div class="formula-row"><span class="fl">借入金額（所要資金）</span><span class="fv">¥${fmt(principal)}</span></div>
+      <div class="formula-row"><span class="fl">支払総額</span><span class="fv">¥${fmt(totalRepay)}</span></div>
+      <div class="formula-row"><span class="fl">分割払手数料 = 支払総額 − 借入金額</span><span class="fv">¥${fmt(totalInterest)}</span></div>
       <div class="formula-row"><span class="fl">支払済み回数 / 総回数</span><span class="fv">${paidMonths} 回 ／ ${totalMonths} 回</span></div>
-      <div class="formula-row"><span class="fl">支払済み元本充当累計（ボーナス込み）</span><span class="fv">¥${fmt(cumPrincipalPaid)}</span></div>
-      <div class="formula-row"><span class="fl">残元本 = 借入 − 支払済み元本</span><span class="fv">¥${fmt(remainBalance)}</span></div>
+      <div class="formula-row"><span class="fl">残り支払予定額（ボーナス込み）</span><span class="fv">¥${fmt(continuePay)}</span></div>
       <div class="divider-line"></div>
       <div class="formula-row"><span class="fl">78分法 戻し係数（残${remainMonths}×${remainMonths+1} ÷ 全${totalMonths}×${totalMonths+1}）</span><span class="fv">${(rule78Ratio*100).toFixed(3)} %</span></div>
-      <div class="formula-row"><span class="fl">未経過利息 = 総利息 × 戻し係数</span><span class="fv">¥${fmt(unearned)}</span></div>
-      <div class="formula-row total-row"><span class="fl">一括返済額 = 残元本 − 未経過利息</span><span class="fv">¥${fmt(earlyPayment)}</span></div>
+      <div class="formula-row"><span class="fl">78分法戻し額 = 分割払手数料 × 戻し係数</span><span class="fv">¥${fmt(unearned78)}</span></div>
+      <div class="formula-row"><span class="fl">実務補正後戻し額 = 78分法戻し額 × ${(refundFactor*100).toFixed(2)}%</span><span class="fv">¥${fmt(unearned)}</span></div>
+      <div class="formula-row total-row"><span class="fl">一括返済額 = 残り支払予定額 − 戻し手数料</span><span class="fv">¥${fmt(earlyPayment)}</span></div>
     `;
 
     document.getElementById('resultNote').innerHTML =
-      `※ 残元本はボーナス加算分も含めた実際の支払い実績をもとに計算しています。<br>
-       ※ 78分法（戻し係数）は回数ベースのため、ボーナスの有無にかかわらず同一になります。<br>
+      `※ 契約書の実質年率をアドオン率として使わず、支払総額から分割払手数料を算出しています。<br>
+       ※ 実務補正率は照会前の概算を実額に近づけるための係数です。金融機関や契約内容により変わります。<br>
        ※ ホンダファイナンス・ジャックス等の実際の金額は各社の規定・端数処理により異なる場合があります。<br>
        ※ 手数料・事務手数料が別途発生する場合があります。実際の返済前に必ず金融機関にご確認ください。`;
 
@@ -1855,14 +1875,14 @@ window.addEventListener('load',function(){
         <div class="compare-row"><span class="cl">残り回数</span><span class="cv">${remainMonths} 回</span></div>
         <div class="compare-row"><span class="cl">今後の支払い総額</span><span class="cv">¥${fmt(continuePay)}</span></div>
         <div class="compare-divider"></div>
-        <div class="compare-row compare-total"><span class="cl">うち利息分</span><span class="cv">¥${fmt(unearned)}</span></div>
+        <div class="compare-row compare-total"><span class="cl">戻し見込み額</span><span class="cv">¥${fmt(unearned)}</span></div>
       </div>
       <div class="compare-col">
         <div class="compare-head">今すぐ一括返済した場合</div>
         <div class="compare-row"><span class="cl">一括返済額</span><span class="cv">¥${fmt(earlyPayment)}</span></div>
         <div class="compare-row"><span class="cl">継続との差額</span><span class="cv">▲ ¥${fmt(continuePay - earlyPayment)}</span></div>
         <div class="compare-divider"></div>
-        <div class="compare-row compare-total"><span class="cl">利息の節約額</span><span class="cv">¥${fmt(saving)}</span></div>
+        <div class="compare-row compare-total"><span class="cl">戻し見込み額</span><span class="cv">¥${fmt(saving)}</span></div>
       </div>
     `;
 
@@ -1884,11 +1904,11 @@ window.addEventListener('load',function(){
       scheduleRows.push({ no: i, year: ym.year, month: ym.month, pay, bonus, pPart, iPart, bal });
     }
 
-    const startIdx = paidMonths - 1;
+    const startIdx = Math.max(0, paidMonths);
     const endIdx   = Math.min(startIdx + 12, scheduleRows.length - 1);
 
     let thtml = `<thead><tr>
-      <th>回</th><th>年月</th><th>月々</th><th>ボーナス</th><th>元金充当</th><th>手数料充当</th><th>残元本</th><th style="color:var(--rose);">一括返済額</th>
+      <th>回</th><th>年月</th><th>月々</th><th>ボーナス</th><th>元金充当</th><th>手数料充当</th><th>残り支払予定額</th><th style="color:var(--rose);">一括返済額</th>
     </tr></thead><tbody>`;
 
     for (let i = startIdx; i <= endIdx; i++) {
@@ -1896,10 +1916,11 @@ window.addEventListener('load',function(){
       const isRepay = i === startIdx;
       const cls     = isRepay ? 'repay-row' : (r.bonus > 0 ? 'bonus-month' : '');
 
-      const remN       = totalMonths - r.no;
+      const remN       = totalMonths - i;
       const earlyR78   = remN * (remN + 1) / (totalMonths * (totalMonths + 1));
-      const unearnedR  = totalInterest * earlyR78;
-      const earlyPayR  = Math.max(0, r.bal - unearnedR);
+      const unearnedR  = totalInterest * earlyR78 * refundFactor;
+      const futurePayR = scheduleRows.slice(i).reduce((sum, row) => sum + row.pay, 0);
+      const earlyPayR  = Math.max(0, futurePayR - unearnedR);
       const earlyCell  = remN <= 0 ? '完済' : `¥${fmt(earlyPayR)}`;
 
       thtml += `<tr class="${cls}">
@@ -1909,7 +1930,7 @@ window.addEventListener('load',function(){
         <td>${r.bonus > 0 ? '¥' + fmt(r.bonus) : '—'}</td>
         <td>¥${fmt(r.pPart)}</td>
         <td>¥${fmt(r.iPart)}</td>
-        <td>¥${fmt(r.bal)}</td>
+        <td>¥${fmt(futurePayR)}</td>
         <td style="font-weight:500;color:var(--rose);">${earlyCell}</td>
       </tr>`;
     }
