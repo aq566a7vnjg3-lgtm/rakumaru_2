@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>車両費用計算ツール 最新版 2026-07-27</title>
-  <meta name="version" content="latest-fixed-2026-07-27" />
+  <title>車両費用計算ツール 2026-11-22 メンテナンス費連動・A4印刷対応</title>
+  <meta name="version" content="release-2026-11-22-tco-sync-a4" />
   <meta name="theme-color" content="#0aa64f" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
@@ -92,72 +92,6 @@
     .breakeven-bar-fill{height:100%;background:var(--bg);border-radius:99px;transition:width .4s ease;}
     .breakeven-note{font-size:11.5px;color:var(--muted);}
     .fuel-note{font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.5;}
-
-    /* ===== クレジット計算 ===== */
-    #tab-credit{background:#c8d8ee;padding:4px;min-height:calc(100vh - 44px);}
-    #tab-credit *{box-sizing:border-box;margin:0;padding:0;}
-    #tab-credit{font-family:"Meiryo","MS PGothic",sans-serif;font-size:12px;color:#000;}
-    #tab-credit .outer{background:#c8d8ee;padding:4px;}
-    #tab-credit .title-bar{display:flex;align-items:center;justify-content:space-between;background:#c8d8ee;padding:4px 6px 6px;}
-    #tab-credit .title-bar h1{font-size:14px;font-weight:bold;}
-    #tab-credit .title-btns{display:flex;gap:4px;}
-    #tab-credit .tbtn{background:#1a3a7a;color:#fff;border:1px solid #3a5aaa;padding:3px 20px;font-size:12px;cursor:pointer;border-radius:1px;}
-    #tab-credit .main{background:#fff;border:2px solid #8aaacc;}
-    #tab-credit .plan-header{background:#a8c4e0;border-bottom:1px solid #8aaacc;padding:3px 8px;font-weight:bold;font-size:13px;display:flex;align-items:center;}
-    #tab-credit .plan-sep{width:24px;flex-shrink:0;}
-    #tab-credit .plan-hontai{display:flex;align-items:center;gap:5px;font-weight:normal;font-size:12px;}
-    #tab-credit .form-grid{display:grid;grid-template-columns:1fr 1fr;}
-    #tab-credit .col{padding:2px 4px;}
-    #tab-credit .fr{display:flex;align-items:center;border-bottom:1px solid #dde8f4;padding:2px 0;min-height:26px;}
-    #tab-credit .fl{min-width:130px;font-size:12px;white-space:nowrap;}
-    #tab-credit .req{color:#cc0000;font-size:10px;}
-    #tab-credit .fi{flex:1;display:flex;align-items:center;gap:3px;}
-    #tab-credit .fi input,#tab-credit .fi select{border:1px solid #9ab0cc;padding:1px 4px;font-size:12px;background:#fff;min-width:0;}
-    #tab-credit .fi input[type=text]{text-align:right;}
-    #tab-credit .fi input.gray{background:#d8e4f0;color:#444;}
-    #tab-credit .fi input.bluebg{background:#a8c4e0;border:1px solid #7a9ac0;font-weight:bold;text-align:right;}
-    #tab-credit .fu{font-size:11px;white-space:nowrap;margin-left:2px;}
-    #tab-credit .zanka-btn{background:#b0b8c8;border:1px solid #8898b0;color:#444;padding:2px 12px;font-size:12px;cursor:default;border-radius:2px;}
-    #tab-credit .btn-row{display:flex;justify-content:flex-end;gap:6px;padding:5px 8px;border-top:1px solid #c0d4e8;background:#e8f0f8;}
-    #tab-credit .calc-btn{background:#1a3a7a;color:#fff;border:1px solid #3a5aaa;padding:4px 24px;font-size:12px;cursor:pointer;font-weight:bold;}
-    #tab-credit .rst-btn{background:#1a3a7a;color:#fff;border:1px solid #3a5aaa;padding:4px 18px;font-size:12px;cursor:pointer;}
-    #tab-credit .tbl-wrap{overflow-x:auto;border-top:2px solid #8aaacc;}
-    #tab-credit table{width:100%;border-collapse:collapse;font-size:11px;}
-    #tab-credit th{background:#1a3a7a;color:#fff;padding:3px 5px;text-align:center;border:1px solid #4a6aaa;white-space:nowrap;font-weight:normal;line-height:1.4;}
-    #tab-credit td{padding:3px 5px;border:1px solid #b0c8e0;text-align:right;white-space:nowrap;background:#fff;}
-    #tab-credit td.c{text-align:center;}
-    #tab-credit tr.result td{background:#dde8f8;}
-    #tab-credit>.outer{display:none;}
-    #tab-credit{background:#f4f6f8;padding:0;min-height:calc(100vh - 44px);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;color:#1f2933;}
-    #tab-credit .cr-simple{max-width:760px;margin:0 auto;padding:18px 12px 28px;}
-    #tab-credit .cr-simple .title-bar{background:transparent;padding:0 0 12px;}
-    #tab-credit .cr-simple .title-bar h1{font-size:22px;font-weight:800;letter-spacing:0;margin:0;color:#102a43;}
-    #tab-credit .cr-simple .main{border:1px solid #d7dee8;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 24px rgba(16,42,67,.08);}
-    #tab-credit .cr-simple .plan-header{background:#0aa64f;color:#fff;padding:12px 16px;font-size:14px;font-weight:800;border:0;}
-    #tab-credit .cr-simple .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px;}
-    #tab-credit .cr-simple .col{padding:0;}
-    #tab-credit .cr-simple .col[style]{border-left:none!important;}
-    #tab-credit .cr-simple .fr{display:block;border:0;padding:0;margin:0 0 14px;min-height:0;}
-    #tab-credit .cr-simple .fr:last-child{margin-bottom:0;}
-    #tab-credit .cr-simple .fl{min-width:0;font-size:13px;font-weight:700;color:#334e68;margin-bottom:6px;white-space:normal;}
-    #tab-credit .cr-simple .req{font-size:10px;color:#d64545;margin-left:4px;}
-    #tab-credit .cr-simple .fi{display:flex;align-items:center;gap:6px;}
-    #tab-credit .cr-simple .fi input,#tab-credit .cr-simple .fi select{width:100%!important;height:42px;border:1px solid #cbd5e1;border-radius:8px;padding:8px 10px;font-size:16px;background:#fff;color:#102a43;}
-    #tab-credit .cr-simple .fi input:focus,#tab-credit .cr-simple .fi select:focus{outline:2px solid rgba(10,166,79,.18);border-color:#0aa64f;}
-    #tab-credit .cr-simple .fu{font-size:13px;color:#52606d;white-space:nowrap;}
-    #tab-credit .cr-simple input[readonly],#tab-credit .cr-simple input:disabled{background:#eef2f6;color:#52606d;}
-    #tab-credit .cr-simple .btn-row{display:flex;gap:10px;justify-content:flex-start;padding:0 18px 18px;border:0;background:#fff;}
-    #tab-credit .cr-simple .calc-btn,#tab-credit .cr-simple .rst-btn{height:42px;border-radius:8px;padding:0 22px;font-size:14px;border:1px solid #0aa64f;cursor:pointer;}
-    #tab-credit .cr-simple .calc-btn{background:#0aa64f;color:#fff;font-weight:800;}
-    #tab-credit .cr-simple .rst-btn{background:#fff;color:#0a7f3e;}
-    #tab-credit .cr-simple .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px;border-top:1px solid #e5eaf0;background:#f8fafc;}
-    #tab-credit .cr-simple .summary-box{border:1px solid #d7dee8;background:#fff;border-radius:8px;padding:14px;text-align:right;}
-    #tab-credit .cr-simple .summary-box span{display:block;color:#52606d;font-size:12px;font-weight:700;text-align:left;margin-bottom:8px;}
-    #tab-credit .cr-simple .summary-box b{font-size:24px;color:#102a43;line-height:1.1;}
-    #tab-credit .cr-simple .summary-box:first-child b,#tab-credit .cr-simple .summary-box:nth-child(2) b{color:#0a7f3e;}
-    #tab-credit .cr-simple .tbl-wrap{display:none;}
-    #tab-credit .cr-simple .note{padding:12px 18px;color:#52606d;font-size:12px;line-height:1.6;background:#fff;border-top:1px solid #e5eaf0;}
-    @media(max-width:700px){#tab-credit .cr-simple .form-grid{grid-template-columns:1fr;gap:0;}#tab-credit .cr-simple .summary{grid-template-columns:1fr;}#tab-credit .cr-simple .summary-box b{font-size:22px;}}
 
     /* ===== EV vs ガソリン比較 ===== */
     #tab-ev{
@@ -287,138 +221,6 @@
     .ev-compare .diff-pos{color:var(--gas);}
     @media(max-width:480px){.ev-compare .cards{grid-template-columns:1fr;}.ev-compare .common-grid{grid-template-columns:1fr;}}
 
-    /* ===== 概算残債計算 ===== */
-    #tab-zandai{
-      --bg:#f4f1ed; --surface:#faf8f5; --surface2:#f0ece6; --border:#e2dbd3;
-      --sage:#9aab99; --sage-light:#e8ede8; --sage-mid:#c5d0c4;
-      --dusty-blue:#8fa3b1; --blue-light:#e4ecf0;
-      --amber:#c8a97d; --amber-light:#fdf6ee;
-      --rose:#c47a6e; --rose-light:#fdf0ee; --rose-mid:#d9a49e;
-      --blush:#c9a99e; --blush-light:#f5ebe9;
-      --text-dark:#3d3830; --text-mid:#6b6257; --text-light:#9e9086;
-      --radius-sm:10px; --radius-md:16px; --radius-lg:24px; --radius-xl:32px;
-      --shadow-sm:0 2px 12px rgba(80,60,40,0.06);
-      font-family:'Noto Sans JP','DM Sans',sans-serif; font-weight:400;
-      background:var(--bg); color:var(--text-dark);
-      padding:40px 20px 80px; min-height:calc(100vh - 44px);
-    }
-    #tab-zandai *,#tab-zandai *::before,#tab-zandai *::after{margin:0;padding:0;}
-    #tab-zandai .page-wrap{max-width:680px;margin:0 auto;}
-    #tab-zandai .page-header{text-align:center;margin-bottom:32px;}
-    #tab-zandai .badge{display:inline-block;background:var(--rose-light);color:var(--rose);font-size:11px;font-weight:500;letter-spacing:.12em;padding:5px 14px;border-radius:99px;margin-bottom:14px;text-transform:uppercase;border:none;}
-    #tab-zandai .page-header h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:300;letter-spacing:-.01em;margin-bottom:8px;}
-    #tab-zandai .page-header p{font-size:13px;color:var(--text-light);font-weight:300;line-height:1.7;}
-    #tab-zandai .notice-banner{background:var(--amber-light);border:1.5px solid #e8d5bc;border-left:5px solid var(--amber);border-radius:var(--radius-md);padding:16px 20px;margin-bottom:28px;}
-    #tab-zandai .notice-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--amber);letter-spacing:.05em;margin-bottom:8px;}
-    #tab-zandai .notice-icon{width:20px;height:20px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
-    #tab-zandai .notice-banner ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
-    #tab-zandai .notice-banner li{font-size:12px;color:var(--text-mid);font-weight:300;padding-left:12px;position:relative;line-height:1.6;}
-    #tab-zandai .notice-banner li::before{content:'·';position:absolute;left:3px;color:var(--amber);font-size:16px;line-height:1.3;}
-    #tab-zandai .card{background:var(--surface);border-radius:var(--radius-xl);padding:28px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border);animation:zdFadeUp .4s ease both;}
-    @keyframes zdFadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-    #tab-zandai .card-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text-mid);letter-spacing:.06em;margin-bottom:20px;}
-    #tab-zandai .dot{width:8px;height:8px;border-radius:50%;background:var(--sage-mid);flex-shrink:0;box-shadow:none;}
-    #tab-zandai .dot.rose{background:var(--rose-mid);}
-    #tab-zandai .dot.blue{background:#b5c8d4;}
-    #tab-zandai .dot.amber{background:#d9c29a;}
-    #tab-zandai .field-grid{display:grid;gap:16px;}
-    #tab-zandai .g2{grid-template-columns:1fr 1fr;}
-    #tab-zandai .g3{grid-template-columns:1fr 1fr 1fr;}
-    #tab-zandai .field{display:flex;flex-direction:column;gap:6px;margin-bottom:0;}
-    #tab-zandai .field label{display:block;font-size:11.5px;font-weight:500;color:var(--text-light);letter-spacing:.04em;margin-bottom:0;}
-    #tab-zandai .field-note{font-size:11px;color:var(--text-light);margin-top:2px;font-weight:300;line-height:1.5;}
-    #tab-zandai input[type="number"],#tab-zandai input[type="text"],#tab-zandai select{
-      width:100%;padding:11px 14px;font-size:14px;font-family:inherit;color:var(--text-dark);
-      background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);outline:none;
-      transition:border-color .2s,background .2s,box-shadow .2s;-moz-appearance:textfield;min-width:0;
-    }
-    #tab-zandai input[type="number"]::-webkit-outer-spin-button,
-    #tab-zandai input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
-    #tab-zandai input:focus,#tab-zandai select:focus{border-color:var(--sage-mid);background:#fff;box-shadow:0 0 0 3px rgba(154,171,153,.15);}
-    #tab-zandai .section-label{font-size:11px;font-weight:500;color:var(--text-light);letter-spacing:.08em;text-transform:uppercase;margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
-    #tab-zandai .bonus-header,#tab-zandai .bonus-row{display:grid;grid-template-columns:90px 1fr 1fr 32px;gap:10px;align-items:center;margin-bottom:8px;}
-    #tab-zandai .bonus-header{margin-bottom:6px;}
-    #tab-zandai .bonus-header span{font-size:11px;color:var(--text-light);font-weight:500;}
-    #tab-zandai .del-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--text-light);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-family:inherit;}
-    #tab-zandai .del-btn:hover{border-color:var(--blush);color:var(--blush);background:var(--blush-light);}
-    #tab-zandai .add-btn{width:100%;padding:10px 16px;background:none;border:1.5px dashed var(--sage-mid);border-radius:var(--radius-sm);color:var(--sage);font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s,border-color .2s;margin-top:4px;}
-    #tab-zandai .add-btn:hover{background:var(--sage-light);border-color:var(--sage);}
-    #tab-zandai .add-btn::before{content:'+';font-size:18px;font-weight:300;line-height:1;}
-    #tab-zandai .hint{font-size:11.5px;color:var(--text-light);margin-top:10px;line-height:1.6;font-weight:300;}
-    #tab-zandai .balloon-row{display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px 16px;background:var(--surface2);border-radius:var(--radius-md);border:1px solid var(--border);}
-    #tab-zandai .balloon-row label{font-size:13px;color:var(--text-mid);flex-shrink:0;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:0;}
-    #tab-zandai .balloon-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--rose);cursor:pointer;}
-    #tab-zandai .balloon-input-wrap{flex:1;display:none;}
-    #tab-zandai .balloon-input-wrap.show{display:block;}
-    #tab-zandai .balloon-input-wrap input{margin-top:0;}
-    #tab-zandai .calc-btn{width:100%;padding:16px;background:var(--rose);color:#fff;border:none;border-radius:var(--radius-lg);font-size:15px;font-family:inherit;font-weight:500;letter-spacing:.05em;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 4px 16px rgba(196,122,110,.3);}
-    #tab-zandai .calc-btn:hover{background:#b36d62;box-shadow:0 6px 20px rgba(196,122,110,.4);transform:translateY(-1px);}
-    #tab-zandai .calc-btn:active{transform:translateY(0);}
-    #tab-zandai #results{display:none;}
-    #tab-zandai #results.show{display:block;animation:zdFadeUp .45s ease both;}
-    #tab-zandai .result-card{background:var(--rose-light);border:1.5px solid #e8c8c3;border-radius:var(--radius-xl);padding:28px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
-    #tab-zandai .hero-amount{text-align:center;padding:24px 0 20px;border-bottom:1px solid #f0deda;margin-bottom:20px;}
-    #tab-zandai .hero-label{font-size:12px;font-weight:500;color:var(--rose);letter-spacing:.1em;margin-bottom:10px;}
-    #tab-zandai .hero-value{font-family:'DM Sans',sans-serif;font-size:48px;font-weight:300;color:var(--rose);letter-spacing:-.03em;line-height:1;}
-    #tab-zandai .hero-sub{font-size:13px;color:var(--text-light);margin-top:8px;font-weight:300;}
-    #tab-zandai .breakdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
-    #tab-zandai .breakdown-item{background:rgba(255,255,255,.65);border:1px solid #f0deda;border-radius:var(--radius-md);padding:14px 16px;}
-    #tab-zandai .breakdown-label{font-size:11px;color:var(--text-light);font-weight:500;margin-bottom:6px;letter-spacing:.03em;}
-    #tab-zandai .breakdown-value{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:300;color:var(--text-dark);letter-spacing:-.01em;}
-    #tab-zandai .breakdown-value.highlight{color:var(--dusty-blue);}
-    #tab-zandai .breakdown-value.saving{color:var(--sage);}
-    #tab-zandai .breakdown-value.small{font-size:13px;color:var(--text-mid);margin-top:3px;}
-    #tab-zandai .formula-box{background:rgba(255,255,255,.5);border:1px solid #f0deda;border-radius:var(--radius-md);padding:16px 18px;margin-bottom:16px;}
-    #tab-zandai .formula-title{font-size:11px;font-weight:500;color:var(--text-light);letter-spacing:.06em;margin-bottom:10px;}
-    #tab-zandai .formula-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid rgba(230,200,195,.4);font-size:13px;min-height:auto;}
-    #tab-zandai .formula-row:last-child{border-bottom:none;}
-    #tab-zandai .formula-row .fl{color:var(--text-mid);font-size:12px;line-height:1.5;min-width:0;white-space:normal;}
-    #tab-zandai .formula-row .fv{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--text-dark);white-space:nowrap;margin-left:12px;}
-    #tab-zandai .formula-row.total-row{padding-top:10px;margin-top:4px;border-top:1.5px solid #e8c8c3;border-bottom:none;}
-    #tab-zandai .formula-row.total-row .fl{font-weight:500;color:var(--rose);font-size:13px;}
-    #tab-zandai .formula-row.total-row .fv{font-size:18px;color:var(--rose);}
-    #tab-zandai .divider-line{height:1px;background:#f0deda;margin:10px 0;}
-    #tab-zandai .result-note{font-size:11px;color:var(--text-light);line-height:1.7;font-weight:300;padding-top:8px;border-top:1px solid #f0deda;}
-    #tab-zandai .compare-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
-    #tab-zandai .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);}
-    #tab-zandai .compare-col{padding:18px 20px;}
-    #tab-zandai .compare-col:first-child{border-right:1px solid var(--border);background:var(--surface2);}
-    #tab-zandai .compare-col:last-child{background:var(--rose-light);}
-    #tab-zandai .compare-head{font-size:11px;font-weight:500;letter-spacing:.06em;margin-bottom:12px;color:var(--text-light);}
-    #tab-zandai .compare-col:last-child .compare-head{color:var(--rose);}
-    #tab-zandai .compare-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;min-height:auto;}
-    #tab-zandai .compare-row .cl{color:var(--text-light);}
-    #tab-zandai .compare-row .cv{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:var(--text-dark);}
-    #tab-zandai .compare-col:last-child .compare-row .cv{color:var(--rose);}
-    #tab-zandai .compare-divider{height:1px;background:var(--border);margin:8px 0;}
-    #tab-zandai .compare-total .cv{font-size:16px;font-weight:400;}
-    #tab-zandai .info-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);color:var(--dusty-blue);font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:99px;margin-bottom:12px;}
-    #tab-zandai .schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px 32px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
-    #tab-zandai .table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border);}
-    #tab-zandai table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
-    #tab-zandai thead tr{background:var(--surface2);}
-    #tab-zandai th{padding:10px 12px;font-size:11px;font-weight:500;color:var(--text-light);letter-spacing:.05em;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface2);border-top:none;border-left:none;border-right:none;}
-    #tab-zandai th:first-child,#tab-zandai th:nth-child(2){text-align:left;}
-    #tab-zandai td{padding:9px 12px;text-align:right;border-bottom:1px solid #ede9e3;color:var(--text-dark);font-variant-numeric:tabular-nums;background:transparent;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
-    #tab-zandai td:first-child,#tab-zandai td:nth-child(2){text-align:left;color:var(--text-mid);}
-    #tab-zandai tbody tr:last-child td{border-bottom:none;}
-    #tab-zandai tbody tr:hover td{background:#faf7f4;}
-    #tab-zandai tr.repay-row td{background:var(--rose-light);color:var(--rose);font-weight:500;}
-    #tab-zandai tr.repay-row td:first-child,#tab-zandai tr.repay-row td:nth-child(2){color:var(--rose);}
-    #tab-zandai tr.bonus-month td{background:#f6f2ec;}
-    #tab-zandai tr.bonus-month td:first-child,#tab-zandai tr.bonus-month td:nth-child(2){color:var(--amber);}
-    @media(max-width:540px){
-      #tab-zandai{padding:24px 14px 60px;}
-      #tab-zandai .card,#tab-zandai .result-card,#tab-zandai .compare-card,#tab-zandai .schedule-card{padding:22px 18px;border-radius:var(--radius-lg);}
-      #tab-zandai .g2,#tab-zandai .g3{grid-template-columns:1fr 1fr;}
-      #tab-zandai .hero-value{font-size:36px;}
-      #tab-zandai .breakdown-grid{grid-template-columns:1fr 1fr;}
-      #tab-zandai .compare-grid{grid-template-columns:1fr;}
-      #tab-zandai .compare-col:first-child{border-right:none;border-bottom:1px solid var(--border);}
-      #tab-zandai .bonus-row,#tab-zandai .bonus-header{grid-template-columns:76px 1fr 1fr 32px;}
-      #tab-zandai .page-header h1{font-size:22px;}
-    }
-
     /* ===== 全ページの色味統一 ===== */
     :root{
       --brand:#0aa64f;
@@ -434,19 +236,12 @@
     body{background:var(--page-bg);color:var(--text-main);}
     .tab-nav{background:var(--brand);}
     :root{--bg:var(--brand);--line:var(--border-soft);--muted:var(--text-sub);--card:var(--app-surface);}
-    #tab-maintenance main,#tab-credit,#tab-zandai,#tab-ev,.ev-compare{background:var(--page-bg);}
+    #tab-maintenance main,#tab-ev,.ev-compare{background:var(--page-bg);}
     #tab-maintenance thead th,.section-row td,.total-row td,.fuel-result-wrap thead th{background:var(--app-surface-soft);}
     #tab-maintenance tbody tr:hover td,.fuel-result-wrap tbody tr:hover td{background:var(--brand-soft);}
     .fuel-result-wrap th.th-gas,.fuel-result-wrap th.th-hv,.fuel-result-wrap td.td-gas,.fuel-result-wrap td.td-hv,
     .fuel-card.card-gas,.fuel-card.card-hv,.fuel-card.card-diff,.breakeven-wrap{background:var(--app-surface-soft);border-color:var(--border-soft);}
     .save-val,.cost-val{color:var(--brand-dark);}
-
-    #tab-credit .cr-simple .plan-header,
-    #tab-credit .cr-simple .calc-btn,
-    #tab-zandai .calc-btn{background:var(--brand);color:#fff;border-color:var(--brand);}
-    #tab-credit .cr-simple .rst-btn,
-    #tab-credit .cr-simple .summary-box:first-child b,
-    #tab-credit .cr-simple .summary-box:nth-child(2) b{color:var(--brand-dark);}
 
     #tab-ev,.ev-compare{
       --ev:var(--brand);
@@ -471,44 +266,116 @@
     #tab-ev .dot-gas,.ev-compare .dot-gas{box-shadow:none;}
     #tab-ev .diff-box,.ev-compare .diff-box{background:var(--brand-soft);border-color:var(--brand);}
 
-    #tab-zandai{
-      --bg:var(--page-bg);
-      --surface:var(--app-surface);
-      --surface2:var(--app-surface-soft);
-      --border:var(--border-soft);
-      --sage:var(--brand-dark);
-      --sage-light:var(--brand-soft);
-      --sage-mid:var(--brand);
-      --dusty-blue:var(--brand-dark);
-      --blue-light:var(--brand-soft);
-      --amber:var(--brand-dark);
-      --amber-light:var(--brand-soft);
-      --rose:var(--brand-dark);
-      --rose-light:var(--brand-soft);
-      --rose-mid:var(--brand);
-      --blush:var(--brand-dark);
-      --blush-light:var(--brand-soft);
-      --text-dark:var(--text-main);
-      --text-mid:#334e68;
-      --text-light:var(--text-sub);
-      --shadow-sm:0 8px 24px rgba(16,42,67,.08);
-    }
-    #tab-zandai .notice-banner,
-    #tab-zandai .result-card,
-    #tab-zandai .compare-col:last-child,
-    #tab-zandai tr.repay-row td{border-color:var(--border-soft);}
-    #tab-zandai .hero-amount,
-    #tab-zandai .formula-row.total-row,
-    #tab-zandai .divider-line,
-    #tab-zandai .result-note{border-color:var(--border-soft);}
+    /* ===== 新車購入・総負担額計算 ===== */
+    #tab-tco [hidden]{display:none!important;}
+    #tab-tco{--tco-green:#0b9750;--tco-light:#eaf8ef;background:#f4f7f5;min-height:calc(100vh - 46px);color:#172c20;}
+    #tab-tco .tco-wrap{max-width:1150px;margin:0 auto;padding:22px 16px 40px;}
+    #tab-tco .tco-head{margin-bottom:18px;}
+    #tab-tco h1{font-size:clamp(21px,3vw,29px);margin:0 0 7px;font-weight:800;}
+    #tab-tco .tco-lead{font-size:13px;line-height:1.7;color:#62766b;margin:0;}
+    #tab-tco .tco-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:16px;align-items:start;}
+    #tab-tco .tco-panel{background:#fff;border:1px solid #dce9df;border-radius:18px;padding:20px;box-shadow:0 3px 14px rgba(20,80,40,.045);}
+    #tab-tco h2{font-size:16px;margin:0 0 17px;font-weight:800;}
+    #tab-tco h3{font-size:14px;margin:0 0 12px;font-weight:800;}
+    #tab-tco .tco-fields{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+    #tab-tco label.tco-field{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;min-width:0;}
+    #tab-tco label.tco-field.wide{grid-column:1/-1;}
+    #tab-tco .tco-field input,#tab-tco .tco-field select{width:100%;border:1px solid #c8d8cc;background:#fff;border-radius:9px;padding:11px 12px;font-size:15px;color:#213c2a;min-width:0;}
+    #tab-tco .tco-field input:focus,#tab-tco .tco-field select:focus{outline:2px solid #8bd1a2;outline-offset:1px;}
+    #tab-tco .tco-field input:disabled{background:#edf2ef;color:#63756a;}
+    #tab-tco .tco-hint{font-size:11px;line-height:1.6;color:#6e8174;font-weight:400;}
+    #tab-tco .tco-segment{border:1px solid #dce7df;background:#f8fbf9;border-radius:12px;padding:12px;margin:14px 0;}
+    #tab-tco .tco-radio-row{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:10px;}
+    #tab-tco .tco-radio-row label{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;cursor:pointer;}
+    #tab-tco .tco-radio-row input{accent-color:var(--tco-green);}
+    #tab-tco .tco-section{border-top:1px solid #e5ece6;margin-top:18px;padding-top:18px;}
+    #tab-tco .tco-kpi{border-radius:17px;padding:20px;background:var(--tco-green);color:#fff;text-align:center;}
+    #tab-tco .tco-kpi small{display:block;font-size:13px;opacity:.95;margin-bottom:5px;}
+    #tab-tco .tco-big{font-weight:900;font-size:clamp(28px,4vw,40px);letter-spacing:-1px;line-height:1.4;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;}
+    #tab-tco .tco-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+    #tab-tco .tco-metric{border:1px solid #dce9df;background:#f8fbf9;border-radius:13px;padding:15px 12px;text-align:center;}
+    #tab-tco .tco-metric small{font-size:12px;color:#597266;display:block;}
+    #tab-tco .tco-metric strong{display:block;margin-top:5px;font-size:clamp(18px,2.5vw,25px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
+    #tab-tco .tco-breakdown{margin-top:17px;}
+    #tab-tco .tco-line{display:flex;justify-content:space-between;gap:10px;margin:10px 0;font-size:13px;}
+    #tab-tco .tco-line span:last-child{font-variant-numeric:tabular-nums;text-align:right;font-weight:700;}
+    #tab-tco .tco-costbar{display:flex;height:13px;border-radius:999px;background:#e5efe8;overflow:hidden;margin-top:12px;}
+    #tab-tco .tco-costbar>span:first-child{display:block;background:#0e9c52;}
+    #tab-tco .tco-costbar>span:last-child{display:block;background:#a5d7b4;}
+    #tab-tco .tco-info{font-size:11.5px;color:#5d7365;line-height:1.7;margin-top:11px;}
+    #tab-tco .tco-comparison{margin-top:16px;background:#f8fbf9;border:1px solid #dce9df;border-radius:14px;padding:16px;}
+    #tab-tco .tco-compare-num{font-size:23px;font-weight:900;color:#08623b;font-variant-numeric:tabular-nums;margin-top:3px;}
+    #tab-tco .tco-action{border:1px solid #0b9750;border-radius:10px;background:white;color:#08713e;font-size:12px;padding:9px 11px;font-weight:800;cursor:pointer;}
+    #tab-tco .tco-action:hover{background:#f3faf5;}
+    #tab-tco .tco-footnote{font-size:11px;line-height:1.8;color:#697970;margin-top:14px;}
+    @media(max-width:760px){#tab-tco .tco-layout{grid-template-columns:1fr;}#tab-tco .tco-wrap{padding:15px 10px 30px;}#tab-tco .tco-panel{padding:16px;} }
+    @media(max-width:380px){#tab-tco .tco-fields{grid-template-columns:1fr;}#tab-tco .tco-metrics{grid-template-columns:1fr;}#tab-tco .tco-radio-row{flex-direction:column;gap:7px;} }
   </style>
+
+<style id="tco-print-style">
+  .tco-head-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;}
+  .tco-head-top h1{margin:0!important;}
+  #tab-tco .tco-print-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;border:0;border-radius:10px;background:#087b47;color:white;font-size:13px;font-weight:800;padding:12px 18px;box-shadow:0 3px 8px rgba(4,90,45,.16);cursor:pointer;}
+  #tab-tco .tco-print-button:hover{background:#08643b;}
+  #tab-tco .tco-print-button:focus-visible{outline:3px solid #f0bb51;outline-offset:2px;}
+  #tcoPrintSheet{display:none;}
+  @media(max-width:480px){.tco-head-top{flex-wrap:wrap;}#tab-tco .tco-print-button{width:100%;}}
+  @page{size:A4 portrait;margin:12mm;}
+  @media print{
+    html,body{width:auto!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:#fff!important;color:#142a20!important;}
+    body > :not(#tcoPrintSheet){display:none!important;}
+    #tcoPrintSheet{display:block!important;position:static!important;width:100%!important;max-width:186mm!important;margin:0 auto!important;padding:0!important;background:#fff!important;box-shadow:none!important;font-family:"Noto Sans JP","Yu Gothic","Meiryo",Arial,sans-serif!important;font-size:10.5px!important;line-height:1.42!important;color:#20352b!important;break-inside:avoid!important;page-break-inside:avoid!important;overflow:hidden!important;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+    #tcoPrintSheet *{box-sizing:border-box!important;}
+    #tcoPrintSheet [hidden]{display:none!important;}
+    .tps-head{display:flex;justify-content:space-between;align-items:end;gap:8mm;padding-bottom:5mm;border-bottom:2px solid #087b47;}
+    .tps-kicker{font-size:8px!important;letter-spacing:.13em;font-weight:800;color:#088448;}
+    .tps-head h1{font-size:22px!important;line-height:1.22!important;margin:1.5mm 0!important;font-weight:850;}
+    .tps-head p{font-size:10px!important;margin:0!important;color:#62766a;}
+    .tps-date{font-size:9px!important;white-space:nowrap;color:#5f7165;}
+    .tps-date strong{display:block;text-align:right;font-size:12px;color:#20352b;}
+    .tps-context{display:flex;align-items:center;gap:3mm;padding:4mm 0 4mm;flex-wrap:wrap;}
+    .tps-context b{font-size:12px;color:#08643b;}
+    .tps-context span{background:#edf6f0;border-radius:10px;padding:1mm 2.5mm;font-weight:700;}
+    .tps-hero{background:#087b47!important;color:#fff!important;border-radius:3mm;padding:6mm 7mm 5mm;text-align:center;}
+    .tps-label{font-size:12px!important;font-weight:800;}
+    .tps-label small{font-size:9px;opacity:.92;}
+    .tps-hero strong{display:block;font-size:32px!important;line-height:1.2!important;margin-top:2mm;white-space:nowrap;}
+    .tps-kpis{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:3.5mm;}
+    .tps-kpis>div{border:1px solid #cfe3d6;background:#f5faf7;border-radius:3mm;padding:4mm;text-align:center;}
+    .tps-kpis small{display:block;font-size:10px;color:#557064;}
+    .tps-kpis strong{display:block;margin-top:1mm;font-size:20px;font-weight:850;white-space:nowrap;color:#0d5835;}
+    .tps-columns{display:grid;grid-template-columns:1.17fr .83fr;gap:4mm;margin-top:5mm;}
+    .tps-panel{border:1px solid #d9e6dd;border-radius:2.5mm;padding:4mm 4mm 3mm;break-inside:avoid;}
+    .tps-panel h2,.tps-note h2{margin:0 0 3mm;font-size:12px!important;font-weight:850;border-left:3px solid #087b47;padding-left:2mm;}
+    .tps-panel table{width:100%;border-collapse:collapse;table-layout:auto;}
+    .tps-panel th,.tps-panel td{padding:2.4mm .7mm;border-bottom:1px solid #e6ede8;vertical-align:top;}
+    .tps-panel th{font-weight:500;text-align:left;white-space:nowrap;color:#52675b;}
+    .tps-panel td{text-align:right;font-weight:750;}
+    .tps-panel tr:last-child th,.tps-panel tr:last-child td{border-bottom:0;}
+    .tps-method{background:#f9fbf9;}
+    .tps-equation{font-size:11px;line-height:1.9;font-weight:750;}
+    .tps-minus{color:#8a4b34;}
+    .tps-equals{color:#087b47;border-top:1px solid #cbded3;margin-top:2mm;padding-top:1mm;}
+    .tps-method p{font-size:9px;margin:3mm 0 0;color:#657467;}
+    .tps-lease{margin-top:4mm;}
+    .tps-lease h2 small{font-weight:500;color:#617167;}
+    .tps-lease-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;}
+    .tps-lease-grid>div{background:#f3f8f4;border-radius:2mm;padding:2.3mm;}
+    .tps-lease-grid small{display:block;font-size:9px;color:#5a7163;}
+    .tps-lease-grid strong{display:block;margin-top:.5mm;font-size:11px;}
+    .tps-lease-conclusion{font-size:13px;font-weight:850;color:#096f40;padding-top:3mm;}
+    .tps-tiny{font-size:8.5px;color:#657467;margin:1.3mm 0 0;}
+    .tps-note{margin-top:4mm;background:#f5f8f5;border-radius:2mm;padding:4mm;break-inside:avoid;}
+    .tps-note p{margin:0;font-size:9px;line-height:1.55;}
+    .tps-footer{border-top:1px solid #d9e5dc;margin-top:4mm;padding-top:2mm;color:#758278;font-size:8.5px;text-align:right;}
+  }
+</style>
 </head>
 <body>
 
 <nav class="tab-nav">
   <button class="tab-btn active" data-tab="maintenance" onclick="switchTab('maintenance')">メンテナンス費計算</button>
-  <button class="tab-btn" data-tab="credit" onclick="switchTab('credit')">クレジット計算</button>
-  <button class="tab-btn" data-tab="zandai" onclick="switchTab('zandai')">概算残債計算</button>
+  <button class="tab-btn" data-tab="tco" onclick="switchTab('tco')">新車購入・総負担額</button>
   <button class="tab-btn" data-tab="ev" onclick="switchTab('ev')">EV vs ガソリン比較</button>
   <button class="tab-btn" data-tab="hv" onclick="switchTab('hv')">GAS vs HV比較</button>
 </nav>
@@ -549,8 +416,8 @@
         </select>
       </label>
       <div class="small">
-        ・単価/回数は編集できます（初期値＝基準値）<br/>
-        ・金額は <b>単価 × 回数</b> で自動計算します
+        ・単価/回数は編集できます（変更内容は自動保存）<br/>
+        ・金額は <b>単価 × 回数</b> で自動計算し、総負担額にも連動します
       </div>
     </div>
     <div class="sheet">
@@ -655,286 +522,94 @@
   </div>
 </div>
 
-<!-- ===== Tab 2: クレジット計算 ===== -->
-<div id="tab-credit" class="tab-content">
-<div class="cr-simple">
-  <div class="title-bar">
-    <h1>ジャックス オートローン計算</h1>
-  </div>
-  <div class="main">
-    <div class="plan-header">オートローン月払いシミュレーション</div>
-    <div class="form-grid">
-      <div class="col">
-        <div class="fr"><div class="fl">計算方法 <span class="req">必須</span></div><div class="fi"><select id="crs_mode" style="width:180px" onchange="crsModeChange()"><option value="monthly">月々を計算</option><option value="down">月々固定で頭金を逆算</option></select></div></div>
-        <div class="fr"><div class="fl">総額 <span class="req">必須</span></div><div class="fi"><input type="text" id="crs_total" placeholder="例: 2,500,000" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric"><span class="fu">円</span></div></div>
-        <div class="fr"><div class="fl">頭金</div><div class="fi"><input type="text" id="crs_down" value="0" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric"><span class="fu">円</span></div></div>
-        <div class="fr"><div class="fl">金利 <span class="req">必須</span></div><div class="fi"><input type="text" id="crs_rate" value="5.50" autocomplete="off" style="width:70px;text-align:right" inputmode="decimal"><span class="fu">%</span></div></div>
-        <div class="fr"><div class="fl">支払い回数 <span class="req">必須</span></div><div class="fi"><input type="text" id="crs_count" value="60" autocomplete="off" style="width:70px;text-align:right" inputmode="numeric"><span class="fu">回</span></div></div>
-        <div class="fr"><div class="fl">ボーナス月加算額</div><div class="fi"><input type="text" id="crs_bonus_amt" value="0" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric"><span class="fu">円</span></div></div>
-        <div class="fr"><div class="fl">ボーナス加算回数</div><div class="fi"><input type="text" id="crs_bonus_count" value="0" autocomplete="off" style="width:70px;text-align:right" inputmode="numeric"><span class="fu">回</span></div></div>
-      </div>
-      <div class="col" style="border-left:2px solid #8aaacc">
-        <div class="fr"><div class="fl">固定する月々支払額</div><div class="fi"><input type="text" id="crs_fixed" placeholder="例: 35,000" autocomplete="off" style="width:130px;text-align:right" inputmode="numeric" disabled><span class="fu">円</span></div></div>
-        <div class="fr"><div class="fl">所要資金</div><div class="fi"><input type="text" id="crs_principal" readonly style="width:130px;text-align:right"><span class="fu">円</span></div></div>
-        <div class="fr"><div class="fl">手数料</div><div class="fi"><input type="text" id="crs_fee" readonly style="width:130px;text-align:right"><span class="fu">円</span></div></div>
-        <div class="fr"><div class="fl">支払対象合計</div><div class="fi"><input type="text" id="crs_financed" readonly style="width:130px;text-align:right"><span class="fu">円</span></div></div>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="calc-btn" onclick="crsCalc()">計　算</button>
-      <button class="rst-btn" onclick="crsReset()">リセット</button>
-    </div>
-    <div class="summary">
-      <div class="summary-box"><span>初回支払額</span><b id="crs_first">-</b></div>
-      <div class="summary-box"><span>2回目以降</span><b id="crs_monthly">-</b></div>
-      <div class="summary-box"><span>逆算頭金</span><b id="crs_down_result">-</b></div>
-      <div class="summary-box"><span>総支払額</span><b id="crs_total_payment">-</b></div>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr><th>計算方法</th><th>総額</th><th>頭金</th><th>所要資金</th><th>金利</th><th>支払い回数</th><th>初回</th><th>2回目以降</th><th>手数料</th><th>総支払額</th></tr>
-        </thead>
-        <tbody id="crs_tbody">
-          <tr><td class="c" colspan="10" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="note">金利は入力した実質年率％を反映します。12〜120回の支払い回数からジャックス式の係数を計算し、分割払手数料へ反映します。分割払手数料は100円単位に丸めません。ボーナス加算がある場合は通常月の支払額から差し引き、端数は初回支払額で調整します。</div>
-  </div>
-</div>
-<div class="outer">
-<div class="title-bar">
-  <h1>クレジット計算</h1>
-  <div class="title-btns"><button class="tbtn">確定</button><button class="tbtn">閉じる</button></div>
-</div>
-<div class="main">
-  <div class="plan-header">
-    <span>お支払いプラン１</span>
-    <span class="plan-sep"></span>
-    <div class="plan-hontai">
-      <span>車両本体価格（税込）<span class="req">※</span></span>
-      <input type="text" id="cr_hontai" placeholder="例: 2,197,540" autocomplete="off" style="width:120px;border:1px solid #7a9ac0;padding:1px 4px;font-size:12px;background:#fff;text-align:right" oninput="crFmtInput(this)" onblur="crOnch()">
-      <span style="font-size:11px">円</span>
-    </div>
-  </div>
-  <div class="form-grid">
-    <div class="col">
-      <div class="fr"><div class="fl">頭金（現金）</div><div class="fi"><input type="text" id="cr_atama" value="0" autocomplete="off" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span></div></div>
-      <div class="fr"><div class="fl">支払方法</div><div class="fi"><select id="cr_shiharaiHoho" style="width:150px" onchange="crOnShiharaiChange()"><option value="">---選択してください---</option><option value="zanka">残価クレジット</option><option value="normal">通常クレジット</option></select></div></div>
-      <div class="fr"><div class="fl">支払回数 <span class="req">（必須）</span></div><div class="fi"><select id="cr_kaisu_sel" style="width:60px" onchange="crOnch()"><option value="36">36</option><option value="60" selected>60</option></select><input type="text" id="cr_kaisu_inp" autocomplete="off" style="width:60px;display:none" placeholder="例:84" oninput="crValidateKaisu(this)" onblur="crOnch()"><span class="fu">回</span></div></div>
-      <div class="fr"><div class="fl">実質年率 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_nenri" value="5.20" autocomplete="off" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
-      <div class="fr"><div class="fl">ボーナス１</div><div class="fi">
-        <select id="cr_b1m" style="width:50px" onchange="crOnch()"><option value="">--</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-        <span class="fu">月</span>
-        <input type="text" id="cr_b1amt" value="0" autocomplete="off" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
-      </div></div>
-      <div class="fr"><div class="fl">ボーナス２</div><div class="fi">
-        <select id="cr_b2m" style="width:50px" onchange="crOnch()"><option value="">--</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-        <span class="fu">月</span>
-        <input type="text" id="cr_b2amt" value="0" autocomplete="off" style="width:80px;margin-left:8px" oninput="crFmtInput(this)" onblur="crOnch()"><span class="fu">円</span>
-      </div></div>
-      <div class="fr"><div class="fl">納車予定日 <span class="req">（必須）</span></div><div class="fi"><input type="date" id="cr_noshabi" style="width:130px" onchange="crOnch()"></div></div>
-      <div class="fr" id="cr_row_mileage"><div class="fl">月間走行 <span class="req">（必須）</span></div><div class="fi">
-        <select id="cr_mileage" style="width:150px" onchange="crOnch()"><option value="">---選択してください---</option><option value="1000">1,000 km</option><option value="1500">1,500 km</option></select>
-        <button type="button" class="zanka-btn" style="margin-left:6px">残価条件選択</button>
-      </div></div>
-      <div class="fr" id="cr_row_menseki"><div class="fl">免責走行距離</div><div class="fi"><input type="text" id="cr_menseki" readonly class="gray" style="width:80px"><span class="fu">km</span></div></div>
-      <div class="fr" id="cr_row_zankaRate" style="display:none"><div class="fl">据置・残価率</div><div class="fi"><input type="text" id="cr_zankaRate" value="46.00" autocomplete="off" style="width:70px" onblur="crOnch()"><span class="fu">%</span></div></div>
-    </div>
-    <div class="col" style="border-left:2px solid #8aaacc">
-      <div class="fr"><div class="fl">所要資金</div><div class="fi"><input type="text" id="cr_shoyo" class="bluebg" autocomplete="off" style="width:120px" oninput="crFmtInput(this)" onblur="crOnShoyo()"></div></div>
-      <div class="fr"><div class="fl">計算方法</div><div class="fi"><select id="cr_keisanHoho" style="width:160px" onchange="crOnKeisanChange()"><option value="">---選択してください---</option><option value="kaisu">回数指定</option><option value="atama">頭金逆引き</option><option value="value" id="cr_opt_value">２回払い（バリュー保証プラン）</option></select></div></div>
-      <div class="fr"><div class="fl">月払額</div><div class="fi"><input type="text" id="cr_tsuki" readonly style="width:120px;background:#d8e4f0;color:#888;font-weight:bold;border:1px solid #9ab0cc;text-align:right"></div></div>
-      <div class="fr"><div class="fl">支払開始月 <span class="req">（必須）</span></div><div class="fi"><input type="text" id="cr_startMonth" placeholder="YYYY/MM" autocomplete="off" style="width:80px;text-align:left" oninput="crFmtStartMonth(this)" onblur="crValidateStartMonth(this)"></div></div>
-      <div class="fr"><div class="fl">加算額１</div><div class="fi"><input type="text" id="cr_kasan1" value="0" autocomplete="off" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()"></div></div>
-      <div class="fr"><div class="fl">加算額２</div><div class="fi">
-        <input type="text" id="cr_kasan2" value="0" autocomplete="off" style="width:110px" oninput="crFmtInput(this)" onblur="crOnch()">
-        <span style="font-size:11px;white-space:nowrap;margin-left:8px">初回ボーナススキップ</span>
-        <input type="checkbox" id="cr_skipBonus" style="margin-left:4px">
-      </div></div>
-      <div class="fr" style="min-height:26px"></div>
-      <div class="fr" id="cr_row_mensekiten"><div class="fl">免責点数</div><div class="fi">
-        <input type="text" value="100" readonly class="gray" style="width:44px"><span class="fu">点</span>
-        <span style="margin-left:10px;font-size:11px">超過走行金額</span>
-        <input type="text" value="5" readonly class="gray" style="width:36px;margin-left:4px"><span class="fu">円／km</span>
-      </div></div>
-      <div class="fr" id="cr_row_zankaGaku" style="display:none"><div class="fl">残価額</div><div class="fi"><input type="text" id="cr_zankaGaku" readonly style="width:120px;background:#fff3cc;font-weight:bold"><span class="fu">円</span></div></div>
-    </div>
-  </div>
-  <div class="btn-row">
-    <button class="calc-btn" id="cr_calcBtn" onclick="crDoCalc()">計　算</button>
-    <button class="rst-btn" onclick="crDoReset()">リセット</button>
-  </div>
-  <div class="tbl-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th></th><th>支払<br>回数</th><th>終了</th><th>頭金(現金)</th><th>初回</th><th>２回目以降</th><th>×回</th>
-          <th>ボーナス１<br>ボーナス２</th><th>×回</th><th>手数料</th><th>支払総額</th>
-          <th id="cr_th_zankaRate">据置・<br>残価率</th><th id="cr_th_zankaFinal">最終回<br>支払金</th>
-        </tr>
-      </thead>
-      <tbody id="cr_tbody">
-        <tr><td class="c"><input type="radio" checked></td><td class="c" colspan="12" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-</div>
-</div>
 
-<!-- ===== Tab 3: 概算残債計算 ===== -->
-<div id="tab-zandai" class="tab-content">
-  <div class="page-wrap">
-    <header class="page-header">
-      <div class="badge">Early Repayment</div>
-      <h1>早期一括返済 試算ツール</h1>
-      <p>契約書の支払総額をもとに、戻し手数料と<br>実際の一括返済金額を概算します</p>
-    </header>
-
-    <div class="notice-banner">
-      <div class="notice-title"><div class="notice-icon">!</div>概算ツールです — 必ず金融機関にご確認ください</div>
-      <ul>
-        <li>契約書の「実質年率」はアドオン率ではありません。支払総額・分割払手数料をもとに概算します。</li>
-        <li>戻し手数料の計算方法は、ホンダファイナンス・ジャックス等の各社規定により異なります。</li>
-        <li>手数料・事務手数料・違約金が別途発生する場合があります。</li>
-        <li>残クレジット（残価設定型）の場合、残価分の扱いが別途あります。</li>
-      </ul>
+<!-- ===== 新車購入・総負担額計算 ===== -->
+<section id="tab-tco" class="tab-content" aria-label="新車購入・総負担額計算">
+  <div class="tco-wrap">
+    <div class="tco-head">
+      <div class="tco-head-top"><h1>新車購入・総負担額計算</h1><button class="tco-print-button" id="tcoPrintBtn" type="button" aria-label="A4縦1枚の計算結果を印刷する">🖨 A4・1枚で印刷</button></div>
+      <p class="tco-lead">購入時の金額と維持費の合計から査定額を差し引き、年間・月間の平均負担額に換算します。楽まるとの比較にも使える概算ツールです。</p>
     </div>
-
-    <!-- 契約内容 -->
-    <div class="card">
-      <div class="card-title"><span class="dot"></span>契約内容</div>
-
-      <div class="field-grid g3" style="margin-bottom:16px;">
-        <div class="field">
-          <label>借入金額（所要資金）</label>
-          <input type="text" id="principal" placeholder="2,500,000" inputmode="numeric">
+    <div class="tco-layout">
+      <div class="tco-panel">
+        <h2>① 購入・保有条件を入力</h2>
+        <div class="tco-fields">
+          <label class="tco-field wide">購入時の支払総額（メンテパック除く）
+            <input id="tcoPrice" type="number" min="0" step="10000" inputmode="numeric" value="2800000">
+            <span class="tco-hint">車両・付属品・登録諸費用等を含めた「乗り出し価格」を入力。メンテパック代は差し引いてください。</span>
+          </label>
+          <label class="tco-field">車両区分
+            <select id="tcoVehicle">
+              <option value="kei">軽自動車</option><option value="small" selected>小型車</option><option value="normal">普通車</option><option value="ev">EV車（N-ONE e:）</option>
+            </select>
+          </label>
+          <label class="tco-field">保有予定期間
+            <select id="tcoPeriod">
+              <option value="2_5">2年半</option><option value="3">3年</option><option value="4_5">4年半</option><option value="5">5年</option><option value="6_5">6年半</option><option value="7">7年</option><option value="10" selected>10年</option>
+            </select>
+          </label>
+          <label class="tco-field" id="tcoTaxWrap" hidden>普通車の自動車税区分
+            <select id="tcoTax"><option value="1500">1,500cc</option><option value="2000">2,000cc</option></select>
+          </label>
         </div>
-        <div class="field">
-          <label>支払総額（円）</label>
-          <input type="text" id="totalRepay" placeholder="5,320,000" inputmode="numeric">
-          <span class="field-note">契約書の支払総額。実質年率では計算しません</span>
-        </div>
-        <div class="field">
-          <label>支払回数（回）</label>
-          <input type="number" id="totalMonths" placeholder="60" min="1" step="1">
-        </div>
-      </div>
-
-      <div class="field-grid g2" style="margin-bottom:16px;">
-        <div class="field">
-          <label>月々の支払額（円）</label>
-          <input type="text" id="monthlyPayment" placeholder="40,000" inputmode="numeric">
-        </div>
-        <div class="field">
-          <label>支払開始月（初回引落月）</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <input type="number" id="startYear" placeholder="年（例：2023）" min="2000" max="2099" step="1">
-            <input type="number" id="startMonth" placeholder="月（1〜12）" min="1" max="12" step="1">
+        <div class="tco-segment">
+          <div class="tco-radio-row">
+            <label><input type="radio" name="tcoMode" value="auto" checked> 維持費を既存データから計算</label>
+            <label><input type="radio" name="tcoMode" value="manual"> 維持費を手入力</label>
           </div>
-          <span class="field-note">契約月ではなく、初回に口座から落ちる月を入力してください</span>
+          <label class="tco-field">保有期間の維持費合計（円）
+            <input id="tcoMaintenance" type="number" min="0" step="1000" inputmode="numeric" value="1200000" disabled>
+            <span class="tco-hint" id="tcoMaintenanceHint">メンテナンス費計算で編集した単価・回数を自動反映します。</span>
+          </label>
         </div>
-      </div>
-
-      <!-- 残クレ残価 -->
-      <div class="balloon-row">
-        <label>
-          <input type="checkbox" id="hasBalloon" onchange="zdToggleBalloon(this)">
-          残クレジット（残価設定）がある
-        </label>
-        <div class="balloon-input-wrap" id="balloonWrap">
-          <input type="text" id="balloonAmount" placeholder="残価（例：800,000）" inputmode="numeric">
-          <span class="field-note" style="display:block;margin-top:4px;">残価の扱いは契約により異なります。必要に応じて支払総額・最終回支払額に含めてください</span>
+        <div class="tco-fields">
+          <label class="tco-field wide">保有終了時の売却・下取り想定額（任意・円）
+            <input id="tcoResale" type="number" min="0" step="10000" inputmode="numeric" placeholder="未入力の場合は考慮しない">
+            <span class="tco-hint">入力すると査定額を差し引いた金額が、総額・年間平均・月平均のすべてに反映されます。</span>
+          </label>
         </div>
-      </div>
-    </div>
-
-    <!-- ボーナス加算 -->
-    <div class="card">
-      <div class="card-title"><span class="dot amber"></span>ボーナス加算（任意）</div>
-
-      <div class="info-badge">
-        ℹ︎ ボーナス加算は残り支払予定額の計算に影響します
-      </div>
-
-      <div class="bonus-header">
-        <span>月（1〜12）</span>
-        <span>加算額（円）</span>
-        <span>繰り返し</span>
-        <span></span>
-      </div>
-      <div id="bonusRows"></div>
-      <button class="add-btn" onclick="zdAddBonusRow()">ボーナス月を追加</button>
-      <p class="hint">※ 月は暦の月（1〜12）で入力。「毎年」を選ぶとローン終了まで毎年その月に加算されます。</p>
-    </div>
-
-    <!-- 一括返済タイミング -->
-    <div class="card">
-      <div class="card-title"><span class="dot rose"></span>一括返済のタイミング</div>
-      <div class="field-grid g2">
-        <div class="field">
-          <label>一括返済する年</label>
-          <input type="number" id="repayYear" placeholder="2025" min="2000" max="2099" step="1">
+        <div class="tco-section">
+          <h3>② 楽まるとの月平均比較（任意）</h3>
+          <div class="tco-fields">
+            <label class="tco-field">楽まる月額リース料（円）<input id="tcoLeaseMonth" type="number" min="0" step="1000" inputmode="numeric" placeholder="例：35000"></label>
+            <label class="tco-field">楽まる契約期間
+              <select id="tcoLeaseYears"><option value="3">3年</option><option value="5" selected>5年</option><option value="7">7年</option></select>
+            </label>
+            <label class="tco-field">楽まる初期費用（円）<input id="tcoLeaseInitial" type="number" min="0" step="10000" value="0" inputmode="numeric"></label>
+            <label class="tco-field">楽まるボーナス加算（1回・円）<input id="tcoLeaseBonus" type="number" min="0" step="10000" value="0" inputmode="numeric"><span class="tco-hint">年2回で計算。ない場合は0円。</span></label>
+          </div>
         </div>
-        <div class="field">
-          <label>一括返済する月（1〜12）</label>
-          <input type="number" id="repayMonth" placeholder="8" min="1" max="12" step="1">
+        <div style="margin-top:16px"><button class="tco-action" type="button" id="tcoExampleBtn">例：280万円＋維持費120万円で表示</button></div>
+      </div>
+      <div class="tco-panel" aria-live="polite">
+        <h2>計算結果</h2>
+        <div class="tco-kpi"><small id="tcoHeroLabel">10年間の総負担額</small><div class="tco-big" id="tcoTotal">—</div></div>
+        <div class="tco-metrics">
+          <div class="tco-metric"><small>1年間あたり</small><strong id="tcoAnnual">—</strong></div>
+          <div class="tco-metric"><small>1か月あたり</small><strong id="tcoMonthly">—</strong></div>
         </div>
-      </div>
-      <div class="field-grid g2" style="margin-top:16px;">
-        <div class="field">
-          <label>一括返済月の引き落とし</label>
-          <select id="repayTiming">
-            <option value="before">まだ落ちていない</option>
-            <option value="after">落ちた後</option>
-          </select>
+        <div class="tco-breakdown">
+          <h3>金額の内訳</h3>
+          <div class="tco-line"><span>購入時の金額</span><span id="tcoOutPrice">—</span></div>
+          <div class="tco-line"><span>保有期間の維持費</span><span id="tcoOutMaintenance">—</span></div>
+          <div class="tco-line" id="tcoResaleRow" hidden><span>売却・下取り想定額（差引）</span><span id="tcoOutResale">—</span></div>
+          <div class="tco-costbar" role="img" aria-label="購入費と維持費の割合"><span id="tcoBarBuy"></span><span id="tcoBarMaintain"></span></div>
         </div>
-        <div class="field">
-          <label>戻し手数料の実務補正率（%）</label>
-          <input type="number" id="refundFactor" value="66.42" min="0" max="100" step="0.01">
-          <span class="field-note">78分法の戻し額に掛ける係数。ジャックス照会例に寄せる初期値です</span>
+        <div class="tco-comparison" id="tcoLeaseResult" hidden>
+          <h3>楽まるとの比較</h3>
+          <div class="tco-line"><span>楽まるの月平均リース料</span><span id="tcoLeaseAverage">—</span></div>
+          <div class="tco-line"><span>楽まる契約期間のリース料総額</span><span id="tcoLeaseTotal">—</span></div>
+          <div class="tco-info">購入側の月平均（保有期間全体）との単純比較</div>
+          <div class="tco-compare-num" id="tcoDiff">—</div>
+          <div class="tco-info" id="tcoDiffNote"></div>
         </div>
+        <p class="tco-footnote">※ 購入側の「月額」はローン支払額ではなく、購入金額と維持費の合計から売却・下取り想定額を差し引いた負担額の月平均です。現在の維持費基準は点検・消耗品・車検基本料・自動車税・自賠責などの概算で、燃料費、任意保険料、重量税などが別途必要となる場合があります。見積書との二重計上に注意してください。楽まるは契約満了時に返却・買取等の条件があるため、期間や残存価値の違いを考慮した上でご案内ください。</p>
       </div>
-      <p class="hint" style="margin-top:12px;">※ 27日前など当月の引き落とし前なら「まだ落ちていない」を選んでください。</p>
-    </div>
-
-    <button class="calc-btn" onclick="zdCalculate()">一括返済額を試算する</button>
-
-    <!-- 結果 -->
-    <div id="results">
-
-      <div class="result-card" style="margin-top:24px;">
-        <div class="hero-amount">
-          <div class="hero-label">一括返済に必要な金額（概算）</div>
-          <div class="hero-value" id="heroVal">—</div>
-          <div class="hero-sub" id="heroSub"></div>
-        </div>
-
-        <div class="breakdown-grid" id="breakdownGrid"></div>
-        <div class="formula-box" id="formulaBox"></div>
-        <p class="result-note" id="resultNote"></p>
-      </div>
-
-      <!-- 比較 -->
-      <div class="compare-card">
-        <div class="card-title" style="margin-bottom:16px;"><span class="dot blue"></span>継続返済 vs 早期一括返済 — 比較</div>
-        <div class="compare-grid" id="compareGrid"></div>
-      </div>
-
-      <!-- スケジュール -->
-      <div class="schedule-card">
-        <div class="card-title" style="margin-bottom:16px;"><span class="dot rose"></span>一括返済月〜その後12ヶ月の試算スケジュール</div>
-        <div class="table-wrap"><table id="scheduleTable"></table></div>
-        <p style="font-size:11.5px;color:var(--text-light);margin-top:10px;font-weight:300;">※ ◀マークの行が指定した一括返済月。以降は継続した場合の返済額を表示しています。</p>
-      </div>
-
     </div>
   </div>
-</div>
+</section>
 
-<!-- ===== Tab 4: EV vs ガソリン比較 ===== -->
+<!-- ===== Tab 3: EV vs ガソリン比較 ===== -->
 <div id="tab-ev" class="tab-content ev-compare">
   <div class="ev-header">
     <h1>EV vs GASOLINE</h1>
@@ -1018,7 +693,7 @@
   </div>
 </div>
 
-<!-- ===== Tab 5: GAS vs HV比較 ===== -->
+<!-- ===== Tab 4: GAS vs HV比較 ===== -->
 <div id="tab-hv" class="tab-content ev-compare">
   <div class="ev-header">
     <h1>HV vs GASOLINE</h1>
@@ -1102,6 +777,52 @@
   </div>
 </div>
 
+
+<!-- A4印刷専用：画面操作部から独立した1ページの試算書 -->
+<article id="tcoPrintSheet" aria-label="新車購入・総負担額試算書（A4・1枚）">
+  <div class="tps-head">
+    <div><div class="tps-kicker">CAR OWNERSHIP COST ESTIMATE</div><h1>新車購入・総負担額 試算書</h1><p>購入費・維持費・査定額を踏まえた保有コストの概算</p></div>
+    <div class="tps-date">試算日 <strong id="tpDate">—</strong></div>
+  </div>
+  <div class="tps-context"><b id="tpVehicle">—</b><span id="tpPeriod">—</span><span id="tpTax"></span></div>
+  <div class="tps-hero"><div class="tps-label">保有予定期間の総負担額 <small id="tpHeroNote">（査定額を差し引いた実質額）</small></div><strong id="tpTotal">—</strong></div>
+  <div class="tps-kpis">
+    <div><small>年間平均</small><strong id="tpAnnual">—</strong></div>
+    <div><small>月間平均</small><strong id="tpMonthly">—</strong></div>
+  </div>
+  <div class="tps-columns">
+    <section class="tps-panel"><h2>購入・維持費の計算条件</h2><table>
+      <tbody>
+        <tr><th>購入時の金額</th><td id="tpPrice">—</td></tr>
+        <tr><th>保有期間の維持費</th><td id="tpMaintenance">—</td></tr>
+        <tr><th>維持費の算出方法</th><td id="tpSource">—</td></tr>
+        <tr><th>売却・下取り想定額</th><td id="tpResale">—</td></tr>
+      </tbody></table>
+    </section>
+    <section class="tps-panel tps-method"><h2>総負担額の考え方</h2>
+      <div class="tps-equation"><div>購入時の金額 ＋ 保有中の維持費</div><div class="tps-minus">− 売却・下取り想定額</div><div class="tps-equals">＝ 総負担額</div></div>
+      <p>「年間・月間平均」は保有期間で割った実質的な負担の目安です。ローンの毎月返済額とは異なります。</p>
+    </section>
+  </div>
+  <section class="tps-panel tps-lease" id="tpLeaseSection" hidden>
+    <h2>楽まるとの比較 <small>（任意試算）</small></h2>
+    <div class="tps-lease-grid">
+      <div><small>月額リース料</small><strong id="tpLeaseMonthlyInput">—</strong></div>
+      <div><small>契約期間</small><strong id="tpLeasePeriod">—</strong></div>
+      <div><small>初期費用</small><strong id="tpLeaseInitial">—</strong></div>
+      <div><small>ボーナス加算（年2回）</small><strong id="tpLeaseBonus">—</strong></div>
+      <div><small>楽まるの月平均</small><strong id="tpLeaseAvg">—</strong></div>
+      <div><small>楽まるの期間総額</small><strong id="tpLeaseTotal">—</strong></div>
+    </div>
+    <div class="tps-lease-conclusion" id="tpLeaseDiff">—</div>
+    <p class="tps-tiny">※ 購入と楽まるの契約期間が異なる場合、月平均の単純比較です。契約満了時の条件等は別途確認してください。</p>
+  </section>
+  <section class="tps-note"><h2>ご案内・注意事項</h2>
+    <p>表示額は入力条件による概算です。維持費には点検・消耗品・車検基本料・自動車税・自賠責保険等の目安を含みます。燃料費、任意保険料、重量税などは別途必要となる場合があります。購入金額と維持費の二重計上にご注意ください。楽まるはリース契約のため、購入とは契約条件が異なります。</p>
+  </section>
+  <div class="tps-footer">※ 本書は費用の試算資料です。正式なお見積書・ご契約内容を優先してください。</div>
+</article>
+
 <script>
 /* ===== タブ切替 ===== */
 function switchTab(name) {
@@ -1109,6 +830,7 @@ function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(function(el){ el.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
   document.querySelector('.tab-btn[data-tab="' + name + '"]').classList.add('active');
+  if(name==='tco' && typeof window.tcUpdate==='function')window.tcUpdate();
 }
 </script>
 
@@ -1124,7 +846,7 @@ const BASE = {
     {name:"安全点検",unit:10450,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"12ヶ月点検",unit:18700,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
     {name:"車検（基本料金＋代行費用含む）",unit:53350,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
-    {name:"エンジンオイル交換",unit:6743,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
+    {name:"エンジンオイル交換",unit:9743,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
     {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9}},
     {name:"エアクリーンフィルター交換",unit:7260,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"エアクリーナーエレメント交換",unit:3080,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
@@ -1148,7 +870,7 @@ const BASE = {
     {name:"安全点検",unit:9350,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"12ヶ月点検",unit:16500,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
     {name:"車検（基本料金＋代行費用含む）",unit:50050,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
-    {name:"エンジンオイル交換",unit:6226,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
+    {name:"エンジンオイル交換",unit:9226,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
     {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9}},
     {name:"エアクリーンフィルター交換",unit:5610,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"エアクリーナーエレメント交換",unit:3080,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
@@ -1171,7 +893,7 @@ const BASE = {
     {name:"安全点検",unit:8800,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"12ヶ月点検",unit:15400,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
     {name:"車検（基本料金＋代行費用含む）",unit:47850,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
-    {name:"エンジンオイル交換",unit:5379,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
+    {name:"エンジンオイル交換",unit:8379,counts:{"2_5":5,"3":6,"4_5":9,"5":10,"6_5":13,"7":14,"10":20}},
     {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":2,"3":3,"4_5":4,"5":5,"6_5":6,"7":7,"10":9}},
     {name:"エアクリーンフィルター交換",unit:5610,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"エアクリーナーエレメント交換",unit:1980,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
@@ -1194,7 +916,7 @@ const BASE = {
     {name:"安全点検",unit:8800,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"12ヶ月点検",unit:15400,counts:{"2_5":2,"3":2,"4_5":3,"5":3,"6_5":4,"7":4,"10":6}},
     {name:"車検（基本料金＋代行費用含む）",unit:47850,counts:{"2_5":0,"3":1,"4_5":1,"5":2,"6_5":2,"7":3,"10":4}},
-    {name:"エンジンオイル交換",unit:5379,counts:{"2_5":0,"3":6,"4_5":0,"5":10,"6_5":13,"7":14,"10":0}},
+    {name:"エンジンオイル交換",unit:8379,counts:{"2_5":0,"3":6,"4_5":0,"5":10,"6_5":13,"7":14,"10":0}},
     {name:"エンジンオイルエレメント交換",unit:2530,counts:{"2_5":0,"3":3,"4_5":0,"5":5,"6_5":6,"7":7,"10":0}},
     {name:"エアクリーンフィルター交換",unit:5610,counts:{"2_5":2,"3":2,"4_5":4,"5":4,"6_5":6,"7":6,"10":9}},
     {name:"エアクリーナーエレメント交換",unit:1980,counts:{"2_5":1,"3":1,"4_5":2,"5":2,"6_5":3,"7":3,"10":5}},
@@ -1213,17 +935,71 @@ const BASE = {
 };
 
 let state={vehicle:"kei",period:"2_5",rows:[],extras:[]};
+const MAINTENANCE_STORAGE_KEY="rakumaru_maintenance_edited_v1";
+let maintenanceEdits={};
 function deepClone(obj){return JSON.parse(JSON.stringify(obj));}
-function buildExtras(vehicleKey){
-  const base=BASE[vehicleKey];const e=base.extras||{};
-  if(vehicleKey==="normal"){const tax=document.getElementById("taxClass").value;const taxKey=(tax==="2000")?"tax_2000":"tax_1500";return[deepClone(e[taxKey]),deepClone(e.jibaiseki)].filter(Boolean);}
-  if(vehicleKey==="small"){return[deepClone(e.tax_1500),deepClone(e.jibaiseki)].filter(Boolean);}
-  if(vehicleKey==="kei"){return[deepClone(e.tax_660),deepClone(e.jibaiseki)].filter(Boolean);}
-  return[];
+try {
+  const saved=JSON.parse(localStorage.getItem(MAINTENANCE_STORAGE_KEY)||"{}");
+  if(saved&&typeof saved==="object"&&!Array.isArray(saved))maintenanceEdits=saved;
+} catch(e) {maintenanceEdits={};}
+// 2026-11-22: 以前の標準価格で保存されていた分だけ新しい標準価格へ移行。
+// お客様が独自に変更した単価や回数は上書きしない。
+const PREVIOUS_OIL_PRICES={normal:6743,small:6226,kei:5379,ev:5379};
+let oilPricesMigrated=false;
+Object.keys(PREVIOUS_OIL_PRICES).forEach(vehicleKey=>{
+  const saved=maintenanceEdits[vehicleKey];
+  if(!saved||!Array.isArray(saved.rows))return;
+  const oil=saved.rows.find(r=>r&&r.name==="エンジンオイル交換");
+  if(oil&&Number(oil.unit)===PREVIOUS_OIL_PRICES[vehicleKey]){
+    oil.unit=PREVIOUS_OIL_PRICES[vehicleKey]+3000;
+    oilPricesMigrated=true;
+  }
+});
+if(oilPricesMigrated){
+  try{localStorage.setItem(MAINTENANCE_STORAGE_KEY,JSON.stringify(maintenanceEdits));}catch(e){}
 }
-function buildStateFromBase(vehicleKey){state.vehicle=vehicleKey;state.rows=deepClone(BASE[vehicleKey].items);state.extras=buildExtras(vehicleKey);}
+function vehicleData(vehicleKey){
+  const base=BASE[vehicleKey];
+  let data=maintenanceEdits[vehicleKey];
+  if(!data||!Array.isArray(data.rows)||data.rows.length!==base.items.length||!data.extras||typeof data.extras!=="object"||
+     data.rows.some((r,i)=>!r||r.name!==base.items[i].name||!r.counts)){
+    data={rows:deepClone(base.items),extras:deepClone(base.extras||{})};
+    maintenanceEdits[vehicleKey]=data;
+  }
+  return data;
+}
+function saveMaintenanceEdits(){
+  try {localStorage.setItem(MAINTENANCE_STORAGE_KEY,JSON.stringify(maintenanceEdits));}catch(e){}
+}
+function buildExtras(vehicleKey){
+  const extras=vehicleData(vehicleKey).extras;
+  if(vehicleKey==="normal"){
+    const tax=document.getElementById("taxClass").value;
+    return [extras[tax==="2000"?"tax_2000":"tax_1500"],extras.jibaiseki].filter(Boolean);
+  }
+  if(vehicleKey==="small")return [extras.tax_1500,extras.jibaiseki].filter(Boolean);
+  if(vehicleKey==="kei")return [extras.tax_660,extras.jibaiseki].filter(Boolean);
+  return [];
+}
+function buildStateFromBase(vehicleKey){
+  const data=vehicleData(vehicleKey);
+  state.vehicle=vehicleKey;state.rows=data.rows;state.extras=buildExtras(vehicleKey);
+}
+function syncTcoFromMaintenance(){
+  // 左側で編集した条件は、右側の自動計算に使う車両区分・期間へ揃える。
+  const vehicle=document.getElementById("tcoVehicle");
+  const period=document.getElementById("tcoPeriod");
+  if(vehicle)vehicle.value=state.vehicle;
+  if(period)period.value=state.period;
+  if(state.vehicle==="normal")document.getElementById("tcoTax").value=document.getElementById("taxClass").value;
+  if(typeof window.tcUpdate==="function")window.tcUpdate();
+}
+function onMaintenanceEdit(){
+  saveMaintenanceEdits();
+  syncTcoFromMaintenance();
+}
 function createNumInput(value,cls){const inp=document.createElement("input");inp.type="number";inp.value=Number(value??0);inp.min="0";inp.step="1";inp.className=cls;return inp;}
-function calcRowAmount(row){return Number(row.unit||0)*Number(row.counts?.[state.period]||0);}
+function calcRowAmount(row){return Math.max(0,Number(row.unit)||0)*Math.max(0,Number(row.counts?.[state.period])||0);}
 function renderPeriodLabels(){const label=PERIODS.find(p=>p.key===state.period)?.label||"";document.getElementById("periodLabelHead").textContent=label;document.getElementById("periodLabelHead2").textContent=label;}
 function render(){
   renderPeriodLabels();
@@ -1231,8 +1007,8 @@ function render(){
   state.rows.forEach((row,idx)=>{
     const tr=document.createElement("tr");
     const tdName=document.createElement("td");tdName.textContent=row.name;tr.appendChild(tdName);
-    const tdUnit=document.createElement("td");tdUnit.className="center";const inpUnit=createNumInput(row.unit,"input-mini");inpUnit.addEventListener("input",()=>{state.rows[idx].unit=Number(inpUnit.value||0);recalc();});tdUnit.appendChild(inpUnit);tr.appendChild(tdUnit);
-    const tdC=document.createElement("td");tdC.className="center";const inpC=createNumInput(row.counts[state.period]??0,"input-count");inpC.addEventListener("input",()=>{state.rows[idx].counts[state.period]=Number(inpC.value||0);recalc();});tdC.appendChild(inpC);tr.appendChild(tdC);
+    const tdUnit=document.createElement("td");tdUnit.className="center";const inpUnit=createNumInput(row.unit,"input-mini");inpUnit.addEventListener("input",()=>{state.rows[idx].unit=Math.max(0,Number(inpUnit.value)||0);recalc();onMaintenanceEdit();});tdUnit.appendChild(inpUnit);tr.appendChild(tdUnit);
+    const tdC=document.createElement("td");tdC.className="center";const inpC=createNumInput(row.counts[state.period]??0,"input-count");inpC.addEventListener("input",()=>{state.rows[idx].counts[state.period]=Math.max(0,Number(inpC.value)||0);recalc();onMaintenanceEdit();});tdC.appendChild(inpC);tr.appendChild(tdC);
     const tdA=document.createElement("td");tdA.className="num yen";tdA.textContent=fmtJPY.format(Math.round(calcRowAmount(row)));tr.appendChild(tdA);
     tbody.appendChild(tr);
   });
@@ -1240,6 +1016,7 @@ function render(){
 }
 function renderExtras(){
   const sec=document.getElementById("extraSection");[...sec.querySelectorAll("tr")].slice(1).forEach(tr=>tr.remove());
+  // 税区分が変わっても編集した税額・回数を破棄しないよう、保存済みオブジェクトを参照する。
   state.extras=buildExtras(state.vehicle);
   const showExtras=state.extras.length>0;sec.classList.toggle("hidden",!showExtras);
   const taxWrap=document.getElementById("taxClassWrap");taxWrap.classList.toggle("hidden",state.vehicle!=="normal");
@@ -1247,8 +1024,8 @@ function renderExtras(){
   state.extras.forEach((row,idx)=>{
     const tr=document.createElement("tr");
     const tdName=document.createElement("td");tdName.textContent=row.name;tr.appendChild(tdName);
-    const tdUnit=document.createElement("td");tdUnit.className="center";const inpUnit=createNumInput(row.unit,"input-mini");inpUnit.addEventListener("input",()=>{state.extras[idx].unit=Number(inpUnit.value||0);recalc();});tdUnit.appendChild(inpUnit);tr.appendChild(tdUnit);
-    const tdC=document.createElement("td");tdC.className="center";const inpC=createNumInput(row.counts[state.period]??0,"input-count");inpC.addEventListener("input",()=>{state.extras[idx].counts[state.period]=Number(inpC.value||0);recalc();});tdC.appendChild(inpC);tr.appendChild(tdC);
+    const tdUnit=document.createElement("td");tdUnit.className="center";const inpUnit=createNumInput(row.unit,"input-mini");inpUnit.addEventListener("input",()=>{state.extras[idx].unit=Math.max(0,Number(inpUnit.value)||0);recalc();onMaintenanceEdit();});tdUnit.appendChild(inpUnit);tr.appendChild(tdUnit);
+    const tdC=document.createElement("td");tdC.className="center";const inpC=createNumInput(row.counts[state.period]??0,"input-count");inpC.addEventListener("input",()=>{state.extras[idx].counts[state.period]=Math.max(0,Number(inpC.value)||0);recalc();onMaintenanceEdit();});tdC.appendChild(inpC);tr.appendChild(tdC);
     const tdA=document.createElement("td");tdA.className="num yen";tdA.textContent=fmtJPY.format(Math.round(calcRowAmount(row)));tr.appendChild(tdA);
     sec.appendChild(tr);
   });
@@ -1259,8 +1036,9 @@ function recalc(){
   let sumMain=0,sumExtra=0;state.rows.forEach(r=>sumMain+=calcRowAmount(r));state.extras.forEach(r=>sumExtra+=calcRowAmount(r));
   document.getElementById("sum_main").textContent=fmtJPY.format(Math.round(sumMain));
   document.getElementById("sum_grand").textContent=fmtJPY.format(Math.round(sumMain+sumExtra));
+  if(typeof window.tcUpdate==="function")window.tcUpdate();
 }
-function resetToBase(){buildStateFromBase(state.vehicle);render();}
+function resetToBase(){delete maintenanceEdits[state.vehicle];buildStateFromBase(state.vehicle);saveMaintenanceEdits();render();syncTcoFromMaintenance();}
 function copyCurrentJson(){
   const payload={vehicle:state.vehicle,period:state.period,taxClass:document.getElementById("taxClass").value,rows:state.rows,extras:state.extras};
   const txt=JSON.stringify(payload,null,2);
@@ -1268,12 +1046,11 @@ function copyCurrentJson(){
 }
 let statusTimer=null;
 function setCopyStatus(msg){const el=document.getElementById("copyStatus");el.textContent=msg;if(statusTimer)clearTimeout(statusTimer);statusTimer=setTimeout(()=>el.textContent="",2500);}
-
 function mInit(){
   buildStateFromBase("kei");render();
-  document.getElementById("vehicleType").addEventListener("change",(e)=>{buildStateFromBase(e.target.value);render();});
-  document.getElementById("periodSel").addEventListener("change",(e)=>{state.period=e.target.value;render();});
-  document.getElementById("taxClass").addEventListener("change",()=>{if(state.vehicle==="normal")render();});
+  document.getElementById("vehicleType").addEventListener("change",(e)=>{buildStateFromBase(e.target.value);render();syncTcoFromMaintenance();});
+  document.getElementById("periodSel").addEventListener("change",(e)=>{state.period=e.target.value;render();syncTcoFromMaintenance();});
+  document.getElementById("taxClass").addEventListener("change",()=>{if(state.vehicle==="normal"){render();syncTcoFromMaintenance();}});
   document.getElementById("resetBtn").addEventListener("click",resetToBase);
   document.getElementById("copyJsonBtn").addEventListener("click",copyCurrentJson);
 }
@@ -1318,264 +1095,6 @@ document.getElementById("closeFuelBtn").addEventListener("click",closeFuelModal)
 document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target===document.getElementById("fuelModal"))closeFuelModal();});
 </script>
 
-<script>
-/* ===== クレジット計算 ===== */
-/* ===== シンプル版クレジット計算 ===== */
-(function(){
-  function id(name){return document.getElementById(name);}
-  function fmt(n){return Math.round(n).toLocaleString('ja-JP');}
-  function money(name){return parseFloat((id(name).value||'').replace(/,/g,''))||0;}
-  function setVal(name,val){id(name).value=val>0?fmt(val):'';}
-  function bindMoney(name){
-    var el=id(name);
-    if(!el)return;
-    el.addEventListener('input',function(){
-      var raw=el.value.replace(/,/g,'').replace(/[^0-9]/g,'');
-      el.value=raw?parseInt(raw,10).toLocaleString('ja-JP'):'';
-    });
-  }
-  function paymentFactor(rate,count){
-    var monthlyRate=(rate/100)/12;
-    if(monthlyRate<=0)return 1/count;
-    var pow=Math.pow(1+monthlyRate,count);
-    return monthlyRate*pow/(pow-1);
-  }
-  function jaccsFeeRate(rate,count){
-    if(count<12||count>120)return null;
-    var rawRate=(paymentFactor(rate,count)*count)-1;
-    return Math.round(rawRate*10000)/10000;
-  }
-  function calcFee(principal,rate,count){
-    var jaccsRate=jaccsFeeRate(rate,count);
-    if(jaccsRate!=null)return Math.floor((principal*jaccsRate)+0.000001);
-    var monthly=principal*paymentFactor(rate,count);
-    var rawFee=(monthly*count)-principal;
-    return Math.round(rawFee);
-  }
-  function splitPayment(financed,count,bonusAmt,bonusCount){
-    bonusAmt=bonusAmt||0;
-    bonusCount=bonusCount||0;
-    var monthlyBase=financed-(bonusAmt*bonusCount);
-    var regular=Math.floor((monthlyBase/count)/100)*100;
-    if(regular<=0)regular=Math.floor(financed/count);
-    var first=financed-(regular*(count-1))-(bonusAmt*bonusCount);
-    return {first:first,regular:regular};
-  }
-  function findDownForFixedMonthly(total,rate,count,fixed,bonusAmt,bonusCount){
-    var low=0;
-    var high=total;
-    var best=total;
-    while(low<=high){
-      var down=Math.floor((low+high)/2);
-      var principal=total-down;
-      var fee=calcFee(principal,rate,count);
-      var pay=splitPayment(principal+fee,count,bonusAmt,bonusCount);
-      if(pay.regular>fixed){
-        low=down+1;
-      }else{
-        best=down;
-        high=down-1;
-      }
-    }
-    return best;
-  }
-  function renderEmpty(){
-    ['crs_principal','crs_fee','crs_financed'].forEach(function(name){id(name).value='';});
-    ['crs_first','crs_monthly','crs_down_result','crs_total_payment'].forEach(function(name){id(name).textContent='-';});
-    id('crs_tbody').innerHTML='<tr><td class="c" colspan="10" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>';
-  }
-  function updateMode(){
-    var downMode=id('crs_mode').value==='down';
-    id('crs_fixed').disabled=!downMode;
-    id('crs_down').readOnly=downMode;
-    if(downMode){
-      id('crs_down').value='';
-      id('crs_down').placeholder='自動計算';
-    }else{
-      id('crs_down').readOnly=false;
-      id('crs_down').placeholder='';
-      if(!id('crs_down').value)id('crs_down').value='0';
-    }
-    renderEmpty();
-  }
-  window.crsModeChange=updateMode;
-  window.crsCalc=function(){
-    var mode=id('crs_mode').value;
-    var total=money('crs_total');
-    var down=money('crs_down');
-    var rate=parseFloat((id('crs_rate').value||'').replace(/[^0-9.]/g,''))||0;
-    var count=parseInt((id('crs_count').value||'').replace(/[^0-9]/g,''),10)||0;
-    var bonusAmt=money('crs_bonus_amt');
-    var bonusCount=parseInt((id('crs_bonus_count').value||'').replace(/[^0-9]/g,''),10)||0;
-    if(!total){alert('総額を入力してください');return;}
-    if(count<=0){alert('支払い回数を入力してください');return;}
-    if(count<12||count>120){alert('支払い回数は12〜120回で入力してください');return;}
-    if(bonusCount>count){alert('ボーナス加算回数は支払い回数以下で入力してください');return;}
-    if(mode==='down'){
-      var fixed=money('crs_fixed');
-      if(!fixed){alert('固定する月々支払額を入力してください');return;}
-      down=findDownForFixedMonthly(total,rate,count,fixed,bonusAmt,bonusCount);
-      id('crs_down').value=fmt(down);
-    }
-    var principal=Math.max(0,total-down);
-    if(principal<=0){alert('所要資金が0円以下です。総額と頭金を確認してください');return;}
-    var fee=calcFee(principal,rate,count);
-    var financed=principal+fee;
-    if((bonusAmt*bonusCount)>=financed){alert('ボーナス加算額が支払対象合計を超えています');return;}
-    var pay=splitPayment(financed,count,bonusAmt,bonusCount);
-    var totalPayment=down+financed;
-    setVal('crs_principal',principal);
-    setVal('crs_fee',fee);
-    setVal('crs_financed',financed);
-    id('crs_first').textContent='¥'+fmt(pay.first);
-    id('crs_monthly').textContent='¥'+fmt(pay.regular);
-    id('crs_down_result').textContent='¥'+fmt(down);
-    id('crs_total_payment').textContent='¥'+fmt(totalPayment);
-    id('crs_tbody').innerHTML='<tr class="result">'
-      +'<td class="c">'+(mode==='down'?'頭金逆算':'月々計算')+'</td>'
-      +'<td>'+fmt(total)+'</td>'
-      +'<td>'+fmt(down)+'</td>'
-      +'<td>'+fmt(principal)+'</td>'
-      +'<td class="c">'+rate.toFixed(2)+'%</td>'
-      +'<td class="c">'+count+'回</td>'
-      +'<td>'+fmt(pay.first)+'</td>'
-      +'<td>'+fmt(pay.regular)+'</td>'
-      +'<td>'+fmt(fee)+'</td>'
-      +'<td>'+fmt(totalPayment)+'</td>'
-      +'</tr>';
-  };
-  window.crsReset=function(){
-    id('crs_mode').value='monthly';
-    id('crs_total').value='';
-    id('crs_down').value='0';
-    id('crs_rate').value='5.50';
-    id('crs_count').value='60';
-    id('crs_fixed').value='';
-    id('crs_bonus_amt').value='0';
-    id('crs_bonus_count').value='0';
-    updateMode();
-  };
-  ['crs_total','crs_down','crs_fixed','crs_bonus_amt'].forEach(bindMoney);
-  id('crs_rate').addEventListener('input',function(){this.value=this.value.replace(/[^0-9.]/g,'');});
-  id('crs_count').addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');});
-  id('crs_bonus_count').addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');});
-  updateMode();
-})();
-
-var crShoyoManual=false;
-function crFmt(n){return Math.round(n).toLocaleString('ja-JP');}
-function crParseVal(id){return parseFloat((document.getElementById(id).value||'').replace(/,/g,''))||0;}
-function crFmtInput(el){var raw=el.value.replace(/,/g,'').replace(/[^0-9]/g,'');if(raw==='')return;el.value=parseInt(raw,10).toLocaleString('ja-JP');}
-function crFmtStartMonth(el){var raw=el.value.replace(/[^0-9\/]/g,'');if(raw.length===6&&raw.indexOf('/')===-1)raw=raw.slice(0,4)+'/'+raw.slice(4);el.value=raw;}
-function crValidateStartMonth(el){var v=el.value.trim();if(v==='')return;el.style.borderColor=v.match(/^(\d{4})\/(\d{2})$/)?'':'#cc0000';}
-function crGetStartMonthAuto(){var d=new Date(document.getElementById('cr_noshabi').value);if(isNaN(d.getTime()))return '';d.setMonth(d.getMonth()+2);return d.getFullYear()+'/'+(('0'+(d.getMonth()+1)).slice(-2));}
-function crGetEndMonth(){
-  var sm=document.getElementById('cr_startMonth').value.trim(),y,mo;
-  if(sm.match(/^(\d{4})\/(\d{2})$/)){y=parseInt(sm.slice(0,4));mo=parseInt(sm.slice(5,7))-1;}
-  else{var d=new Date(document.getElementById('cr_noshabi').value);if(isNaN(d.getTime()))return '';d.setMonth(d.getMonth()+2);y=d.getFullYear();mo=d.getMonth();}
-  var tc=crGetKaisu();var end=new Date(y,mo+tc-1);
-  return end.getFullYear()+'/'+(('0'+(end.getMonth()+1)).slice(-2));
-}
-function crUpdateMenseki(){var v=document.getElementById('cr_mileage').value,tc=crGetKaisu();document.getElementById('cr_menseki').value=v?(parseInt(v)*tc).toLocaleString('ja-JP'):'';}
-function crCalcTsukiAddon(shoyo,zankaGaku,nenri,tc){var g=shoyo-zankaGaku;if(g<=0)return 0;var nen=tc/12,t=g*(nenri/100)*nen;return Math.ceil((g+t)/tc);}
-function crCalcAtamaAddon(shoyo,zankaGaku,nenri,tc,tsuki){var nen=tc/12,rate=nenri/100,g=(tsuki*tc)/(1+rate*nen),a=(shoyo-zankaGaku)-g;if(a<0)a=0;if(a>shoyo)a=shoyo;return Math.round(a);}
-function crGetKaisu(){var n=crIsNormal();if(n){var v=parseInt(document.getElementById('cr_kaisu_inp').value)||0;return v>0?v:0;}return parseInt(document.getElementById('cr_kaisu_sel').value)||60;}
-function crValidateKaisu(el){var raw=el.value.replace(/[^0-9]/g,'');var v=parseInt(raw)||0;if(v>120)v=120;el.value=v||'';}
-function crIsZanka(){return document.getElementById('cr_shiharaiHoho').value==='zanka';}
-function crIsNormal(){return document.getElementById('cr_shiharaiHoho').value==='normal';}
-function crShow(id,v){document.getElementById(id).style.display=v?'':'none';}
-function crUpdateZankaCols(z){document.getElementById('cr_th_zankaRate').style.display=z?'':'none';document.getElementById('cr_th_zankaFinal').style.display=z?'':'none';}
-function crSetTsukiEditable(e){var el=document.getElementById('cr_tsuki');if(e){el.removeAttribute('readonly');el.style.background='#fff';el.style.color='#000';el.placeholder='月払額を入力';}else{el.setAttribute('readonly','');el.style.background='#d8e4f0';el.style.color='#888';el.placeholder='';el.value='';}}
-function crOnShiharaiChange(){
-  var z=crIsZanka(),n=crIsNormal();
-  crShow('cr_row_zankaRate',z);crShow('cr_row_zankaGaku',z);crShow('cr_row_mileage',z);crShow('cr_row_menseki',z);crShow('cr_row_mensekiten',z);
-  crUpdateZankaCols(z);
-  var optVal=document.getElementById('cr_opt_value');
-  if(optVal)optVal.style.display=z?'':'none';
-  if(n&&document.getElementById('cr_keisanHoho').value==='value'){document.getElementById('cr_keisanHoho').value='';crSetTsukiEditable(false);}
-  document.getElementById('cr_kaisu_sel').style.display=z?'':'none';document.getElementById('cr_kaisu_inp').style.display=n?'':'none';
-  if(n){document.getElementById('cr_kaisu_inp').value='';}else{document.getElementById('cr_kaisu_sel').value='60';}
-  var nenriEl=document.getElementById('cr_nenri');if(z)nenriEl.value='5.20';else if(n)nenriEl.value='5.50';
-  crOnch();
-}
-function crOnKeisanChange(){crSetTsukiEditable(document.getElementById('cr_keisanHoho').value==='atama');crOnch();}
-function crOnShoyo(){crShoyoManual=true;crCalcAndShowTsuki();}
-function crCalcAndShowTsuki(){
-  var hontai=crParseVal('cr_hontai'),zankaRate=parseFloat(document.getElementById('cr_zankaRate').value)||0;
-  var nenri=parseFloat(document.getElementById('cr_nenri').value)||0,tc=crGetKaisu();
-  var shoyo=crParseVal('cr_shoyo'),zankaGaku=crIsZanka()?Math.round(hontai*zankaRate/100):0;
-  if(crIsZanka())document.getElementById('cr_zankaGaku').value=hontai>0?crFmt(zankaGaku):'';
-  if(document.getElementById('cr_keisanHoho').value!=='atama')
-    document.getElementById('cr_tsuki').value=(shoyo>0&&hontai>0)?crFmt(crCalcTsukiAddon(shoyo,zankaGaku,nenri,tc)):'';
-}
-function crOnch(){
-  crUpdateMenseki();
-  var hontai=crParseVal('cr_hontai'),atama=crParseVal('cr_atama'),kasan1=crParseVal('cr_kasan1'),kasan2=crParseVal('cr_kasan2');
-  var total=hontai+kasan1+kasan2;
-  if(!crShoyoManual){var s=total-atama;document.getElementById('cr_shoyo').value=s>0?crFmt(s):'';}
-  if(!document.getElementById('cr_startMonth').value.trim())document.getElementById('cr_startMonth').value=crGetStartMonthAuto();
-  crCalcAndShowTsuki();
-}
-function crDoCalc(){
-  crOnch();
-  var hontai=crParseVal('cr_hontai');if(!hontai){alert('車両本体価格（税込）を入力してください');return;}
-  if(!document.getElementById('cr_shiharaiHoho').value){alert('支払方法を選択してください');return;}
-  var z=crIsZanka();
-  if(z&&!document.getElementById('cr_mileage').value){alert('月間走行距離を選択してください');return;}
-  var zankaRate=z?(parseFloat(document.getElementById('cr_zankaRate').value)||0):0;
-  if(z&&!zankaRate){alert('据置・残価率を入力してください');return;}
-  var sm=document.getElementById('cr_startMonth').value.trim();
-  if(!sm.match(/^\d{4}\/\d{2}$/)){alert('支払開始月をYYYY/MM形式で入力してください');return;}
-  var nenri=parseFloat(document.getElementById('cr_nenri').value)||0,tc=crGetKaisu();
-  var kasan1=crParseVal('cr_kasan1'),kasan2=crParseVal('cr_kasan2'),shoyo=crParseVal('cr_shoyo');
-  var zankaGaku=z?Math.round(hontai*zankaRate/100):0;
-  var km=document.getElementById('cr_keisanHoho').value;
-  var b1amt=crParseVal('cr_b1amt'),b2amt=crParseVal('cr_b2amt');
-  var b1has=document.getElementById('cr_b1m').value!='',b2has=document.getElementById('cr_b2m').value!='';
-  var nen=tc/12,b1kai=b1has?Math.floor(nen):0,b2kai=b2has?Math.floor(nen):0;
-  var bonusKai=b1kai+b2kai,bonusAmtPer=(b1has&&b2has)?(b1amt+b2amt):(b1has?b1amt:(b2has?b2amt:0));
-  var tsuki,atamaResult;
-  if(km==='atama'){tsuki=crParseVal('cr_tsuki');if(!tsuki){alert('月払額を入力してください');return;}atamaResult=crCalcAtamaAddon(shoyo,zankaGaku,nenri,tc,tsuki);}
-  else{atamaResult=crParseVal('cr_atama');tsuki=crCalcTsukiAddon(shoyo,zankaGaku,nenri,tc);}
-  var total=hontai+kasan1+kasan2,bonusTotal=0;
-  if(b1has)bonusTotal+=b1amt*b1kai;if(b2has)bonusTotal+=b2amt*b2kai;
-  var shiharaiTotal=atamaResult+tsuki*tc+bonusTotal+zankaGaku,tesuryo=Math.max(shiharaiTotal-total,0);
-  document.getElementById('cr_tbody').innerHTML=
-    '<tr class="result"><td class="c"><input type="radio" checked></td>'
-    +'<td class="c">'+tc+'回</td><td class="c">'+crGetEndMonth()+'</td>'
-    +'<td>'+crFmt(atamaResult)+'</td><td>'+crFmt(tsuki)+'</td><td>'+crFmt(tsuki)+'</td>'
-    +'<td class="c">'+(tc-1)+'回</td>'
-    +'<td>'+(bonusAmtPer>0?crFmt(bonusAmtPer):'')+'</td>'
-    +'<td class="c">'+(bonusKai>0?bonusKai+'回':'')+'</td>'
-    +'<td>'+crFmt(tesuryo)+'</td><td>'+crFmt(shiharaiTotal)+'</td>'
-    +'<td style="'+(z?'':'display:none')+'">'+(z?zankaRate.toFixed(2):'')+'</td>'
-    +'<td style="'+(z?'':'display:none')+'">'+(z?crFmt(zankaGaku):'')+'</td></tr>';
-}
-function crDoReset(){
-  crShoyoManual=false;
-  ['cr_hontai','cr_kasan1','cr_kasan2','cr_b1amt','cr_b2amt','cr_shoyo'].forEach(id=>{document.getElementById(id).value='';});
-  document.getElementById('cr_atama').value='0';document.getElementById('cr_nenri').value='5.20';document.getElementById('cr_zankaRate').value='46.00';
-  document.getElementById('cr_kaisu_sel').value='60';document.getElementById('cr_kaisu_inp').value='';
-  document.getElementById('cr_kaisu_sel').style.display='';document.getElementById('cr_kaisu_inp').style.display='none';
-  document.getElementById('cr_b1m').value='';document.getElementById('cr_b2m').value='';document.getElementById('cr_skipBonus').checked=false;
-  document.getElementById('cr_shiharaiHoho').value='';document.getElementById('cr_keisanHoho').value='';
-  document.getElementById('cr_mileage').value='';document.getElementById('cr_menseki').value='';
-  document.getElementById('cr_startMonth').value='';document.getElementById('cr_startMonth').style.borderColor='';
-  ['cr_row_zankaRate','cr_row_zankaGaku','cr_row_mileage','cr_row_menseki','cr_row_mensekiten'].forEach(id=>{document.getElementById(id).style.display='';});
-  var optVal=document.getElementById('cr_opt_value');if(optVal)optVal.style.display='';
-  crUpdateZankaCols(true);
-  document.getElementById('cr_tbody').innerHTML='<tr><td class="c"><input type="radio" checked></td><td class="c" colspan="12" style="color:#888;text-align:center">計算ボタンを押すと結果が表示されます</td></tr>';
-  crSetTsukiEditable(false);document.getElementById('cr_startMonth').value=crGetStartMonthAuto();
-}
-
-window.addEventListener('load',function(){
-  ['cr_hontai','cr_atama','cr_nenri','cr_b1amt','cr_b2amt','cr_shoyo','cr_startMonth','cr_kasan1','cr_kasan2','cr_zankaRate'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.removeAttribute('readonly');
-  });
-  document.getElementById('cr_noshabi').value='2026-05-01';
-  document.getElementById('cr_startMonth').value=crGetStartMonthAuto();
-});
-</script>
 
 <script>
 /* ===== EV vs ガソリン比較 ===== */
@@ -1690,264 +1209,101 @@ window.addEventListener('load',function(){
 })();
 </script>
 
+
 <script>
-/* ===== 概算残債計算 ===== */
+/* ===== 購入時・保有期間の総負担額計算 ===== */
 (function(){
-  let bonusCount = 0;
-
-  function toComma(val) {
-    const n = parseInt(String(val).replace(/,/g, ''), 10);
-    return isNaN(n) ? '' : n.toLocaleString('ja-JP');
+  'use strict';
+  const el=id=>document.getElementById(id);
+  const money=v=>Math.round(v).toLocaleString('ja-JP')+'円';
+  const num=id=>Math.max(0,Number(el(id).value)||0);
+  const ys={"2_5":2.5,"3":3,"4_5":4.5,"5":5,"6_5":6.5,"7":7,"10":10};
+  function estimate(){
+    const vehicle=el('tcoVehicle').value,period=el('tcoPeriod').value,tax=el('tcoTax').value;
+    const data=vehicleData(vehicle); // 左タブで編集した単価・期間別回数をすべて参照
+    const rows=data.rows;
+    const main=rows.reduce((sum,r)=>sum+Math.max(0,Number(r.unit)||0)*Math.max(0,Number(r.counts?.[period])||0),0);
+    const extras=data.extras||{};
+    let extraItems=[];
+    if(vehicle==='normal')extraItems=[extras[tax==='2000'?'tax_2000':'tax_1500'],extras.jibaiseki];
+    else if(vehicle==='small')extraItems=[extras.tax_1500,extras.jibaiseki];
+    else if(vehicle==='kei')extraItems=[extras.tax_660,extras.jibaiseki];
+    const extra=extraItems.filter(Boolean).reduce((sum,r)=>sum+Math.max(0,Number(r.unit)||0)*Math.max(0,Number(r.counts?.[period])||0),0);
+    return Math.round(main+extra);
   }
-  function fromComma(str) {
-    return parseFloat(String(str).replace(/,/g, '')) || 0;
-  }
-  function bindComma(el) {
-    el.addEventListener('blur', () => { if (el.value) el.value = toComma(el.value); });
-    el.addEventListener('focus', () => { el.value = String(el.value).replace(/,/g, ''); });
-    el.addEventListener('input', () => {
-      const raw = el.value.replace(/[^0-9]/g, '');
-      el.value = raw ? parseInt(raw,10).toLocaleString('ja-JP') : '';
-    });
-  }
-  function initCommaInputs() {
-    ['principal','totalRepay','monthlyPayment','balloonAmount'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) bindComma(el);
-    });
-  }
-
-  window.zdToggleBalloon = function(cb) {
-    document.getElementById('balloonWrap').classList.toggle('show', cb.checked);
-  };
-
-  window.zdAddBonusRow = function(cm, am) {
-    bonusCount++;
-    const id = bonusCount;
-    const div = document.createElement('div');
-    div.className = 'bonus-row'; div.id = 'zd-bonus-' + id;
-    const i1 = document.createElement('input'); i1.type='number'; i1.placeholder='8'; i1.value=cm||''; i1.min=1; i1.max=12; i1.step=1; i1.className='bonus-calmonth';
-    const i2 = document.createElement('input'); i2.type='text'; i2.placeholder='100,000'; i2.value=am ? toComma(am) : ''; i2.className='bonus-amount';
-    bindComma(i2);
-    const sel = document.createElement('select'); sel.className='bonus-repeat';
-    sel.innerHTML='<option value="yearly">毎年（ローン終了まで）</option><option value="once">一回のみ</option>';
-    const btn = document.createElement('button'); btn.type='button'; btn.className='del-btn'; btn.setAttribute('aria-label','削除'); btn.textContent='×';
-    btn.onclick = () => document.getElementById('zd-bonus-'+id)?.remove();
-    div.append(i1, i2, sel, btn);
-    document.getElementById('bonusRows').appendChild(div);
-  };
-
-  function fmt(n) { return Math.round(n).toLocaleString('ja-JP'); }
-
-  function getYM(sy, sm, idx) {
-    const d = new Date(sy, sm - 1 + idx, 1);
-    return { year: d.getFullYear(), month: d.getMonth() + 1 };
-  }
-
-  function buildBonusMap(sy, sm, total) {
-    const map = {};
-    document.querySelectorAll('#bonusRows .bonus-row').forEach(row => {
-      const cm  = parseInt(row.querySelector('.bonus-calmonth').value);
-      const am  = fromComma(row.querySelector('.bonus-amount').value);
-      const rep = row.querySelector('.bonus-repeat').value;
-      if (!cm || !am || isNaN(cm)) return;
-      for (let i = 0; i < total; i++) {
-        const ym = getYM(sy, sm, i);
-        if (ym.month === cm) {
-          const no = i + 1;
-          map[no] = (map[no] || 0) + am;
-          if (rep === 'once') break;
-        }
-      }
-    });
-    return map;
-  }
-
-  window.zdCalculate = function() {
-    const principal     = fromComma(document.getElementById('principal').value);
-    const totalRepay    = fromComma(document.getElementById('totalRepay').value);
-    const totalMonths   = parseInt(document.getElementById('totalMonths').value);
-    const monthlyStdIn  = fromComma(document.getElementById('monthlyPayment').value);
-    const startYear     = parseInt(document.getElementById('startYear').value);
-    const startMonth    = parseInt(document.getElementById('startMonth').value);
-    const repayYear     = parseInt(document.getElementById('repayYear').value);
-    const repayMonth    = parseInt(document.getElementById('repayMonth').value);
-    const repayTiming   = document.getElementById('repayTiming').value;
-    const refundFactor  = Math.max(0, Math.min(100, parseFloat(document.getElementById('refundFactor').value) || 0)) / 100;
-    const hasBalloon    = document.getElementById('hasBalloon').checked;
-    const balloonAmount = hasBalloon ? fromComma(document.getElementById('balloonAmount').value) : 0;
-
-    if (!principal || !totalRepay || !totalMonths || !monthlyStdIn || !startYear || !startMonth || !repayYear || !repayMonth) {
-      alert('すべての項目を入力してください。'); return;
+  function update(){
+    const vehicle=el('tcoVehicle').value,period=el('tcoPeriod').value,years=ys[period]||10;
+    el('tcoTaxWrap').hidden=vehicle!=='normal';
+    const isAuto=document.querySelector('input[name="tcoMode"]:checked').value==='auto';
+    el('tcoMaintenance').disabled=isAuto;
+    const autoMaintenance=estimate();
+    if(isAuto)el('tcoMaintenance').value=autoMaintenance;
+    el('tcoMaintenanceHint').textContent=isAuto?'「メンテナンス費計算」で編集した単価・回数を反映中（車両区分・保有期間別）。':'手入力中：左タブで変更してもこの金額は上書きされません。';
+    const price=num('tcoPrice'),maintenance=num('tcoMaintenance');
+    const grossTotal=price+maintenance;
+    const hasResale=el('tcoResale').value.trim()!=='';
+    const resale=hasResale?num('tcoResale'):0;
+    const total=grossTotal-resale;
+    const annual=total/years,monthly=total/(years*12);
+    const periodLabel=el('tcoPeriod').selectedOptions[0].textContent;
+    el('tcoHeroLabel').textContent=periodLabel+'間の総負担額'+(hasResale?'（査定額差引後）':'');
+    el('tcoTotal').textContent=money(total);el('tcoAnnual').textContent=money(annual);el('tcoMonthly').textContent=money(monthly);
+    el('tcoOutPrice').textContent=money(price);el('tcoOutMaintenance').textContent=money(maintenance);
+    el('tcoResaleRow').hidden=!hasResale;
+    if(hasResale)el('tcoOutResale').textContent=money(-resale);
+    // 購入費と維持費の内訳バーは、査定額の差引前の合計を基準に表示
+    el('tcoBarBuy').style.width=(grossTotal>0?price/grossTotal*100:0)+'%';
+    el('tcoBarMaintain').style.width=(grossTotal>0?maintenance/grossTotal*100:0)+'%';
+    const leaseMonthInput=el('tcoLeaseMonth').value.trim();
+    const hasLease=leaseMonthInput!==''&&num('tcoLeaseMonth')>0;
+    el('tcoLeaseResult').hidden=!hasLease;
+    if(hasLease){
+      const contractYears=Number(el('tcoLeaseYears').value),months=contractYears*12;
+      const leaseTotal=num('tcoLeaseMonth')*months+num('tcoLeaseInitial')+num('tcoLeaseBonus')*contractYears*2;
+      const leaseAverage=leaseTotal/months,delta=leaseAverage-monthly;
+      el('tcoLeaseAverage').textContent=money(leaseAverage);el('tcoLeaseTotal').textContent=money(leaseTotal);
+      el('tcoDiff').textContent=(delta>=0?'楽まるのほうが月平均 ':'購入のほうが月平均 ')+money(Math.abs(delta))+(Math.abs(delta)<.5?'（ほぼ同額）':'');
+      el('tcoDiffNote').textContent='※ 購入側：'+years+'年／楽まる：'+contractYears+'年の平均額です。期間が異なる場合、同一条件の総額比較にはなりません。車両売却・返却時の条件や保険等の差も確認してください。';
     }
-    if (totalRepay < principal) { alert('支払総額は借入金額以上で入力してください。'); return; }
-
-    const targetMonthIndex = (repayYear - startYear) * 12 + (repayMonth - startMonth) + 1;
-    const paidMonths = targetMonthIndex - (repayTiming === 'before' ? 1 : 0);
-    if (targetMonthIndex <= 0) { alert('一括返済月は支払開始月以降を入力してください。'); return; }
-    if (paidMonths < 0) { alert('支払開始月より前のタイミングは計算できません。'); return; }
-    if (paidMonths >= totalMonths) { alert('すでに全回数の支払いが完了しています。'); return; }
-
-    const remainMonths = totalMonths - paidMonths;
-
-    const totalInterest   = totalRepay - principal;
-    const principalRatio  = principal / totalRepay;
-    const interestRatio   = totalInterest / totalRepay;
-
-    const bonusMap = buildBonusMap(startYear, startMonth, totalMonths);
-
-    let cumPrincipalPaid = 0;
-    let cumBonusPaid     = 0;
-
-    for (let i = 1; i <= paidMonths; i++) {
-      const bonus       = bonusMap[i] || 0;
-      const totalPay    = monthlyStdIn + bonus;
-      const principalPart = totalPay * principalRatio;
-      cumPrincipalPaid += principalPart;
-      if (bonus > 0) cumBonusPaid += bonus;
-    }
-
-    const rule78Num   = remainMonths * (remainMonths + 1);
-    const rule78Den   = totalMonths  * (totalMonths  + 1);
-    const rule78Ratio = rule78Num / rule78Den;
-    const unearned78  = totalInterest * rule78Ratio;
-    const unearned    = unearned78 * refundFactor;
-
-    let continuePay = 0;
-    for (let i = paidMonths + 1; i <= totalMonths; i++) {
-      continuePay += (monthlyStdIn + (bonusMap[i] || 0));
-    }
-    const earlyPayment  = Math.max(0, continuePay - unearned);
-    const paidInterest = totalInterest - unearned;
-    const saving       = unearned;
-
-    document.getElementById('heroVal').textContent = '¥' + fmt(earlyPayment);
-    document.getElementById('heroSub').textContent =
-      `支払開始から ${paidMonths} 回支払済み ／ 残 ${remainMonths} 回分を一括返済`;
-
-    const bonusNote = cumBonusPaid > 0
-      ? `（うちボーナス加算 ¥${fmt(cumBonusPaid)} 分を元本充当済み）`
-      : '';
-
-    document.getElementById('breakdownGrid').innerHTML = `
-      <div class="breakdown-item">
-        <div class="breakdown-label">残り支払予定額（戻し前）</div>
-        <div class="breakdown-value">¥${fmt(continuePay)}</div>
-        ${bonusNote ? `<div class="breakdown-value small">${bonusNote}</div>` : ''}
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-label">戻し手数料（実務補正後）</div>
-        <div class="breakdown-value highlight">▲ ¥${fmt(unearned)}</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-label">78分法そのままの戻し額</div>
-        <div class="breakdown-value">¥${fmt(unearned78)}</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-label">補正差額</div>
-        <div class="breakdown-value saving">¥${fmt(unearned78 - unearned)}</div>
-      </div>
-    `;
-
-    document.getElementById('formulaBox').innerHTML = `
-      <div class="formula-title">計算の内訳</div>
-      <div class="formula-row"><span class="fl">借入金額（所要資金）</span><span class="fv">¥${fmt(principal)}</span></div>
-      <div class="formula-row"><span class="fl">支払総額</span><span class="fv">¥${fmt(totalRepay)}</span></div>
-      <div class="formula-row"><span class="fl">分割払手数料 = 支払総額 − 借入金額</span><span class="fv">¥${fmt(totalInterest)}</span></div>
-      <div class="formula-row"><span class="fl">支払済み回数 / 総回数</span><span class="fv">${paidMonths} 回 ／ ${totalMonths} 回</span></div>
-      <div class="formula-row"><span class="fl">残り支払予定額（ボーナス込み）</span><span class="fv">¥${fmt(continuePay)}</span></div>
-      <div class="divider-line"></div>
-      <div class="formula-row"><span class="fl">78分法 戻し係数（残${remainMonths}×${remainMonths+1} ÷ 全${totalMonths}×${totalMonths+1}）</span><span class="fv">${(rule78Ratio*100).toFixed(3)} %</span></div>
-      <div class="formula-row"><span class="fl">78分法戻し額 = 分割払手数料 × 戻し係数</span><span class="fv">¥${fmt(unearned78)}</span></div>
-      <div class="formula-row"><span class="fl">実務補正後戻し額 = 78分法戻し額 × ${(refundFactor*100).toFixed(2)}%</span><span class="fv">¥${fmt(unearned)}</span></div>
-      <div class="formula-row total-row"><span class="fl">一括返済額 = 残り支払予定額 − 戻し手数料</span><span class="fv">¥${fmt(earlyPayment)}</span></div>
-    `;
-
-    document.getElementById('resultNote').innerHTML =
-      `※ 契約書の実質年率をアドオン率として使わず、支払総額から分割払手数料を算出しています。<br>
-       ※ 実務補正率は照会前の概算を実額に近づけるための係数です。金融機関や契約内容により変わります。<br>
-       ※ ホンダファイナンス・ジャックス等の実際の金額は各社の規定・端数処理により異なる場合があります。<br>
-       ※ 手数料・事務手数料が別途発生する場合があります。実際の返済前に必ず金融機関にご確認ください。`;
-
-    document.getElementById('compareGrid').innerHTML = `
-      <div class="compare-col">
-        <div class="compare-head">継続して返済した場合</div>
-        <div class="compare-row"><span class="cl">残り回数</span><span class="cv">${remainMonths} 回</span></div>
-        <div class="compare-row"><span class="cl">今後の支払い総額</span><span class="cv">¥${fmt(continuePay)}</span></div>
-        <div class="compare-divider"></div>
-        <div class="compare-row compare-total"><span class="cl">戻し見込み額</span><span class="cv">¥${fmt(unearned)}</span></div>
-      </div>
-      <div class="compare-col">
-        <div class="compare-head">今すぐ一括返済した場合</div>
-        <div class="compare-row"><span class="cl">一括返済額</span><span class="cv">¥${fmt(earlyPayment)}</span></div>
-        <div class="compare-row"><span class="cl">継続との差額</span><span class="cv">▲ ¥${fmt(continuePay - earlyPayment)}</span></div>
-        <div class="compare-divider"></div>
-        <div class="compare-row compare-total"><span class="cl">戻し見込み額</span><span class="cv">¥${fmt(saving)}</span></div>
-      </div>
-    `;
-
-    const res = document.getElementById('results');
-    res.classList.add('show');
-    setTimeout(() => res.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
-
-    /* スケジュール表 */
-    const scheduleRows = [];
-    let cumP2 = 0;
-    for (let i = 1; i <= totalMonths; i++) {
-      const ym    = getYM(startYear, startMonth, i - 1);
-      const bonus = bonusMap[i] || 0;
-      const pay   = monthlyStdIn + bonus;
-      const pPart = pay * principalRatio;
-      const iPart = pay * interestRatio;
-      cumP2 += pPart;
-      const bal = Math.max(0, principal - cumP2);
-      scheduleRows.push({ no: i, year: ym.year, month: ym.month, pay, bonus, pPart, iPart, bal });
-    }
-
-    const startIdx = Math.max(0, paidMonths);
-    const endIdx   = Math.min(startIdx + 12, scheduleRows.length - 1);
-
-    let thtml = `<thead><tr>
-      <th>回</th><th>年月</th><th>月々</th><th>ボーナス</th><th>元金充当</th><th>手数料充当</th><th>残り支払予定額</th><th style="color:var(--rose);">一括返済額</th>
-    </tr></thead><tbody>`;
-
-    for (let i = startIdx; i <= endIdx; i++) {
-      const r       = scheduleRows[i];
-      const isRepay = i === startIdx;
-      const cls     = isRepay ? 'repay-row' : (r.bonus > 0 ? 'bonus-month' : '');
-
-      const remN       = totalMonths - i;
-      const earlyR78   = remN * (remN + 1) / (totalMonths * (totalMonths + 1));
-      const unearnedR  = totalInterest * earlyR78 * refundFactor;
-      const futurePayR = scheduleRows.slice(i).reduce((sum, row) => sum + row.pay, 0);
-      const earlyPayR  = Math.max(0, futurePayR - unearnedR);
-      const earlyCell  = remN <= 0 ? '完済' : `¥${fmt(earlyPayR)}`;
-
-      thtml += `<tr class="${cls}">
-        <td>${r.no}${isRepay ? ' ◀' : ''}</td>
-        <td>${r.year}/${String(r.month).padStart(2,'0')}</td>
-        <td>¥${fmt(r.pay - r.bonus)}</td>
-        <td>${r.bonus > 0 ? '¥' + fmt(r.bonus) : '—'}</td>
-        <td>¥${fmt(r.pPart)}</td>
-        <td>¥${fmt(r.iPart)}</td>
-        <td>¥${fmt(futurePayR)}</td>
-        <td style="font-weight:500;color:var(--rose);">${earlyCell}</td>
-      </tr>`;
-    }
-    thtml += '</tbody>';
-    document.getElementById('scheduleTable').innerHTML = thtml;
-  };
-
-  /* 初期化 */
-  window.addEventListener('load', function() {
-    const now = new Date();
-    document.getElementById('repayYear').value  = now.getFullYear();
-    document.getElementById('repayMonth').value = now.getMonth() + 1;
-    initCommaInputs();
-    /* デフォルトボーナス */
-    window.zdAddBonusRow(8, 100000);
-    window.zdAddBonusRow(12, 100000);
+  }
+  function printText(id,text){const node=el(id);if(node)node.textContent=text;}
+  function renderTcoPrint(){
+    update();
+    const isAuto=document.querySelector('input[name="tcoMode"]:checked').value==='auto';
+    const hasResale=el('tcoResale').value.trim()!=='';
+    const hasLease=!el('tcoLeaseResult').hidden;
+    printText('tpDate',new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}));
+    printText('tpVehicle',el('tcoVehicle').selectedOptions[0].textContent);
+    printText('tpPeriod',el('tcoPeriod').selectedOptions[0].textContent);
+    printText('tpTax',el('tcoVehicle').value==='normal'?'自動車税 '+el('tcoTax').selectedOptions[0].textContent:'');
+    el('tpTax').hidden=el('tcoVehicle').value!=='normal';
+    printText('tpHeroNote',hasResale?'（査定額差引後）':'（査定額は未設定）');
+    printText('tpPrice',el('tcoOutPrice').textContent);
+    printText('tpMaintenance',el('tcoOutMaintenance').textContent);
+    printText('tpSource',isAuto?'メンテナンス費計算に連動':'維持費を手入力');
+    printText('tpResale',hasResale?el('tcoOutResale').textContent:'0円（設定なし）');
+    printText('tpTotal',el('tcoTotal').textContent);
+    printText('tpAnnual',el('tcoAnnual').textContent);
+    printText('tpMonthly',el('tcoMonthly').textContent);
+    printText('tpLeaseMonthlyInput',money(num('tcoLeaseMonth')));
+    printText('tpLeasePeriod',el('tcoLeaseYears').selectedOptions[0].textContent);
+    printText('tpLeaseInitial',money(num('tcoLeaseInitial')));
+    printText('tpLeaseBonus',money(num('tcoLeaseBonus')));
+    printText('tpLeaseAvg',el('tcoLeaseAverage').textContent);
+    printText('tpLeaseTotal',el('tcoLeaseTotal').textContent);
+    printText('tpLeaseDiff',el('tcoDiff').textContent);
+    el('tpLeaseSection').hidden=!hasLease;
+  }
+  el('tcoPrintBtn').addEventListener('click',()=>{renderTcoPrint();window.print();});
+  window.addEventListener('beforeprint',renderTcoPrint);
+  window.tcPrintRefresh=renderTcoPrint;
+  document.querySelectorAll('#tab-tco input,#tab-tco select').forEach(element=>{element.addEventListener('input',update);element.addEventListener('change',update);});
+  el('tcoExampleBtn').addEventListener('click',()=>{
+    el('tcoPrice').value=2800000;el('tcoPeriod').value='10';el('tcoMaintenance').value=1200000;el('tcoResale').value='';
+    document.querySelector('input[name="tcoMode"][value="manual"]').checked=true;update();
   });
+  window.tcUpdate=update;
+  update();
 })();
 </script>
 </body>
