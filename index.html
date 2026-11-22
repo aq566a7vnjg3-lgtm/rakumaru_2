@@ -549,7 +549,7 @@
         <h2>① 購入・保有条件を入力</h2>
         <div class="tco-fields">
           <label class="tco-field wide">購入時の支払総額（メンテパック除く）
-            <input id="tcoPrice" type="number" min="0" step="10000" inputmode="numeric" value="2800000">
+            <input id="tcoPrice" type="text" inputmode="numeric" pattern="[0-9,]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-money-input value="2,800,000">
             <span class="tco-hint">車両・付属品・登録諸費用等を含めた「乗り出し価格」を入力。メンテパック代は差し引いてください。</span>
           </label>
           <label class="tco-field">車両区分
@@ -572,25 +572,24 @@
             <label><input type="radio" name="tcoMode" value="manual"> 維持費を手入力</label>
           </div>
           <label class="tco-field">保有期間の維持費合計（円）
-            <input id="tcoMaintenance" type="number" min="0" step="1000" inputmode="numeric" value="1200000" disabled>
+            <input id="tcoMaintenance" type="text" inputmode="numeric" pattern="[0-9,]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-money-input value="1,200,000" disabled>
             <span class="tco-hint" id="tcoMaintenanceHint">メンテナンス費計算で編集した単価・回数を自動反映します。</span>
           </label>
         </div>
         <div class="tco-fields">
           <label class="tco-field wide">保有終了時の売却・下取り想定額（任意・円）
-            <input id="tcoResale" type="number" min="0" step="10000" inputmode="numeric" placeholder="未入力の場合は考慮しない">
+            <input id="tcoResale" type="text" inputmode="numeric" pattern="[0-9,]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-money-input placeholder="未入力の場合は考慮しない">
             <span class="tco-hint">入力すると査定額を差し引いた金額が、総額・年間平均・月平均のすべてに反映されます。</span>
           </label>
         </div>
         <div class="tco-section">
           <h3>② 楽まるとの月平均比較（任意）</h3>
           <div class="tco-fields">
-            <label class="tco-field">楽まる月額リース料（円）<input id="tcoLeaseMonth" type="number" min="0" step="1000" inputmode="numeric" placeholder="例：35000"></label>
+            <label class="tco-field">楽まる月額リース料（円）<input id="tcoLeaseMonth" type="text" inputmode="numeric" pattern="[0-9,]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-money-input placeholder="例：35,000"></label>
             <label class="tco-field">楽まる契約期間
               <select id="tcoLeaseYears"><option value="3">3年</option><option value="5" selected>5年</option><option value="7">7年</option></select>
             </label>
-            <label class="tco-field">楽まる初期費用（円）<input id="tcoLeaseInitial" type="number" min="0" step="10000" value="0" inputmode="numeric"></label>
-            <label class="tco-field">楽まるボーナス加算（1回・円）<input id="tcoLeaseBonus" type="number" min="0" step="10000" value="0" inputmode="numeric"><span class="tco-hint">年2回で計算。ない場合は0円。</span></label>
+            <label class="tco-field">楽まるボーナス加算（1回・円）<input id="tcoLeaseBonus" type="text" inputmode="numeric" pattern="[0-9,]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-money-input value="0"><span class="tco-hint">年2回で計算。ない場合は0円。</span></label>
           </div>
         </div>
         <div style="margin-top:16px"><button class="tco-action" type="button" id="tcoExampleBtn">例：280万円＋維持費120万円で表示</button></div>
@@ -829,7 +828,6 @@
     <div class="tps-lease-grid">
       <div><small>月額リース料</small><strong id="tpLeaseMonthlyInput">—</strong></div>
       <div><small>契約期間</small><strong id="tpLeasePeriod">—</strong></div>
-      <div><small>初期費用</small><strong id="tpLeaseInitial">—</strong></div>
       <div><small>ボーナス加算（年2回）</small><strong id="tpLeaseBonus">—</strong></div>
       <div><small>楽まるの月平均</small><strong id="tpLeaseAvg">—</strong></div>
       <div><small>楽まるの期間総額</small><strong id="tpLeaseTotal">—</strong></div>
@@ -1238,7 +1236,7 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
   'use strict';
   const el=id=>document.getElementById(id);
   const money=v=>Math.round(v).toLocaleString('ja-JP')+'円';
-  const num=id=>Math.max(0,Number(el(id).value)||0);
+  const num=id=>Math.max(0,Number(el(id).value.replace(/,/g,''))||0);
   const ys={"2_5":2.5,"3":3,"4_5":4.5,"5":5,"6_5":6.5,"7":7,"10":10};
   function estimate(){
     const vehicle=el('tcoVehicle').value,period=el('tcoPeriod').value,tax=el('tcoTax').value;
@@ -1259,7 +1257,7 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
     const isAuto=document.querySelector('input[name="tcoMode"]:checked').value==='auto';
     el('tcoMaintenance').disabled=isAuto;
     const autoMaintenance=estimate();
-    if(isAuto)el('tcoMaintenance').value=autoMaintenance;
+    if(isAuto)el('tcoMaintenance').value=formatMoneyText(String(autoMaintenance));
     el('tcoMaintenanceHint').textContent=isAuto?'「メンテナンス費計算」で編集した単価・回数を反映中（車両区分・保有期間別）。':'手入力中：左タブで変更してもこの金額は上書きされません。';
     const price=num('tcoPrice'),maintenance=num('tcoMaintenance');
     const grossTotal=price+maintenance;
@@ -1281,7 +1279,7 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
     el('tcoLeaseResult').hidden=!hasLease;
     if(hasLease){
       const contractYears=Number(el('tcoLeaseYears').value),months=contractYears*12;
-      const leaseTotal=num('tcoLeaseMonth')*months+num('tcoLeaseInitial')+num('tcoLeaseBonus')*contractYears*2;
+      const leaseTotal=num('tcoLeaseMonth')*months+num('tcoLeaseBonus')*contractYears*2;
       const leaseAverage=leaseTotal/months,delta=leaseAverage-monthly;
       const monthlyGap=Math.round(Math.abs(delta)),yearlyGap=Math.round(Math.abs(delta)*12);
       const purchaseLabel='購入（'+periodLabel+'保有）・月平均';
@@ -1327,7 +1325,6 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
     printText('tpMonthly',el('tcoMonthly').textContent);
     printText('tpLeaseMonthlyInput',money(num('tcoLeaseMonth')));
     printText('tpLeasePeriod',el('tcoLeaseYears').selectedOptions[0].textContent);
-    printText('tpLeaseInitial',money(num('tcoLeaseInitial')));
     printText('tpLeaseBonus',money(num('tcoLeaseBonus')));
     printText('tpLeaseAvg',el('tcoLeaseAverage').textContent);
     printText('tpLeaseTotal',el('tcoLeaseTotal').textContent);
@@ -1339,9 +1336,80 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
   el('tcoPrintBtn').addEventListener('click',()=>{renderTcoPrint();window.print();});
   window.addEventListener('beforeprint',renderTcoPrint);
   window.tcPrintRefresh=renderTcoPrint;
-  document.querySelectorAll('#tab-tco input,#tab-tco select').forEach(element=>{element.addEventListener('input',update);element.addEventListener('change',update);});
+  // 金額欄はtext入力を使用し、カンマを即時付与する（計算はnum()でカンマ除去）。
+  // IMEの未確定文字は触らず、確定時だけ整形して数字以外は採用しない。
+  function asciiDigits(text){
+    return String(text).replace(/[０-９]/g,ch=>String.fromCharCode(ch.charCodeAt(0)-0xFEE0)).replace(/[^0-9]/g,'');
+  }
+  function formatMoneyText(text){
+    const digits=asciiDigits(text).replace(/^0+(?=\d)/,'');
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  }
+  function caretAfterDigits(text,count){
+    if(count===0)return 0;
+    let seen=0;
+    for(let i=0;i<text.length;i++){
+      if(/[0-9]/.test(text[i])&&++seen===count)return i+1;
+    }
+    return text.length;
+  }
+  function formatMoneyField(input){
+    const start=input.selectionStart??input.value.length;
+    const end=input.selectionEnd??start;
+    const before=asciiDigits(input.value.slice(0,start)).length;
+    const beforeEnd=asciiDigits(input.value.slice(0,end)).length;
+    const formatted=formatMoneyText(input.value);
+    if(formatted!==input.value){
+      input.value=formatted;
+      input.setSelectionRange(caretAfterDigits(formatted,before),caretAfterDigits(formatted,beforeEnd));
+    }
+  }
+  document.querySelectorAll('#tab-tco input[data-money-input]').forEach(input=>{
+    input.addEventListener('compositionstart',()=>{input.dataset.imeActive='1';});
+    input.addEventListener('compositionend',()=>{
+      input.dataset.imeActive='0';
+      formatMoneyField(input);
+      update();
+    });
+    // 「1,000」のカンマ位置でBackspace/Deleteしても操作が止まらないようにする。
+    input.addEventListener('beforeinput',event=>{
+      if(event.isComposing||input.dataset.imeActive==='1')return;
+      if(!['deleteContentBackward','deleteContentForward'].includes(event.inputType))return;
+      const start=input.selectionStart,end=input.selectionEnd;
+      if(start==null||start!==end)return;
+      const raw=input.value;
+      const backward=event.inputType==='deleteContentBackward';
+      const commaAt=backward?start-1:start;
+      if(raw[commaAt]!==',')return;
+      let digitAt=backward?commaAt-1:commaAt+1;
+      while(digitAt>=0&&digitAt<raw.length&&!/[0-9]/.test(raw[digitAt]))digitAt+=backward?-1:1;
+      if(digitAt<0||digitAt>=raw.length)return;
+      event.preventDefault();
+      const remaining=raw.slice(0,digitAt)+raw.slice(digitAt+1);
+      const digitsBefore=asciiDigits(raw.slice(0,digitAt)).length;
+      input.value=formatMoneyText(remaining);
+      const caret=caretAfterDigits(input.value,digitsBefore);
+      input.setSelectionRange(caret,caret);
+      update();
+    });
+    input.addEventListener('input',event=>{
+      if(event.isComposing||input.dataset.imeActive==='1')return;
+      formatMoneyField(input);
+      update();
+    });
+    input.addEventListener('change',()=>{
+      if(input.dataset.imeActive==='1')return;
+      formatMoneyField(input);
+      update();
+    });
+    formatMoneyField(input);
+  });
+  document.querySelectorAll('#tab-tco input:not([data-money-input]),#tab-tco select').forEach(element=>{
+    element.addEventListener('input',update);
+    element.addEventListener('change',update);
+  });
   el('tcoExampleBtn').addEventListener('click',()=>{
-    el('tcoPrice').value=2800000;el('tcoPeriod').value='10';el('tcoMaintenance').value=1200000;el('tcoResale').value='';
+    el('tcoPrice').value='2,800,000';el('tcoPeriod').value='10';el('tcoMaintenance').value='1,200,000';el('tcoResale').value='';
     document.querySelector('input[name="tcoMode"][value="manual"]').checked=true;update();
   });
   window.tcUpdate=update;
