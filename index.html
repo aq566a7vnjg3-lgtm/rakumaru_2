@@ -304,7 +304,19 @@
     #tab-tco .tco-costbar>span:last-child{display:block;background:#a5d7b4;}
     #tab-tco .tco-info{font-size:11.5px;color:#5d7365;line-height:1.7;margin-top:11px;}
     #tab-tco .tco-comparison{margin-top:16px;background:#f8fbf9;border:1px solid #dce9df;border-radius:14px;padding:16px;}
-    #tab-tco .tco-compare-num{font-size:23px;font-weight:900;color:#08623b;font-variant-numeric:tabular-nums;margin-top:3px;}
+    #tab-tco .tco-compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:11px 0 13px;}
+    #tab-tco .tco-compare-grid>div{border-radius:11px;border:1px solid #dbe7df;background:white;padding:12px 10px;text-align:center;min-width:0;}
+    #tab-tco .tco-compare-grid small{display:block;color:#526c5d;font-size:11px;line-height:1.5;}
+    #tab-tco .tco-compare-grid strong{display:block;margin-top:4px;font-size:clamp(17px,2.3vw,21px);font-weight:850;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;}
+    #tab-tco .tco-compare-summary{background:#e7f5ec;border-left:4px solid #098b50;border-radius:8px;padding:12px;}
+    #tab-tco .tco-compare-summary.is-purchase-higher{background:#fff5e8;border-color:#c77a27;}
+    #tab-tco .tco-compare-summary.is-equal{background:#f0f4f1;border-color:#879a8b;}
+    #tab-tco .tco-compare-num{font-size:clamp(17px,2.6vw,23px);line-height:1.4;font-weight:900;color:#08623b;font-variant-numeric:tabular-nums;margin:0;overflow-wrap:anywhere;}
+    #tab-tco .tco-compare-summary.is-purchase-higher .tco-compare-num{color:#825019;}
+    #tab-tco .tco-compare-summary.is-equal .tco-compare-num{color:#456253;}
+    #tab-tco .tco-compare-year{font-weight:800;font-size:13px;margin-top:5px;line-height:1.5;color:#254a34;}
+    #tab-tco .tco-compare-intro{font-size:11.5px;color:#596e61;line-height:1.6;}
+    #tab-tco .tco-compare-note{margin-top:10px;}
     #tab-tco .tco-action{border:1px solid #0b9750;border-radius:10px;background:white;color:#08713e;font-size:12px;padding:9px 11px;font-weight:800;cursor:pointer;}
     #tab-tco .tco-action:hover{background:#f3faf5;}
     #tab-tco .tco-footnote{font-size:11px;line-height:1.8;color:#697970;margin-top:14px;}
@@ -363,7 +375,9 @@
     .tps-lease-grid>div{background:#f3f8f4;border-radius:2mm;padding:2.3mm;}
     .tps-lease-grid small{display:block;font-size:9px;color:#5a7163;}
     .tps-lease-grid strong{display:block;margin-top:.5mm;font-size:11px;}
-    .tps-lease-conclusion{font-size:13px;font-weight:850;color:#096f40;padding-top:3mm;}
+    .tps-lease-conclusion{font-size:13px;font-weight:850;color:#096f40;padding-top:2mm;}
+    .tps-lease-year{font-size:10px;font-weight:800;color:#365f45;padding-top:.8mm;}
+    .tps-lease-context{font-size:9px;color:#627267;margin:1mm 0 0;}
     .tps-tiny{font-size:8.5px;color:#657467;margin:1.3mm 0 0;}
     .tps-note{margin-top:4mm;background:#f5f8f5;border-radius:2mm;padding:4mm;break-inside:avoid;}
     .tps-note p{margin:0;font-size:9px;line-height:1.55;}
@@ -597,11 +611,17 @@
         </div>
         <div class="tco-comparison" id="tcoLeaseResult" hidden>
           <h3>楽まるとの比較</h3>
-          <div class="tco-line"><span>楽まるの月平均リース料</span><span id="tcoLeaseAverage">—</span></div>
-          <div class="tco-line"><span>楽まる契約期間のリース料総額</span><span id="tcoLeaseTotal">—</span></div>
-          <div class="tco-info">購入側の月平均（保有期間全体）との単純比較</div>
-          <div class="tco-compare-num" id="tcoDiff">—</div>
-          <div class="tco-info" id="tcoDiffNote"></div>
+          <div class="tco-compare-intro">それぞれの保有・契約期間で計算した月平均負担額を比較します。</div>
+          <div class="tco-compare-grid">
+            <div><small id="tcoPurchaseCompareLabel">購入（10年保有）・月平均</small><strong id="tcoPurchaseCompareMonthly">—</strong></div>
+            <div><small id="tcoLeaseCompareLabel">楽まる（5年契約）・月平均</small><strong id="tcoLeaseAverage">—</strong></div>
+          </div>
+          <div class="tco-compare-summary" id="tcoCompareSummary">
+            <div class="tco-compare-num" id="tcoDiff">—</div>
+            <div class="tco-compare-year" id="tcoDiffYear">—</div>
+          </div>
+          <div class="tco-line"><span>楽まる契約期間のリース料総額（参考）</span><span id="tcoLeaseTotal">—</span></div>
+          <div class="tco-info tco-compare-note" id="tcoDiffNote"></div>
         </div>
         <p class="tco-footnote">※ 購入側の「月額」はローン支払額ではなく、購入金額と維持費の合計から売却・下取り想定額を差し引いた負担額の月平均です。現在の維持費基準は点検・消耗品・車検基本料・自動車税・自賠責などの概算で、燃料費、任意保険料、重量税などが別途必要となる場合があります。見積書との二重計上に注意してください。楽まるは契約満了時に返却・買取等の条件があるため、期間や残存価値の違いを考慮した上でご案内ください。</p>
       </div>
@@ -814,8 +834,10 @@
       <div><small>楽まるの月平均</small><strong id="tpLeaseAvg">—</strong></div>
       <div><small>楽まるの期間総額</small><strong id="tpLeaseTotal">—</strong></div>
     </div>
+    <p class="tps-lease-context" id="tpLeaseContext">—</p>
     <div class="tps-lease-conclusion" id="tpLeaseDiff">—</div>
-    <p class="tps-tiny">※ 購入と楽まるの契約期間が異なる場合、月平均の単純比較です。契約満了時の条件等は別途確認してください。</p>
+    <div class="tps-lease-year" id="tpLeaseDiffYear">—</div>
+    <p class="tps-tiny">※ 各期間の月・年平均による比較であり、期間が異なる場合は同一期間の総額比較ではありません。契約満了・売却等の条件もご確認ください。</p>
   </section>
   <section class="tps-note"><h2>ご案内・注意事項</h2>
     <p>表示額は入力条件による概算です。維持費には点検・消耗品・車検基本料・自動車税・自賠責保険等の目安を含みます。燃料費、任意保険料、重量税などは別途必要となる場合があります。購入金額と維持費の二重計上にご注意ください。楽まるはリース契約のため、購入とは契約条件が異なります。</p>
@@ -1261,9 +1283,27 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
       const contractYears=Number(el('tcoLeaseYears').value),months=contractYears*12;
       const leaseTotal=num('tcoLeaseMonth')*months+num('tcoLeaseInitial')+num('tcoLeaseBonus')*contractYears*2;
       const leaseAverage=leaseTotal/months,delta=leaseAverage-monthly;
-      el('tcoLeaseAverage').textContent=money(leaseAverage);el('tcoLeaseTotal').textContent=money(leaseTotal);
-      el('tcoDiff').textContent=(delta>=0?'楽まるのほうが月平均 ':'購入のほうが月平均 ')+money(Math.abs(delta))+(Math.abs(delta)<.5?'（ほぼ同額）':'');
-      el('tcoDiffNote').textContent='※ 購入側：'+years+'年／楽まる：'+contractYears+'年の平均額です。期間が異なる場合、同一条件の総額比較にはなりません。車両売却・返却時の条件や保険等の差も確認してください。';
+      const monthlyGap=Math.round(Math.abs(delta)),yearlyGap=Math.round(Math.abs(delta)*12);
+      const purchaseLabel='購入（'+periodLabel+'保有）・月平均';
+      const leaseLabel='楽まる（'+contractYears+'年契約）・月平均';
+      const summary=el('tcoCompareSummary');
+      summary.classList.toggle('is-purchase-higher',delta<-.5);
+      summary.classList.toggle('is-equal',Math.abs(delta)<.5);
+      el('tcoPurchaseCompareLabel').textContent=purchaseLabel;
+      el('tcoPurchaseCompareMonthly').textContent=money(monthly);
+      el('tcoLeaseCompareLabel').textContent=leaseLabel;
+      el('tcoLeaseAverage').textContent=money(leaseAverage);
+      el('tcoLeaseTotal').textContent=money(leaseTotal);
+      if(Math.abs(delta)<.5){
+        el('tcoDiff').textContent='月平均負担額はほぼ同額です';
+        el('tcoDiffYear').textContent='月平均の差：1円未満';
+      }else{
+        const higher=delta>0?'楽まる':'購入';
+        const lower=delta>0?'購入':'楽まる';
+        el('tcoDiff').textContent=higher+'の方が月平均 '+money(monthlyGap)+' 高い';
+        el('tcoDiffYear').textContent='年平均では '+money(yearlyGap)+' 高い（'+lower+'の方が安い）';
+      }
+      el('tcoDiffNote').textContent='※ 購入：'+periodLabel+'保有／楽まる：'+contractYears+'年契約。それぞれの期間で月・年平均に換算した差額です。期間が違う場合は同一期間の総額比較ではありません。返却・買取・査定額や含まれる保険・維持費の差もご確認ください。';
     }
   }
   function printText(id,text){const node=el(id);if(node)node.textContent=text;}
@@ -1292,6 +1332,8 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
     printText('tpLeaseAvg',el('tcoLeaseAverage').textContent);
     printText('tpLeaseTotal',el('tcoLeaseTotal').textContent);
     printText('tpLeaseDiff',el('tcoDiff').textContent);
+    printText('tpLeaseDiffYear',el('tcoDiffYear').textContent);
+    printText('tpLeaseContext',el('tcoPurchaseCompareLabel').textContent+'：'+el('tcoPurchaseCompareMonthly').textContent+' ／ '+el('tcoLeaseCompareLabel').textContent+'：'+el('tcoLeaseAverage').textContent);
     el('tpLeaseSection').hidden=!hasLease;
   }
   el('tcoPrintBtn').addEventListener('click',()=>{renderTcoPrint();window.print();});
