@@ -1134,11 +1134,11 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
     var evAnnual=evCostPerKm*annualKm;var gasAnnual=gasCostPerKm*annualKm;var diffAnnual=gasAnnual-evAnnual;
     gId('evAnnual').textContent=evFmt(evAnnual);gId('gasAnnual').textContent=evFmt(gasAnnual);
     if(diffAnnual>0){
-      gId('evDiffAnnual').textContent=evFmt(diffAnnual)+' 円';
+      gId('evDiffAnnual').textContent='年間 '+evFmt(diffAnnual)+'円';
       gId('evDiffAnnualSub').textContent=years+'年間では約 '+evFmt(diffAnnual*years)+' 円の節約';
       gId('evDiffAnnual').style.color='var(--green)';
     }else{
-      gId('evDiffAnnual').textContent=evFmt(Math.abs(diffAnnual))+' 円';
+      gId('evDiffAnnual').textContent='年間 '+evFmt(Math.abs(diffAnnual))+'円';
       gId('evDiffAnnualSub').textContent='ガソリン車のほうが '+years+'年間で約 '+evFmt(Math.abs(diffAnnual)*years)+' 円安い';
       gId('evDiffAnnual').style.color='var(--gas)';
     }
