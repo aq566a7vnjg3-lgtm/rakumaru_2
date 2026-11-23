@@ -1190,11 +1190,11 @@ document.getElementById("fuelModal").addEventListener("click",(e)=>{if(e.target=
     gId('hvAnnual').textContent=hvFmt(hvAnnual);
     gId('hvGasAnnual').textContent=hvFmt(gasAnnual);
     if(diffAnnual>0){
-      gId('hvDiffAnnual').textContent=hvFmt(diffAnnual)+' 円';
+      gId('hvDiffAnnual').textContent='年間 '+hvFmt(diffAnnual)+'円';
       gId('hvDiffAnnualSub').textContent=years+'年間では約 '+hvFmt(diffAnnual*years)+' 円の節約';
       gId('hvDiffAnnual').style.color='var(--green)';
     }else{
-      gId('hvDiffAnnual').textContent=hvFmt(Math.abs(diffAnnual))+' 円';
+      gId('hvDiffAnnual').textContent='年間 '+hvFmt(Math.abs(diffAnnual))+'円';
       gId('hvDiffAnnualSub').textContent='GAS車のほうが '+years+'年間で約 '+hvFmt(Math.abs(diffAnnual)*years)+' 円安い';
       gId('hvDiffAnnual').style.color='var(--gas)';
     }
